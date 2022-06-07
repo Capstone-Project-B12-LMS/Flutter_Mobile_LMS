@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final formLogin = GlobalKey<FormState>();
   @override
   void initState() {
+    checkLogin();
     super.initState();
     txtemail = TextEditingController();
     txtpassword = TextEditingController();
@@ -212,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
     logindata = await SharedPreferences.getInstance();
     final data = await LoginApi().login(email, password);
     if (data.token != null) {
-      Navigator.pushNamed(context, '/main');
+      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       logindata.setString('token', data.token!);
       logindata.setBool('hasLogin', true);
       context.read<LoginProvider>().getUserData(email, password);

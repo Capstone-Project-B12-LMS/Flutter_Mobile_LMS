@@ -17,8 +17,13 @@ class ProfileScreen extends StatelessWidget {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        automaticallyImplyLeading: true,
         backgroundColor: Colors.white,
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.arrow_back_ios_new_sharp,
+              color: secColor,
+            )),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -61,7 +66,6 @@ class ProfileScreen extends StatelessWidget {
                               contentType: ContentType.success,
                             ));
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        
                       },
                       child: const Text(
                         'SAVE',

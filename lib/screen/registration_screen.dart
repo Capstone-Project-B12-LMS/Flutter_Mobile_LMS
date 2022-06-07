@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/api/sign_api.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fzregex/fzregex.dart';
@@ -37,7 +38,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool isObscure = true;
   @override
   Widget build(BuildContext context) {
-    Color btnColor = HexColor('#FF997A');
+    Color secColor = HexColor('#415A80');
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
@@ -84,14 +85,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       },
                       autofocus: true,
                       autocorrect: true,
-                      cursorColor: HexColor('#FF997A'),
+                      cursorColor: secColor,
                       keyboardType: TextInputType.name,
                       controller: txtfullname,
                       decoration: InputDecoration(
                         hintText: 'Full Name',
                         prefixIcon: Icon(
                           Icons.person_outline,
-                          color: HexColor('#FF997A'),
+                          color: secColor,
                         ),
                         hintStyle: const TextStyle(color: Colors.grey),
                         filled: true,
@@ -103,8 +104,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: HexColor('#FF997A'), width: 2),
+                          borderSide: BorderSide(color: secColor, width: 2),
                         ),
                       ),
                     ),
@@ -124,13 +124,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       },
                       autocorrect: true,
                       controller: txtemail,
-                      cursorColor: HexColor('#FF997A'),
+                      cursorColor: secColor,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         hintText: 'Enter Email Address',
                         prefixIcon: Icon(
                           Icons.email,
-                          color: HexColor('#FF997A'),
+                          color: secColor,
                         ),
                         hintStyle: const TextStyle(color: Colors.grey),
                         filled: true,
@@ -142,8 +142,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: HexColor('#FF997A'), width: 2),
+                          borderSide: BorderSide(color: secColor, width: 2),
                         ),
                       ),
                     ),
@@ -169,16 +168,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       controller: txtpassword,
                       keyboardType: TextInputType.visiblePassword,
                       autocorrect: true,
-                      cursorColor: HexColor('#FF997A'),
+                      cursorColor: secColor,
                       decoration: InputDecoration(
                         hintText: 'Enter Password',
                         prefixIcon: Icon(
                           Icons.lock_outline,
-                          color: HexColor('#FF997A'),
+                          color: secColor,
                         ),
                         hintStyle: const TextStyle(color: Colors.grey),
                         suffixIcon: IconButton(
-                            color: HexColor('#FF997A'),
+                            color: secColor,
                             onPressed: () {
                               setState(() {
                                 isObscure = !isObscure;
@@ -196,8 +195,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: HexColor('#FF997A'), width: 2),
+                          borderSide: BorderSide(color: secColor, width: 2),
                         ),
                       ),
                     )
@@ -210,7 +208,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         child: ElevatedButton(
                             style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all(btnColor)),
+                                    MaterialStateProperty.all(secColor)),
                             onPressed: () {
                               final isValidForm =
                                   formRegis.currentState!.validate();
@@ -220,29 +218,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 if (isValid &&
                                     Fzregex.hasMatch(txtpassword.text,
                                         FzPattern.passwordNormal1)) {
-                                  // CoolAlert.show(
-                                  //   context: context,
-                                  //   type: CoolAlertType.success,
-                                  //   text: 'Successfully registered',
-                                  // );
-                                  var snackBar = SnackBar(
-                                      elevation: 0,
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor: Colors.transparent,
-                                      content: AwesomeSnackbarContent(
-                                        title: 'Success',
-                                        message: 'Successfully Registered',
-                                        contentType: ContentType.success,
-                                      ));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                  // Navigator.pushNamed(context, '/login');
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, '/login', (route) => false);
-                                  // authLogin(
-                                  //     txtfullname.text,
-                                  //     txtemail.text,
-                                  //     txtpassword.text);
+                                  signUp(txtemail.text, txtpassword.text,
+                                      txtfullname.text);
                                 } else if (isValid == false) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -259,15 +236,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   // txtRegisPass.clear();
                                 }
                               }
-                              // if (txtusername.text == 'rama' &&
-                              //     txtpassword.text == '123') {
-                              //   Navigator.pushNamed(context, '/login');
-                              // } else {
-                              //   ScaffoldMessenger.of(context).showSnackBar(
-                              //       const SnackBar(
-                              //           content: Text(
-                              //               'Email / Password anda salah atau belum terdaftar!')));
-                              // }
                             },
                             child: const Text('SIGN UP'))),
                   ],
@@ -278,5 +246,49 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       )),
     );
+  }
+
+  signUp(String email, String password, String fullName) async {
+    try {
+      final data = await LoginApi().regis(fullName, email, password);
+      if (data.data != null) {
+        txtemail.clear();
+        txtfullname.clear();
+        txtpassword.clear();
+        var snackBar = SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: AwesomeSnackbarContent(
+              title: 'Success!',
+              message: 'Successfully Registered!',
+              contentType: ContentType.success,
+            ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      } else {
+        var snackBar = SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: AwesomeSnackbarContent(
+              title: 'Oops!',
+              message: 'Email already taken!\nPlease use another email..',
+              contentType: ContentType.warning,
+            ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } catch (e) {
+      var snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'Oops!',
+            message: 'Something Wrong...',
+            contentType: ContentType.warning,
+          ));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 }

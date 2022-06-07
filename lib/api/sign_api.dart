@@ -1,4 +1,5 @@
 import 'package:capstone_project_lms/models/login_response_model.dart';
+import 'package:capstone_project_lms/models/register_response_model.dart';
 import 'package:dio/dio.dart';
 
 class LoginApi {
@@ -20,14 +21,14 @@ class LoginApi {
     }
   }
 
-  Future<ResponseLogin> regis(String fullname,String email, String password) async {
-    var data = {"fullName":fullname,"email": email, "password": password};
+  Future<ResponseRegister> regis(String fullName,String email, String password) async {
+    var data = {"fullName":fullName,"email": email, "password": password};
     try {
       Response response = await _dio.post(regisApi,
           data: data, options: Options(contentType: Headers.jsonContentType));
-      return ResponseLogin.fromJson(response.data);
+      return ResponseRegister.fromJson(response.data);
     } catch (e) {
-      return ResponseLogin.fromJson({});
+      return ResponseRegister.fromJson({});
     }
   }
 }

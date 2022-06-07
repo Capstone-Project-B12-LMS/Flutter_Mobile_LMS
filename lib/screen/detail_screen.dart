@@ -258,9 +258,9 @@ class _DetailScreenState extends State<DetailScreen> {
           centerTitle: true,
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: const Icon(
+              icon: Icon(
                 Icons.arrow_back_ios_new_sharp,
-                color: Colors.black,
+                color: secColor,
               )),
         ),
         body: SizedBox(

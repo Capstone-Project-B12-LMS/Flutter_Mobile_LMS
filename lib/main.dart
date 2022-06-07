@@ -5,7 +5,6 @@ import 'package:capstone_project_lms/screen/login_screen.dart';
 import 'package:capstone_project_lms/screen/main_screen.dart';
 import 'package:capstone_project_lms/screen/registration_screen.dart';
 import 'package:capstone_project_lms/screen/detail_screen.dart';
-import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +42,7 @@ class MyApp extends StatelessWidget {
             titleTextStyle: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
           )),
-      initialRoute: '/main',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
         '/registration': (context) => const RegistrationScreen(),
