@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   late int _selectedIndex;
   @override
   void initState() {
-    _selectedIndex = widget.selectedIndex;
+    _selectedIndex = 0;
     super.initState();
   }
 

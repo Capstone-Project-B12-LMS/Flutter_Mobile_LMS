@@ -2,8 +2,11 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -13,20 +16,32 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    userData();
+    super.initState();
+  }
 
+  late SharedPreferences logindata;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyReq = GlobalKey<FormState>();
+  late String token;
+  late Map<String, dynamic> payload;
   final TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController txtFullNameReq = TextEditingController();
+  final TextEditingController txtEmailReq = TextEditingController();
+  final TextEditingController txtClassReq = TextEditingController();
 
   Future<void> showInformationDialog(BuildContext context) async {
     Color secColor = HexColor('#415A80');
     return await showDialog(
         context: context,
         builder: (context) {
-          bool isChecked = false;
+          // bool isChecked = false;
           return StatefulBuilder(builder: (context, setState) {
             return Dialog(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
+                  borderRadius: BorderRadius.circular(20.0)),
               child: SizedBox(
                 height: 300,
                 child: Column(
@@ -43,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                       child: Text(
-                        "Ask the admin or mentor for the class code, then input the code here.",
+                        "Ask the admin / mentor for the class code, then enter the code here.",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
@@ -108,11 +123,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ));
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);
-                            // CoolAlert.show(
-                            //   context: context,
-                            //   type: CoolAlertType.success,
-                            //   text: 'Successfully joined the class',
-                            // );
                           },
                           child: const Text("JOIN")),
                     ),
@@ -138,58 +148,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             );
-            // return AlertDialog(
-            //   content: Form(
-            //       key: _formKey,
-            //       child: TextFormField(
-            //         controller: _textEditingController,
-            //         validator: (value) {
-            //           return value!.isNotEmpty
-            //               ? null
-            //               : "Code class Must be filled!";
-            //         },
-            //         decoration: const InputDecoration(
-            //             hintText: "Please Enter Code Class"),
-            //       )),
-            //   title: const Text('Join Class'),
-            //   elevation: 0,
-            //   shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(10.0)),
-
-            //   actions: <Widget>[
-            //     InkWell(
-            //       child: const Text('OK'),
-            //       onTap: () {
-            //         if (_formKey.currentState!.validate()) {
-            //           // Do something like updating SharedPreferences or User Settings etc.
-            //           // Navigator.of(context).pop();
-            //           showDialog(
-            //               context: context,
-            //               builder: (context) {
-            //                 return AlertDialog(
-            //                   title: const Text("Success"),
-            //                   titleTextStyle: const TextStyle(
-            //                       fontWeight: FontWeight.bold,
-            //                       color: Colors.black,
-            //                       fontSize: 20),
-            //                   actionsOverflowButtonSpacing: 20,
-            //                   actions: [
-            //                     ElevatedButton(
-            //                         onPressed: () {
-            //                           _textEditingController.clear();
-            //                           Navigator.of(context).pop();
-            //                           Navigator.of(context).pop();
-            //                         },
-            //                         child: const Text("Ok")),
-            //                   ],
-            //                   content: const Text("Success to join the class"),
-            //                 );
-            //               });
-            //         }
-            //       },
-            //     ),
-            //   ],
-            // );
           });
         });
   }
@@ -380,8 +338,182 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: Card(
+                elevation: 10,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Need an online class request?',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                      const Text(
+                        'Fill out this form',
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
+                      Card(
+                        elevation: 0,
+                        child: Form(
+                          key: _formKeyReq,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 5),
+                                child: TextFormField(
+                                  controller: txtFullNameReq,
+                                  cursorColor: secColor,
+                                  validator: (value) {
+                                    return value!.isNotEmpty
+                                        ? null
+                                        : "Full Name must be filled!";
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: 'Full Name',
+                                    hintStyle:
+                                        const TextStyle(color: Colors.grey),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(5.0)),
+                                      borderSide:
+                                          BorderSide(color: secColor, width: 2),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 5),
+                                child: TextFormField(
+                                  controller: txtEmailReq,
+                                  cursorColor: secColor,
+                                  validator: (value) {
+                                    return value!.isNotEmpty
+                                        ? null
+                                        : "Email must be filled!";
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: 'Email',
+                                    hintStyle:
+                                        const TextStyle(color: Colors.grey),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(5.0)),
+                                      borderSide:
+                                          BorderSide(color: secColor, width: 2),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 5),
+                                child: TextFormField(
+                                  controller: txtClassReq,
+                                  cursorColor: secColor,
+                                  validator: (value) {
+                                    return value!.isNotEmpty
+                                        ? null
+                                        : "Class must be filled!";
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: 'The class you requested',
+                                    hintStyle:
+                                        const TextStyle(color: Colors.grey),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(5.0)),
+                                      borderSide:
+                                          BorderSide(color: secColor, width: 2),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              side:
+                                                  BorderSide(color: secColor))),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(secColor)),
+                                  child: const Text(
+                                    'SUBMIT A REQUEST',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                  onPressed: () async {
+                                    final isValidForm =
+                                        _formKeyReq.currentState!.validate();
+                                    if (isValidForm) {
+                                      final bool isValid =
+                                          EmailValidator.validate(
+                                              txtEmailReq.text);
+                                      if (isValid) {
+                                        var snackBar = SnackBar(
+                                            elevation: 0,
+                                            behavior: SnackBarBehavior.floating,
+                                            backgroundColor: Colors.transparent,
+                                            content: AwesomeSnackbarContent(
+                                              title: 'Success!',
+                                              message:
+                                                  'Successfully Registered!',
+                                              contentType: ContentType.success,
+                                            ));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else {
+                                        var snackBar = SnackBar(
+                                            elevation: 0,
+                                            behavior: SnackBarBehavior.floating,
+                                            backgroundColor: Colors.transparent,
+                                            content: AwesomeSnackbarContent(
+                                              title: 'Oops!',
+                                              message:
+                                                  'Your email isn\'t valid!',
+                                              contentType: ContentType.warning,
+                                            ));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+          )
         ]),
       ),
     );
+  }
+
+  userData() async {
+    logindata = await SharedPreferences.getInstance();
+    token = logindata.getString('token') ?? 'Token Null';
+    print('token: $token');
+
+    payload = Jwt.parseJwt(token);
+    print('id: ${payload['userId']}');
+    logindata.setString('userId', payload['userId']);
+    // {roles: [{authority: USER}], exp: 1654698961, userId: d809c7a7-8282-4572-a487-d05e7a2a17f5, iat: 1654695361}
   }
 }

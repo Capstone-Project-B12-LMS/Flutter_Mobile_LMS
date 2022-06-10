@@ -1,6 +1,5 @@
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/positions.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -99,6 +98,203 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> showInformationDialog(BuildContext context) async {
+      final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+      final TextEditingController txtFullName = TextEditingController();
+      final TextEditingController txtEmail = TextEditingController();
+      Color secColor = HexColor('#415A80');
+      return await showDialog(
+          context: context,
+          builder: (context) {
+            return StatefulBuilder(builder: (context, setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "Counselling Request Form",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "Fill out this form and receive a response within 1-2 days.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12, color: Colors.black),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: TextFormField(
+                                  controller: txtFullName,
+                                  cursorColor: secColor,
+                                  validator: (value) {
+                                    return value!.isNotEmpty
+                                        ? null
+                                        : "Full Name must be filled!";
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: 'Full Name',
+                                    prefixIcon: Icon(
+                                      Icons.person_outline,
+                                      color: secColor,
+                                    ),
+                                    hintStyle:
+                                        const TextStyle(color: Colors.grey),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(12.0)),
+                                      borderSide: BorderSide(
+                                          color: Colors.grey, width: 2),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10.0)),
+                                      borderSide:
+                                          BorderSide(color: secColor, width: 2),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: TextFormField(
+                                  controller: txtEmail,
+                                  cursorColor: secColor,
+                                  validator: (value) {
+                                    return value!.isNotEmpty
+                                        ? null
+                                        : "Email must be filled!";
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter Email Address',
+                                    prefixIcon: Icon(
+                                      Icons.email_outlined,
+                                      color: secColor,
+                                    ),
+                                    hintStyle:
+                                        const TextStyle(color: Colors.grey),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(12.0)),
+                                      borderSide: BorderSide(
+                                          color: Colors.grey, width: 2),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10.0)),
+                                      borderSide:
+                                          BorderSide(color: secColor, width: 2),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      side: BorderSide(color: secColor))),
+                              backgroundColor:
+                                  MaterialStateProperty.all(secColor)),
+                          onPressed: () {
+                            final isValidForm =
+                                formKey.currentState!.validate();
+                            if (isValidForm) {
+                              Navigator.pop(context);
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text(
+                                    'COUNSELLING REQUEST COMPLETE!',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  content: const Text(
+                                    'You\'ll receive a confirmation when your request has been accepted or declined.',
+                                    style: TextStyle(color: Colors.black),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  actions: <Widget>[
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: ElevatedButton(
+                                          style: ButtonStyle(
+                                              shape: MaterialStateProperty.all<
+                                                      RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      side: BorderSide(
+                                                          color: secColor))),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      secColor)),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text("OK")),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
+                          child: const Text("SUBMIT A REQUEST")),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, bottom: 20),
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      side: const BorderSide(
+                                          color: Colors.grey))),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.grey)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("CANCEL")),
+                    ),
+                  ],
+                ),
+              );
+            });
+          });
+    }
+
     void _showSnackBar(String message) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -285,14 +481,19 @@ class _DetailScreenState extends State<DetailScreen> {
                     padding: const EdgeInsets.only(left: 20, top: 10),
                     child: Row(
                       children: [
-                        AvatarStack(
-                          settings: settings,
-                          height: 40,
-                          width: 100,
-                          avatars: [
-                            for (var n = 0; n < 3; n++)
-                              NetworkImage('https://i.pravatar.cc/150?img=$n')
-                          ],
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/members');
+                          },
+                          child: AvatarStack(
+                            settings: settings,
+                            height: 40,
+                            width: 100,
+                            avatars: [
+                              for (var n = 0; n < 3; n++)
+                                NetworkImage('https://i.pravatar.cc/150?img=$n')
+                            ],
+                          ),
                         ),
                         const Padding(
                           padding: EdgeInsets.only(left: 10),
@@ -313,11 +514,11 @@ class _DetailScreenState extends State<DetailScreen> {
                       isStretch: true,
                       children: const {
                         1: Text(
-                          'Contents',
+                          'Description',
                           textAlign: TextAlign.center,
                         ),
                         2: Text(
-                          'Task',
+                          'Contents',
                           textAlign: TextAlign.center,
                         ),
                         3: Text(
@@ -369,122 +570,181 @@ class _DetailScreenState extends State<DetailScreen> {
                     child: CustomScrollView(
                   slivers: [
                     SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      sliver: SliverAppBar(
-                        automaticallyImplyLeading: false,
-                        backgroundColor: Colors.white,
-                        expandedHeight: 200,
-                        elevation: 10,
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: Container(
-                            color: Colors.white,
-                            child: ListView(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: CircleAvatar(
-                                        radius: 25,
-                                        backgroundColor: secColor,
-                                        child: const Icon(
-                                          Icons.person_outline,
-                                          color: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        sliver: SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: CircleAvatar(
+                                      radius: 25,
+                                      backgroundColor: secColor,
+                                      child: const Icon(
+                                        Icons.person_outline,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          'Hi, Alexa!',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                      ),
+                                        Text(
+                                          'Status / Occupation',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 12),
+                                        )
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            'Hi, Alexa!',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            'Status / Occupation',
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 12),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const Text(
-                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                                  style: TextStyle(fontSize: 12),
-                                  maxLines: 2,
-                                  softWrap: true,
-                                ),
-                                TextButton(
-                                    onPressed: () {
-                                      showBarModalBottomSheet(
-                                        context: context,
-                                        builder: (context) =>
-                                            SingleChildScrollView(
-                                          controller:
-                                              ModalScrollController.of(context),
-                                          child: SafeArea(
-                                            child: Container(
-                                              height: MediaQuery.of(context)
-                                                  .size
-                                                  .height,
-                                              padding: const EdgeInsets.all(10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: const [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 10),
-                                                    child: Text(
-                                                      'Description',
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 16),
-                                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Text(
+                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                                style: TextStyle(fontSize: 12),
+                                maxLines: 4,
+                                softWrap: true,
+                              ),
+                              TextButton(
+                                  onPressed: () {
+                                    showBarModalBottomSheet(
+                                      context: context,
+                                      builder: (context) =>
+                                          SingleChildScrollView(
+                                        controller:
+                                            ModalScrollController.of(context),
+                                        child: SafeArea(
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                2,
+                                            padding: const EdgeInsets.all(10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: const [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10),
+                                                  child: Text(
+                                                    'Description',
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16),
                                                   ),
-                                                  Text(
-                                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
-                                                ],
-                                              ),
+                                                ),
+                                                Text(
+                                                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
+                                              ],
                                             ),
                                           ),
                                         ),
-                                      );
-                                      // showModalBottomSheet(
-                                      //   context: context,
-                                      //   builder: (context) => Container(
-                                      //     height: MediaQuery.of(context)
-                                      //         .size
-                                      //         .height,
-                                      //     padding: const EdgeInsets.all(10),
-                                      //     child: const Text(
-                                      //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
-                                      //   ),
-                                      // );
-                                    },
-                                    child: const Text('Selengkapnya'))
-                              ],
-                            ),
+                                      ),
+                                    );
+                                    // showModalBottomSheet(
+                                    //   context: context,
+                                    //   builder: (context) => Container(
+                                    //     height: MediaQuery.of(context)
+                                    //         .size
+                                    //         .height,
+                                    //     padding: const EdgeInsets.all(10),
+                                    //     child: const Text(
+                                    //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
+                                    //   ),
+                                    // );
+                                  },
+                                  child: Text(
+                                    'See more',
+                                    style: TextStyle(color: secColor),
+                                  ))
+                            ],
                           ),
-                          // title: const Text('Active Class'),
+                        )),
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 20),
+                      sliver: SliverToBoxAdapter(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Any Questions?',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            side: BorderSide(color: secColor))),
+                                    backgroundColor:
+                                        MaterialStateProperty.all(secColor)),
+                                onPressed: () {
+                                  showInformationDialog(context);
+                                },
+                                child: const Text(
+                                  'REQUEST COUNSELLING',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
+                  ],
+                )),
+              if (konten == 2)
+                Expanded(
+                    child: CustomScrollView(
+                  slivers: [
+                    // SliverPadding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       vertical: 5, horizontal: 20),
+                    //   sliver: SliverToBoxAdapter(
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: const [
+                    //         Text(
+                    //           'Quiz',
+                    //           style: TextStyle(
+                    //               color: Colors.black,
+                    //               fontSize: 12,
+                    //               fontWeight: FontWeight.bold),
+                    //         ),
+                    //         Text(
+                    //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                    //           style:
+                    //               TextStyle(fontSize: 12, color: Colors.grey),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 5),
@@ -522,72 +782,6 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                       ),
                     ),
-                  ],
-                )),
-              if (konten == 2)
-                Expanded(
-                    child: CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 20),
-                      sliver: SliverToBoxAdapter(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Quiz',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SliverPadding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 2),
-                        sliver: SliverToBoxAdapter(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          side: BorderSide(color: secColor))),
-                                  backgroundColor:
-                                      MaterialStateProperty.all(secColor)),
-                              onPressed: () {
-                                var snackBar = SnackBar(
-                                    elevation: 0,
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor: Colors.transparent,
-                                    content: AwesomeSnackbarContent(
-                                      title: 'Quiz Time!',
-                                      message:
-                                          'You will be directed to the website,\nHappy Quiz!',
-                                      contentType: ContentType.warning,
-                                    ));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              },
-                              child: const Text(
-                                'START QUIZ',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        )),
                   ],
                 )),
               if (konten == 3)

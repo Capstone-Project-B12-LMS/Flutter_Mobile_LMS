@@ -2,6 +2,7 @@ import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
 
 Widget widgetTextField(String label, TextInputType keyboard) {
+  Color secColor = HexColor('#415A80');
   return SizedBox(
     // width: MediaQuery.of(context).size.width,
     height: 100,
@@ -23,7 +24,7 @@ Widget widgetTextField(String label, TextInputType keyboard) {
             child: TextField(
               keyboardType: keyboard,
               style: const TextStyle(color: Colors.black),
-              cursorColor: HexColor('#FF997A'),
+              cursorColor: secColor,
               decoration: InputDecoration(
                   fillColor: Colors.black,
                   border: InputBorder.none,
@@ -45,7 +46,7 @@ Widget widgetTextField(String label, TextInputType keyboard) {
                   // labelText: label,
                   suffixIcon: Icon(
                     Icons.edit_outlined,
-                    color: HexColor('#FF997A'),
+                    color: secColor,
                   )),
             ),
           ),

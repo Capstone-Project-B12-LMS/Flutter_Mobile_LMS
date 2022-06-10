@@ -31,4 +31,15 @@ class LoginApi {
       return ResponseRegister.fromJson({});
     }
   }
+
+  Future<ResponseRegister> tes(String fullName,String email, String password) async {
+    var data = {"fullName":fullName,"email": email, "password": password};
+    try {
+      Response response = await _dio.post(regisApi,
+          data: data, options: Options(contentType: Headers.jsonContentType));
+      return ResponseRegister.fromJson(response.data);
+    } catch (e) {
+      return ResponseRegister.fromJson({});
+    }
+  }
 }

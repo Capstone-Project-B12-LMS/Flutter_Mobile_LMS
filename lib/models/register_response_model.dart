@@ -1,17 +1,20 @@
 class ResponseRegister {
   String? errors;
+  bool? status;
   Data? data;
 
-  ResponseRegister({this.errors, this.data});
+  ResponseRegister({this.errors, this.status, this.data});
 
   ResponseRegister.fromJson(Map<String, dynamic> json) {
     errors = json['errors'];
+    status = json['status'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['errors'] = errors;
+    data['status'] = status;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -29,13 +32,14 @@ class Data {
   String? fullName;
   String? email;
   String? password;
+  String? telepon;
   List<Roles>? roles;
   bool? enabled;
   List<Authorities>? authorities;
   String? username;
-  bool? accountNonExpired;
   bool? accountNonLocked;
   bool? credentialsNonExpired;
+  bool? accountNonExpired;
 
   Data(
       {this.id,
@@ -47,13 +51,14 @@ class Data {
       this.fullName,
       this.email,
       this.password,
+      this.telepon,
       this.roles,
       this.enabled,
       this.authorities,
       this.username,
-      this.accountNonExpired,
       this.accountNonLocked,
-      this.credentialsNonExpired});
+      this.credentialsNonExpired,
+      this.accountNonExpired});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,6 +70,7 @@ class Data {
     fullName = json['fullName'];
     email = json['email'];
     password = json['password'];
+    telepon = json['telepon'];
     if (json['roles'] != null) {
       roles = <Roles>[];
       json['roles'].forEach((v) {
@@ -79,9 +85,9 @@ class Data {
       });
     }
     username = json['username'];
-    accountNonExpired = json['accountNonExpired'];
     accountNonLocked = json['accountNonLocked'];
     credentialsNonExpired = json['credentialsNonExpired'];
+    accountNonExpired = json['accountNonExpired'];
   }
 
   Map<String, dynamic> toJson() {
@@ -95,6 +101,7 @@ class Data {
     data['fullName'] = fullName;
     data['email'] = email;
     data['password'] = password;
+    data['telepon'] = telepon;
     if (roles != null) {
       data['roles'] = roles!.map((v) => v.toJson()).toList();
     }
@@ -103,9 +110,9 @@ class Data {
       data['authorities'] = authorities!.map((v) => v.toJson()).toList();
     }
     data['username'] = username;
-    data['accountNonExpired'] = accountNonExpired;
     data['accountNonLocked'] = accountNonLocked;
     data['credentialsNonExpired'] = credentialsNonExpired;
+    data['accountNonExpired'] = accountNonExpired;
     return data;
   }
 }
