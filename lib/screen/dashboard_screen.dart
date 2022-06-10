@@ -509,10 +509,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   userData() async {
     logindata = await SharedPreferences.getInstance();
     token = logindata.getString('token') ?? 'Token Null';
-    print('token: $token');
+    // print('token: $token');
 
     payload = Jwt.parseJwt(token);
-    print('id: ${payload['userId']}');
+    // print('id: ${payload['userId']}');
     logindata.setString('userId', payload['userId']);
     // {roles: [{authority: USER}], exp: 1654698961, userId: d809c7a7-8282-4572-a487-d05e7a2a17f5, iat: 1654695361}
   }
