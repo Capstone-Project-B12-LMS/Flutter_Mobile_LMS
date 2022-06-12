@@ -8,9 +8,7 @@ class GetUserProvider with ChangeNotifier {
 
   getUserData(String id, String token) async {
     try {
-      final d = await API().userData(id, token);
-      _userDataProvider = d;
-      print('dari provider : ${_userDataProvider.data?.email}');
+      _userDataProvider = await API().userData(id, token);
       notifyListeners();
     } catch (e) {
       notifyListeners();

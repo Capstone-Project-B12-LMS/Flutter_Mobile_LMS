@@ -8,8 +8,7 @@ class LoginProvider with ChangeNotifier {
 
   getUserData(String email, String password) async {
     try {
-      final d = await API().login(email, password);
-      _userResponse = d;
+      _userResponse = await API().login(email, password);
       notifyListeners();
     } catch (e) {
       notifyListeners();

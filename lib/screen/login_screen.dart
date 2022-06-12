@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/api/sign_api.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
@@ -24,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final formLogin = GlobalKey<FormState>();
   @override
   void initState() {
-    checkLogin();
     super.initState();
     txtemail = TextEditingController();
     txtpassword = TextEditingController();
@@ -213,50 +210,33 @@ class _LoginScreenState extends State<LoginScreen> {
     logindata = await SharedPreferences.getInstance();
     final data = await API().login(email, password);
     if (data.status == true) {
-      context.read<NavbarProvider>().getIndexNavbar(0);
-      var token = Jwt.parseJwt(data.token!);
-      final userId = token['userId'];
-      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
-      logindata.setString('token', data.token!);
-      logindata.setString('userId', userId);
-      context.read<GetUserProvider>().getUserData(userId, data.token!);
-      txtemail.clear();
-      txtpassword.clear();
+      if (mounted) {
+        context.read<NavbarProvider>().getIndexNavbar(0);
+        var token = Jwt.parseJwt(data.token!);
+        final userId = token['userId'];
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+        logindata.setString('token', data.token!);
+        logindata.setString('userId', userId);
+        logindata.setBool('newUser', false);
+        context.read<GetUserProvider>().getUserData(userId, data.token!);
+        txtemail.clear();
+        txtpassword.clear();
+      }
     } else {
-      logindata.remove('userId');
-      logindata.remove('token');
-      var snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Oops!',
-            message: 'Your email / password is wrong or not registered yet!',
-            contentType: ContentType.failure,
-          ));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
-
-  checkLogin() async {
-    logindata = await SharedPreferences.getInstance();
-    var token = logindata.getString('token');
-    var userId = logindata.getString('userId');
-    try {
-      print('userId checklogin : $userId');
-      context.read<GetUserProvider>().getUserData(userId!, token!);
-      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
-    } catch (e) {
-      var snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Oops!',
-            message: 'Your session was ended\nplease relogin',
-            contentType: ContentType.failure,
-          ));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      if (mounted) {
+        logindata.remove('userId');
+        logindata.remove('token');
+        var snackBar = SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: AwesomeSnackbarContent(
+              title: 'Oops!',
+              message: 'Your email / password is wrong or not registered yet!',
+              contentType: ContentType.failure,
+            ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
   }
 }
