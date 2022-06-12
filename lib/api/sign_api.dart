@@ -42,10 +42,8 @@ class API {
     try {
       Response response =
           await _dio.get("$getUser/$id", options: Options(headers: auth));
-      print('dari API: ${response.data}');
       return ResponseGetUser.fromJson(response.data);
     } catch (e) {
-      print('dari API: $e');
       return ResponseGetUser.fromJson({});
     }
   }

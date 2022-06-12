@@ -10,7 +10,6 @@ class GetUserProvider with ChangeNotifier {
     try {
       final d = await API().userData(id, token);
       _userDataProvider = d;
-      print('dari provider : ${_userDataProvider.data?.email}');
       notifyListeners();
     } catch (e) {
       notifyListeners();
