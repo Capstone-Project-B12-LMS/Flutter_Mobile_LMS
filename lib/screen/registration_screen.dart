@@ -221,37 +221,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         FzPattern.passwordNormal1)) {
                                   signUp(txtemail.text, txtpassword.text,
                                       txtfullname.text);
-                                  if (isSuccess) {
-                                    // var snackBar = SnackBar(
-                                    //     elevation: 0,
-                                    //     behavior: SnackBarBehavior.floating,
-                                    //     backgroundColor: Colors.transparent,
-                                    //     content: AwesomeSnackbarContent(
-                                    //       title: 'Success!',
-                                    //       message: 'Successfully Registered!',
-                                    //       contentType: ContentType.success,
-                                    //     ));
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content:
-                                                Text('Berhasil mendaftar')));
-                                    // Navigator.pushNamedAndRemoveUntil(
-                                    //     context, '/login', (route) => false);
-                                  } else {
-                                    // var snackBar = SnackBar(
-                                    //     elevation: 0,
-                                    //     behavior: SnackBarBehavior.floating,
-                                    //     backgroundColor: Colors.transparent,
-                                    //     content: AwesomeSnackbarContent(
-                                    //       title: 'Oops!',
-                                    //       message:
-                                    //           'Email already taken!\nPlease use another email..',
-                                    //       contentType: ContentType.warning,
-                                    //     ));
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text('Gagal Mendaftar')));
-                                  }
                                 } else if (isValid == false) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -282,54 +251,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   signUp(String email, String password, String fullName) async {
     try {
-      await LoginApi().regis(fullName, email, password).then((value) {
-        print(value.errors);
-        if (value.errors == null) {
+      await API().regis(fullName, email, password).then((value) {
+        if (value.status == true) {
           txtemail.clear();
           txtfullname.clear();
           txtpassword.clear();
-          setState(() {
-            isSuccess = true;
-          });
+          var snackBar = SnackBar(
+              elevation: 0,
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.transparent,
+              content: AwesomeSnackbarContent(
+                title: 'Success!',
+                message: 'Successfully Registered!',
+                contentType: ContentType.success,
+              ));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.pop(context);
         } else {
-          setState(() {
-            isSuccess = false;
-          });
+          var snackBar = SnackBar(
+              elevation: 0,
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.transparent,
+              content: AwesomeSnackbarContent(
+                title: 'Oops!',
+                message: 'Email already taken!\nPlease use another email..',
+                contentType: ContentType.warning,
+              ));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       });
-      // if (await data.data != null) {
-      //   txtemail.clear();
-      //   txtfullname.clear();
-      //   txtpassword.clear();
-      //   setState(() {
-      //     isSuccess = true;
-      //   });
-      //   // var snackBar = SnackBar(
-      //   //     elevation: 0,
-      //   //     behavior: SnackBarBehavior.floating,
-      //   //     backgroundColor: Colors.transparent,
-      //   //     content: AwesomeSnackbarContent(
-      //   //       title: 'Success!',
-      //   //       message: 'Successfully Registered!',
-      //   //       contentType: ContentType.success,
-      //   //     ));
-      //   // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      //   // Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-      // } else {
-      //    setState(() {
-      //     isSuccess = false;
-      //   });
-      //   // var snackBar = SnackBar(
-      //   //     elevation: 0,
-      //   //     behavior: SnackBarBehavior.floating,
-      //   //     backgroundColor: Colors.transparent,
-      //   //     content: AwesomeSnackbarContent(
-      //   //       title: 'Oops!',
-      //   //       message: 'Email already taken!\nPlease use another email..',
-      //   //       contentType: ContentType.warning,
-      //   //     ));
-      //   // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      // }
     } catch (e) {
       var snackBar = SnackBar(
           elevation: 0,

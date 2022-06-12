@@ -1,11 +1,11 @@
-class ResponseGetUser {
+class ResponseUpdateUser {
   String? errors;
   bool? status;
   Data? data;
 
-  ResponseGetUser({this.errors, this.status, this.data});
+  ResponseUpdateUser({this.errors, this.status, this.data});
 
-  ResponseGetUser.fromJson(Map<String, dynamic> json) {
+  ResponseUpdateUser.fromJson(Map<String, dynamic> json) {
     errors = json['errors'];
     status = json['status'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
@@ -24,9 +24,9 @@ class ResponseGetUser {
 
 class Data {
   String? id;
-  // List<int>? createdAt;
+  List<int>? createdAt;
   String? createdBy;
-  // List<int>? updatedAt;
+  List<int>? updatedAt;
   String? updatedBy;
   bool? isDeleted;
   String? fullName;
@@ -43,9 +43,9 @@ class Data {
 
   Data(
       {this.id,
-      // this.createdAt,
+      this.createdAt,
       this.createdBy,
-      // this.updatedAt,
+      this.updatedAt,
       this.updatedBy,
       this.isDeleted,
       this.fullName,
@@ -62,9 +62,9 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    // createdAt = json['createdAt'].cast<int>();
+    createdAt = json['createdAt'].cast<int>();
     createdBy = json['createdBy'];
-    // updatedAt = json['updatedAt'].cast<int>();
+    updatedAt = json['updatedAt'].cast<int>();
     updatedBy = json['updatedBy'];
     isDeleted = json['isDeleted'];
     fullName = json['fullName'];
@@ -93,9 +93,9 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    // data['createdAt'] = createdAt;
+    data['createdAt'] = createdAt;
     data['createdBy'] = createdBy;
-    // data['updatedAt'] = updatedAt;
+    data['updatedAt'] = updatedAt;
     data['updatedBy'] = updatedBy;
     data['isDeleted'] = isDeleted;
     data['fullName'] = fullName;
@@ -139,9 +139,9 @@ class Roles {
 
   Roles.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    // createdAt = json['createdAt'].cast<int>();
+    createdAt = json['createdAt'].cast<int>();
     createdBy = json['createdBy'];
-    // updatedAt = json['updatedAt'];
+    updatedAt = json['updatedAt'];
     updatedBy = json['updatedBy'];
     isDeleted = json['isDeleted'];
     name = json['name'];
@@ -151,9 +151,9 @@ class Roles {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    // data['createdAt'] = createdAt;
+    data['createdAt'] = createdAt;
     data['createdBy'] = createdBy;
-    // data['updatedAt'] = updatedAt;
+    data['updatedAt'] = updatedAt;
     data['updatedBy'] = updatedBy;
     data['isDeleted'] = isDeleted;
     data['name'] = name;

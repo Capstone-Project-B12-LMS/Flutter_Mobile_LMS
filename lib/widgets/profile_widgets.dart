@@ -1,7 +1,7 @@
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
 
-Widget widgetTextField(String label, TextInputType keyboard) {
+Widget widgetTextField(String label,String data, TextInputType keyboard, TextEditingController controller, bool enable) {
   Color secColor = HexColor('#415A80');
   return SizedBox(
     // width: MediaQuery.of(context).size.width,
@@ -21,7 +21,9 @@ Widget widgetTextField(String label, TextInputType keyboard) {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.grey.shade200),
-            child: TextField(
+            child: TextFormField(
+              enabled: enable,
+              controller: controller,
               keyboardType: keyboard,
               style: const TextStyle(color: Colors.black),
               cursorColor: secColor,
@@ -41,7 +43,7 @@ Widget widgetTextField(String label, TextInputType keyboard) {
                   // errorBorder: OutlineInputBorder(
                   //     borderSide: const BorderSide(color: Colors.red),
                   //     borderRadius: BorderRadius.circular(20)),
-                  hintText: label,
+                  hintText: data,
                   hintStyle: TextStyle(color: Colors.grey.shade500),
                   // labelText: label,
                   suffixIcon: Icon(

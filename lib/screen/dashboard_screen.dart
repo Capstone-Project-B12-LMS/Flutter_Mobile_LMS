@@ -1,12 +1,14 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/getuser_response_model.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -16,17 +18,10 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  @override
-  void initState() {
-    userData();
-    super.initState();
-  }
 
   late SharedPreferences logindata;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyReq = GlobalKey<FormState>();
-  late String token;
-  late Map<String, dynamic> payload;
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController txtFullNameReq = TextEditingController();
   final TextEditingController txtEmailReq = TextEditingController();
@@ -167,9 +162,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           SliverAppBar(
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
-            // pinned: true,
             floating: true,
-            // expandedHeight: 200.0,
             elevation: 1,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
@@ -193,15 +186,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             padding: const EdgeInsets.only(left: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
-                                  'Hi, Alexa!',
-                                  style: TextStyle(
+                                  'Hi ${context.watch<GetUserProvider>().userDataProvider.data?.fullName ?? 'Alexa'} !',
+                                  style: const TextStyle(
                                       color: Colors.black, fontSize: 14),
                                 ),
                                 Text(
-                                  'Status / Occupation',
-                                  style: TextStyle(
+                                  context
+                                          .watch<GetUserProvider>()
+                                          .userDataProvider
+                                          .data
+                                          ?.roles?[0]
+                                          .name ??
+                                      'Roles',
+                                  style: const TextStyle(
                                       color: Colors.grey, fontSize: 12),
                                 )
                               ],
@@ -252,36 +251,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               },
             ),
           ),
-          // SliverAppBar(
-          //   automaticallyImplyLeading: false,
-          //   backgroundColor: Colors.white,
-          //   // pinned: true,
-          //   floating: true,
-          //   // expandedHeight: 200.0,
-          //   elevation: 1,
-          //   flexibleSpace: FlexibleSpaceBar(
-          //     background: SizedBox(
-          //         child: ElevatedButton.icon(
-          //       style: ButtonStyle(
-          //           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          //               RoundedRectangleBorder(
-          //                   borderRadius: BorderRadius.circular(18.0),
-          //                   side: BorderSide(color: secColor))),
-          //           backgroundColor: MaterialStateProperty.all(secColor)),
-          //       icon: const Icon(Icons.door_front_door),
-          //       label: const Text(
-          //         'Join Class',
-          //         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          //       ),
-          //       onPressed: () {},
-          //     )),
-          //     // title: const Text('Active Class'),
-          //   ),
-          // ),
           const SliverPadding(
             padding: EdgeInsets.symmetric(vertical: 10),
           ),
-
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -300,12 +272,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       setState(() {
                         context.read<NavbarProvider>().getIndexNavbar(1);
                       });
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: ((context) => const MainScreen(
-                      //               selectedIndex: 1,
-                      //             ))));
                     },
                     child: const Text(
                       'View All',
@@ -504,16 +470,5 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ]),
       ),
     );
-  }
-
-  userData() async {
-    logindata = await SharedPreferences.getInstance();
-    token = logindata.getString('token') ?? 'Token Null';
-    // print('token: $token');
-
-    payload = Jwt.parseJwt(token);
-    // print('id: ${payload['userId']}');
-    logindata.setString('userId', payload['userId']);
-    // {roles: [{authority: USER}], exp: 1654698961, userId: d809c7a7-8282-4572-a487-d05e7a2a17f5, iat: 1654695361}
   }
 }

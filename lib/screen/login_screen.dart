@@ -4,10 +4,10 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/api/sign_api.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../provider/login_provider.dart';
+import '../provider/getuser_provider.dart';
 import '../provider/navbar_provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,7 +19,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late SharedPreferences logindata;
-  late bool hasLogin;
   late TextEditingController txtemail;
   late TextEditingController txtpassword;
   final formLogin = GlobalKey<FormState>();
@@ -212,18 +211,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   authLogin(String email, String password) async {
     logindata = await SharedPreferences.getInstance();
-    final data = await LoginApi().login(email, password);
+    final data = await API().login(email, password);
     if (data.status == true) {
       context.read<NavbarProvider>().getIndexNavbar(0);
+      var token = Jwt.parseJwt(data.token!);
+      final userId = token['userId'];
       Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       logindata.setString('token', data.token!);
-      logindata.setBool('hasLogin', true);
-      context.read<LoginProvider>().getUserData(email, password);
-
+      logindata.setString('userId', userId);
+      context.read<GetUserProvider>().getUserData(userId, data.token!);
       txtemail.clear();
       txtpassword.clear();
     } else {
-      logindata.setBool('hasLogin', false);
+      logindata.remove('userId');
       logindata.remove('token');
       var snackBar = SnackBar(
           elevation: 0,
@@ -240,9 +240,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   checkLogin() async {
     logindata = await SharedPreferences.getInstance();
-    hasLogin = logindata.getBool('hasLogin') ?? false;
-    if (hasLogin) {
+    var token = logindata.getString('token');
+    var userId = logindata.getString('userId');
+    try {
+      print('userId checklogin : $userId');
+      context.read<GetUserProvider>().getUserData(userId!, token!);
       Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+    } catch (e) {
+      var snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'Oops!',
+            message: 'Your session was ended\nplease relogin',
+            contentType: ContentType.failure,
+          ));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 }

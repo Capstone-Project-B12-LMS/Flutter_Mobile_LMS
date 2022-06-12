@@ -37,9 +37,9 @@ class Data {
   bool? enabled;
   List<Authorities>? authorities;
   String? username;
-  bool? accountNonLocked;
-  bool? credentialsNonExpired;
   bool? accountNonExpired;
+  bool? credentialsNonExpired;
+  bool? accountNonLocked;
 
   Data(
       {this.id,
@@ -56,9 +56,9 @@ class Data {
       this.enabled,
       this.authorities,
       this.username,
-      this.accountNonLocked,
+      this.accountNonExpired,
       this.credentialsNonExpired,
-      this.accountNonExpired});
+      this.accountNonLocked});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -85,9 +85,9 @@ class Data {
       });
     }
     username = json['username'];
-    accountNonLocked = json['accountNonLocked'];
-    credentialsNonExpired = json['credentialsNonExpired'];
     accountNonExpired = json['accountNonExpired'];
+    credentialsNonExpired = json['credentialsNonExpired'];
+    accountNonLocked = json['accountNonLocked'];
   }
 
   Map<String, dynamic> toJson() {
@@ -110,9 +110,9 @@ class Data {
       data['authorities'] = authorities!.map((v) => v.toJson()).toList();
     }
     data['username'] = username;
-    data['accountNonLocked'] = accountNonLocked;
-    data['credentialsNonExpired'] = credentialsNonExpired;
     data['accountNonExpired'] = accountNonExpired;
+    data['credentialsNonExpired'] = credentialsNonExpired;
+    data['accountNonLocked'] = accountNonLocked;
     return data;
   }
 }
