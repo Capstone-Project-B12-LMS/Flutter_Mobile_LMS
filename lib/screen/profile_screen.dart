@@ -19,10 +19,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late TextEditingController txtemail;
-  late TextEditingController txtfullname;
-  late TextEditingController txttelepon;
-  late TextEditingController txtuser;
+  late final TextEditingController txtemail;
+  late final TextEditingController txtfullname;
+  late final TextEditingController txttelepon;
+  late final TextEditingController txtuser;
   @override
   void initState() {
     txtemail = TextEditingController();
@@ -30,6 +30,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     txtfullname = TextEditingController();
     txtuser = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    txtemail.dispose();
+    txtfullname.dispose();
+    txttelepon.dispose();
+    txtuser.dispose();
+    super.dispose();
   }
 
   @override
@@ -99,18 +108,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     TextInputType.phone,
                     txttelepon,
                     true),
-                widgetTextField(
-                    'Occupation',
-                    context
-                            .watch<GetUserProvider>()
-                            .userDataProvider
-                            .data
-                            ?.roles?[0]
-                            .name ??
-                        '...',
-                    TextInputType.text,
-                    txtuser,
-                    false),
+                widgetTextFieldRole(
+                  'Occupation',
+                  context
+                          .watch<GetUserProvider>()
+                          .userDataProvider
+                          .data
+                          ?.roles?[0]
+                          .name ??
+                      '...',
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
