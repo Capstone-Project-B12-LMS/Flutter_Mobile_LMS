@@ -159,7 +159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Password must be filled!';
                         } else if (Fzregex.hasMatch(
-                                txtpassword.text, FzPattern.passwordNormal1) ==
+                                txtpassword.text, FzPattern.passwordHard) ==
                             false) {
                           return 'Password must be 8-20 characters,\nno spaces and must contain at least 3\nof these characters: 1 uppercase,\n1 number, 1 symbols.';
                         }
@@ -218,7 +218,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     EmailValidator.validate(txtemail.text);
                                 if (isValid &&
                                     Fzregex.hasMatch(txtpassword.text,
-                                        FzPattern.passwordNormal1)) {
+                                        FzPattern.passwordHard)) {
                                   signUp(txtemail.text, txtpassword.text,
                                       txtfullname.text);
                                 } else if (isValid == false) {
@@ -228,12 +228,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                               Text('Email is not valid!')));
                                   txtpassword.clear();
                                 } else if (Fzregex.hasMatch(txtpassword.text,
-                                        FzPattern.passwordNormal1) ==
+                                        FzPattern.passwordHard) ==
                                     false) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(
-                                              'Password must contains at least 8 character, 1 letter and 1 Number')));
+                                              'Password must contains at least 8 character, 1 letter, 1 Number, 1 uppercase, 1 symbols, except whitespace')));
                                   // txtRegisPass.clear();
                                 }
                               }
