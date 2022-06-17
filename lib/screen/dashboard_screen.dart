@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/getuser_response_model.dart';
+import '../provider/join_provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -18,7 +18,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   late SharedPreferences logindata;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyReq = GlobalKey<FormState>();
@@ -105,19 +104,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       side: BorderSide(color: secColor))),
                               backgroundColor:
                                   MaterialStateProperty.all(secColor)),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            var snackBar = SnackBar(
-                                elevation: 0,
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: Colors.transparent,
-                                content: AwesomeSnackbarContent(
-                                  title: 'Success!',
-                                  message: 'Successfully joined the class',
-                                  contentType: ContentType.success,
-                                ));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
+                          onPressed: () async {
+                            try {
+                              await Provider.of<JoinProvider>(context,
+                                      listen: false)
+                                  .joinClass(
+                                      Provider.of<JoinProvider>(context,
+                                              listen: false)
+                                          .token,
+                                      Provider.of<JoinProvider>(context,
+                                              listen: false)
+                                          .userId,
+                                      _textEditingController.text);
+                              if (mounted) {
+                                if (context
+                                        .read<JoinProvider>()
+                                        .joinResClass
+                                        .status ==
+                                    true) {
+                                  var snackBar = SnackBar(
+                                      elevation: 0,
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.transparent,
+                                      content: AwesomeSnackbarContent(
+                                        title: 'Success',
+                                        message:
+                                            'Join Success!\nCheck your new class!',
+                                        contentType: ContentType.success,
+                                      ));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                  Navigator.pop(context);
+                                  _textEditingController.clear();
+                                } else {
+                                  var snackBar = SnackBar(
+                                      elevation: 0,
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.transparent,
+                                      content: AwesomeSnackbarContent(
+                                        title: 'Oops!',
+                                        message: 'Somethng Wrong..',
+                                        contentType: ContentType.failure,
+                                      ));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                  _textEditingController.clear();
+                                }
+                              }
+                            } catch (e) {
+                              // print(e);
+                            }
                           },
                           child: const Text("JOIN")),
                     ),

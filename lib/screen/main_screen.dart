@@ -1,3 +1,4 @@
+import 'package:capstone_project_lms/provider/join_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/screen/dashboard_screen.dart';
 import 'package:capstone_project_lms/screen/mycourse_screen.dart';
@@ -5,6 +6,10 @@ import 'package:capstone_project_lms/screen/setting_screen.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/getclass_response.dart';
+import '../provider/listclass_provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key, this.selectedIndex = 0}) : super(key: key);
@@ -14,10 +19,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  late SharedPreferences loginData;
+  late ResponseGetListClass listClass;
+
   late int _selectedIndex;
   @override
   void initState() {
     _selectedIndex = 0;
+    loadDataMyCourseScreen();
+    loadDataDashboard();
     super.initState();
   }
 
@@ -60,5 +70,23 @@ class _MainScreenState extends State<MainScreen> {
         onTap: _onItemTapped,
       ),
     );
+  }
+
+  loadDataMyCourseScreen() async {
+    loginData = await SharedPreferences.getInstance();
+    String token = loginData.getString('token')!;
+    if (mounted) {
+      Provider.of<GetListClassProvider>(context, listen: false)
+          .getListClass(token);
+    }
+  }
+
+  loadDataDashboard() async {
+    loginData = await SharedPreferences.getInstance();
+    String token = loginData.getString('token')!;
+    String id = loginData.getString('userId')!;
+    if (mounted) {
+      Provider.of<JoinProvider>(context, listen: false).savetokenid(id, token);
+    }
   }
 }
