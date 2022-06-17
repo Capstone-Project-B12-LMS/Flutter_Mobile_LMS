@@ -43,12 +43,12 @@ Widget listClassVertical(String title, String role, String progress) {
     trailing: Column(
       children: [
         const Text(
-          'Progress',
-          style: TextStyle(color: Colors.grey, fontSize: 10),
+          'Members',
+          style: TextStyle(color: Colors.grey, fontSize: 12),
         ),
         Text(
           progress,
-          style: const TextStyle(color: Colors.black, fontSize: 12),
+          style: const TextStyle(color: Colors.black, fontSize: 16),
         )
       ],
     ),

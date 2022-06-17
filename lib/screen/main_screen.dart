@@ -26,9 +26,16 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     _selectedIndex = 0;
-    loadDataMyCourseScreen();
-    loadDataDashboard();
+    // loadDataMyCourseScreen();
+    // loadDataDashboard();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    loadDataDashboard();
+    loadDataMyCourseScreen();
+    super.didChangeDependencies();
   }
 
   List pages = [

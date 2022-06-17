@@ -25,7 +25,7 @@ class MyCourseScreen extends StatelessWidget {
               child: listClassVertical(
                   data.data?[index].name ?? '...',
                   data.data?[index].room ?? '...',
-                  data.data?[index].createdBy ?? '...'),
+                  data.data?[index].users?.length.toString() ?? '...'),
             );
           },
           itemCount: data.data?.length ?? 0,
