@@ -135,6 +135,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
                                   Navigator.pop(context);
+
                                   _textEditingController.clear();
                                 } else {
                                   var snackBar = SnackBar(
@@ -143,11 +144,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       backgroundColor: Colors.transparent,
                                       content: AwesomeSnackbarContent(
                                         title: 'Oops!',
-                                        message: 'Somethng Wrong..',
+                                        message: 'Invalid Code!',
                                         contentType: ContentType.failure,
                                       ));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
+                                  Navigator.pop(context);
                                   _textEditingController.clear();
                                 }
                               }
