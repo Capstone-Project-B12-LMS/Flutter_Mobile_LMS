@@ -15,7 +15,7 @@ class API {
   String regisApi = "$baseUrl/restapi/v1/register";
   String getUser = "$baseUrl/restapi/v1/users";
   String updateUser = "$baseUrl/restapi/v1/users";
-  String getMaterial = "$baseUrl/restapi/v1/class";
+  String getClass = "$baseUrl/restapi/v1/class";
   String join = "$baseUrl/restapi/v1/class/join";
 
   Future<ResponseLogin> login(String email, String password) async {
@@ -79,7 +79,7 @@ class API {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     try {
       Response response =
-          await _dio.get(getMaterial, options: Options(headers: auth));
+          await _dio.get(getClass, options: Options(headers: auth));
       return ResponseGetListClass.fromJson(response.data);
     } catch (e) {
       return ResponseGetListClass.fromJson({});

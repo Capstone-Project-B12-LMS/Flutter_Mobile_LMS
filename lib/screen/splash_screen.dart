@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
       navigateRoute: isTrue ? const MainScreen() : const LoginScreen(),
       duration: 2000,
       imageSize: 300,
-      imageSrc: "assets/images/Splash.png",
+      imageSrc: "assets/images/logoSP.png",
       text: "Study Space",
       textType: TextType.TyperAnimatedText,
       textStyle: TextStyle(fontSize: 30.0, color: secColor),
@@ -49,9 +49,26 @@ class _SplashScreenState extends State<SplashScreen> {
       try {
         if (mounted) {
           context.read<GetUserProvider>().getUserData(userId!, token!);
-          setState(() {
-            isTrue = true;
-          });
+          var a = Provider.of<GetUserProvider>(context).userDataProvider;
+          if (a.status == false) {
+            setState(() {
+              isTrue = false;
+              var snackBar = SnackBar(
+                  elevation: 0,
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.transparent,
+                  content: AwesomeSnackbarContent(
+                    title: 'Oops!',
+                    message: 'Your session was ended\nplease relogin',
+                    contentType: ContentType.failure,
+                  ));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            });
+          } else {
+            setState(() {
+              isTrue = true;
+            });
+          }
           // Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
         }
       } catch (e) {

@@ -820,18 +820,18 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget feedback(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: ListView.builder(
-        // scrollDirection: Axis.horizontal,
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return SizedBox(
-              width: 150.0,
-              child: listClass('UI/UX Design for Beginner', '89%'));
-        },
-      ),
-    );
-  }
+  // Widget feedback(BuildContext context) {
+  //   return SizedBox(
+  //     height: MediaQuery.of(context).size.height,
+  //     child: ListView.builder(
+  //       // scrollDirection: Axis.horizontal,
+  //       itemCount: 10,
+  //       itemBuilder: (context, index) {
+  //         return SizedBox(
+  //             width: 150.0,
+  //             child: listClass('UI/UX Design for Beginner', '89%'));
+  //       },
+  //     ),
+  //   );
+  // }
 }

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../provider/join_provider.dart';
+import '../provider/listclass_provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -187,6 +188,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var data =
+        Provider.of<GetListClassProvider>(context, listen: false).listClass;
     Color secColor = HexColor('#415A80');
     return Scaffold(
       appBar: AppBar(
@@ -332,12 +335,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 height: 150.0,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 10,
                   itemBuilder: (context, index) {
-                    return SizedBox(
-                        width: 150.0,
-                        child: listClass('UI/UX Design for Beginner', '89%'));
+                    return GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, '/detail'),
+                      child: listClassVertical(
+                          data.data?[index].name ?? '...',
+                          data.data?[index].room ?? '...',
+                          data.data?[index].users?.length.toString() ?? '...'),
+                    );
                   },
+                  itemCount: data.data?.length ?? 0,
                 ),
               ),
             ),
