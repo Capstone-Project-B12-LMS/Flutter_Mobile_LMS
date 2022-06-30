@@ -1,8 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/api/sign_api.dart';
+import 'package:capstone_project_lms/provider/login_provider.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:jwt_decode/jwt_decode.dart';
+// import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../provider/getuser_provider.dart';
@@ -164,6 +165,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                 formLogin.currentState!.validate();
                             if (isValidForm) {
                               authLogin(txtemail.text, txtpassword.text);
+                              // Consumer<LoginProvider>(
+                              //   builder: (context, value, _) {
+                              //     switch (value.loginState) {
+                              //       case LoginState.error:
+                              //         txtpassword.clear();
+                              //         return message('Something wrong..');
+                              //       case LoginState.none:
+                              //         return message('Success');
+                              //       case LoginState.loading:
+                              //         return loading();
+                              //     }
+                              //   },
+                              // );
                             } else {
                               var snackBar = SnackBar(
                                   elevation: 0,
@@ -206,26 +220,51 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // Widget message(String m) {
+  //   return Card(
+  //     child: uwaw(m),
+  //   );
+  // }
+
+  // uwaw(String m) {
+  //   var snackBar = SnackBar(
+  //       elevation: 0,
+  //       behavior: SnackBarBehavior.floating,
+  //       backgroundColor: Colors.transparent,
+  //       content: AwesomeSnackbarContent(
+  //         title: 'Oops!',
+  //         message: m,
+  //         contentType: ContentType.failure,
+  //       ));
+  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  // }
+
+  // Widget loading() {
+  //   return const LoadingIndicator(
+  //       indicatorType: Indicator.ballPulse,
+  //       colors: [Colors.blue],
+  //       strokeWidth: 2,
+  //       backgroundColor: Colors.white,
+  //       pathBackgroundColor: Colors.white);
+  // }
+
   authLogin(String email, String password) async {
-    logindata = await SharedPreferences.getInstance();
     final data = await API().login(email, password);
     if (data.status == true) {
       if (mounted) {
         context.read<NavbarProvider>().getIndexNavbar(0);
-        var token = Jwt.parseJwt(data.token!);
-        final userId = token['userId'];
-        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
-        logindata.setString('token', data.token!);
-        logindata.setString('userId', userId);
-        logindata.setBool('newUser', false);
-        context.read<GetUserProvider>().getUserData(userId, data.token!);
+        await Provider.of<LoginProvider>(context, listen: false)
+            .setToken(data.token!);
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+          context.read<GetUserProvider>().getUserData();
+        }
         txtemail.clear();
         txtpassword.clear();
       }
     } else {
       if (mounted) {
-        logindata.remove('userId');
-        logindata.remove('token');
+        Provider.of<LoginProvider>(context, listen: false);
         var snackBar = SnackBar(
             elevation: 0,
             behavior: SnackBarBehavior.floating,

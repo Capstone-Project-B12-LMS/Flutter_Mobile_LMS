@@ -204,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .showSnackBar(snackBar);
                                   context
                                       .read<GetUserProvider>()
-                                      .getUserData(userId, token);
+                                      .getUserData();
                                   txtemail.clear();
                                   txtfullname.clear();
                                   txttelepon.clear();

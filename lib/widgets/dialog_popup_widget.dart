@@ -2,7 +2,8 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
 
-Future<void> showInformationDialog(BuildContext context, String title, String subtitle, String buttonText) async {
+Future<void> showInformationDialog(BuildContext context, String title,
+    String subtitle, String buttonText) async {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final TextEditingController textEditingController = TextEditingController();
@@ -10,7 +11,6 @@ Future<void> showInformationDialog(BuildContext context, String title, String su
   return await showDialog(
       context: context,
       builder: (context) {
-        bool isChecked = false;
         return StatefulBuilder(builder: (context, setState) {
           return Dialog(
             shape: RoundedRectangleBorder(
@@ -20,19 +20,20 @@ Future<void> showInformationDialog(BuildContext context, String title, String su
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   Text(
+                  Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
-                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 20),
                     child: Text(
                       subtitle,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12, color: Colors.black),
+                      style: const TextStyle(fontSize: 12, color: Colors.black),
                     ),
                   ),
                   Padding(

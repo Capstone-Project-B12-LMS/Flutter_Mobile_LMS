@@ -3,7 +3,9 @@ import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
 import 'package:capstone_project_lms/provider/listclass_provider.dart';
 import 'package:capstone_project_lms/provider/login_provider.dart';
+import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
+import 'package:capstone_project_lms/provider/splash_provider.dart';
 import 'package:capstone_project_lms/screen/list_member_screen.dart';
 import 'package:capstone_project_lms/screen/login_screen.dart';
 import 'package:capstone_project_lms/screen/main_screen.dart';
@@ -32,6 +34,12 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (_) => JoinProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => GetMaterialClassProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => SplashProvider(),
       ),
     ],
     child: const MyApp(),

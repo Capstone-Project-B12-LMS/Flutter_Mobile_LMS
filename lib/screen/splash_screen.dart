@@ -1,10 +1,10 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/provider/splash_provider.dart';
 import 'package:capstone_project_lms/screen/login_screen.dart';
 import 'package:capstone_project_lms/screen/main_screen.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 
 import '../provider/getuser_provider.dart';
@@ -17,7 +17,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late SharedPreferences logindata;
   @override
   void initState() {
     checkLogin();
@@ -28,70 +27,53 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     Color secColor = HexColor('#415A80');
-    return SplashScreenView(
-      navigateRoute: isTrue ? const MainScreen() : const LoginScreen(),
-      duration: 2000,
-      imageSize: 300,
-      imageSrc: "assets/images/logoSP.png",
-      text: "Study Space",
-      textType: TextType.TyperAnimatedText,
-      textStyle: TextStyle(fontSize: 30.0, color: secColor),
-      backgroundColor: Colors.white,
+    return Consumer<SplashProvider>(
+      builder: (context, value, _) {
+        return SplashScreenView(
+          navigateRoute:
+              value.isTrue ? const MainScreen() : const LoginScreen(),
+          duration: 2000,
+          imageSize: 300,
+          imageSrc: "assets/images/logoSP.png",
+          text: "Study Space",
+          textType: TextType.TyperAnimatedText,
+          textStyle: TextStyle(fontSize: 30.0, color: secColor),
+          backgroundColor: Colors.white,
+        );
+      },
+      // child:
     );
   }
 
   checkLogin() async {
-    logindata = await SharedPreferences.getInstance();
-    final token = logindata.getString('token');
-    final userId = logindata.getString('userId');
-    final newUser = logindata.getBool('newUser');
-    if (newUser == false) {
-      try {
-        if (mounted) {
-          context.read<GetUserProvider>().getUserData(userId!, token!);
-          var a = Provider.of<GetUserProvider>(context).userDataProvider;
-          if (a.status == false) {
-            setState(() {
-              isTrue = false;
-              var snackBar = SnackBar(
-                  elevation: 0,
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.transparent,
-                  content: AwesomeSnackbarContent(
-                    title: 'Oops!',
-                    message: 'Your session was ended\nplease relogin',
-                    contentType: ContentType.failure,
-                  ));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            });
-          } else {
-            setState(() {
-              isTrue = true;
-            });
-          }
-          // Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
-        }
-      } catch (e) {
-        if (mounted) {
-          setState(() {
-            isTrue = false;
-          });
-          var snackBar = SnackBar(
-              elevation: 0,
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.transparent,
-              content: AwesomeSnackbarContent(
-                title: 'Oops!',
-                message: 'Your session was ended\nplease relogin',
-                contentType: ContentType.failure,
-              ));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    if (mounted) {
+      await context.read<GetUserProvider>().getUserData();
+      if (mounted) {
+        var a = Provider.of<GetUserProvider>(context, listen: false)
+            .userDataProvider;
+        if (a.status == false || a.status == null) {
+          Provider.of<SplashProvider>(context, listen: false).setBool(false);
+          message();
+        } else {
+          Provider.of<SplashProvider>(context, listen: false).setBool(true);
         }
       }
     } else {
-      setState(() {
-        isTrue = false;
-      });
+      Provider.of<SplashProvider>(context, listen: false).setBool(false);
+      message();
     }
+  }
+
+  message() {
+    var snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Oops!',
+          message: 'Your session was endded..',
+          contentType: ContentType.warning,
+        ));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

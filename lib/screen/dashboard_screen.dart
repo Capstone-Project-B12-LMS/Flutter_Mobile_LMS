@@ -6,10 +6,10 @@ import 'package:capstone_project_lms/widgets/list_class_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../provider/join_provider.dart';
 import '../provider/listclass_provider.dart';
+import 'detail_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -19,13 +19,18 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  late SharedPreferences logindata;
+  // late SharedPreferences logindata;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyReq = GlobalKey<FormState>();
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController txtFullNameReq = TextEditingController();
   final TextEditingController txtEmailReq = TextEditingController();
   final TextEditingController txtClassReq = TextEditingController();
+  @override
+  void initState() {
+    Provider.of<GetListClassProvider>(context, listen: false).getListClass();
+    super.initState();
+  }
 
   Future<void> showInformationDialog(BuildContext context) async {
     Color secColor = HexColor('#415A80');
@@ -188,8 +193,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var data =
-        Provider.of<GetListClassProvider>(context, listen: false).listClass;
     Color secColor = HexColor('#415A80');
     return Scaffold(
       appBar: AppBar(
@@ -327,25 +330,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           SliverToBoxAdapter(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/detail');
-              },
-              child: SizedBox(
-                height: 150.0,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/detail'),
-                      child: listClassVertical(
-                          data.data?[index].name ?? '...',
-                          data.data?[index].room ?? '...',
-                          data.data?[index].users?.length.toString() ?? '...'),
-                    );
-                  },
-                  itemCount: data.data?.length ?? 0,
-                ),
+            child: SizedBox(
+              height: 150.0,
+              child: Consumer<GetListClassProvider>(
+                builder: (context, GetListClassProvider data, _) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () => Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return DetailScreen(
+                              classId:
+                                  data.listClass.data?[index].id.toString() ??
+                                      'null',
+                            );
+                          },
+                        )),
+                        child: listClass(
+                          data.listClass.data?[index].name ?? '...',
+                          data.listClass.data?[index].createdBy ?? '...',
+                        ),
+                      );
+                    },
+                    itemCount: data.listClass.data?.length ?? 0,
+                  );
+                },
+                // child: ,
               ),
             ),
           ),
@@ -516,4 +527,5 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
 }

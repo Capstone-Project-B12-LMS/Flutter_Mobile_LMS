@@ -1,4 +1,6 @@
+import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListMemberScreen extends StatelessWidget {
   const ListMemberScreen({Key? key}) : super(key: key);
@@ -16,26 +18,35 @@ class ListMemberScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          return const ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.amber,
-            ),
-            title: Text(
-              'Name',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-              'Role',
-              style: TextStyle(color: Colors.grey),
-            ),
+      body: Consumer<GetMaterialClassProvider>(
+        builder: (context, value, _) {
+          return ListView.builder(
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.amber,
+                ),
+                title: Text(
+                  value.materialClass.data?[0].classes?.users?[index]
+                          .fullName ??
+                      '..',
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  value.materialClass.data?[0].classes?.users?[index].roles?[0]
+                          .name ??
+                      '..',
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              );
+            },
+            itemCount: value.materialClass.data?[0].classes?.users?.length ?? 1,
           );
         },
-        itemCount: 10,
+        // child:
       ),
     );
   }

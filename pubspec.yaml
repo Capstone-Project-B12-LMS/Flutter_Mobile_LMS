@@ -49,6 +49,7 @@ dependencies:
   shared_preferences: ^2.0.15
   splash_screen_view: ^2.0.1
   jwt_decode: ^0.3.1
+  loading_indicator: ^3.1.0
   
 
 dev_dependencies:

@@ -6,17 +6,19 @@ import 'package:capstone_project_lms/models/register_response_model.dart';
 import 'package:capstone_project_lms/models/updateuser_response.dart';
 import 'package:dio/dio.dart';
 
+import '../models/materialbyclass_response.dart';
+
 class API {
   static String baseUrl =
-      'http://ec2-34-212-169-254.us-west-2.compute.amazonaws.com';
+      'http://ec2-34-219-136-154.us-west-2.compute.amazonaws.com';
   final Dio _dio = Dio();
 
   String loginApi = "$baseUrl/restapi/v1/login";
   String regisApi = "$baseUrl/restapi/v1/register";
-  String getUser = "$baseUrl/restapi/v1/users";
-  String updateUser = "$baseUrl/restapi/v1/users";
-  String getClass = "$baseUrl/restapi/v1/class";
+  String userUrl = "$baseUrl/restapi/v1/users";
   String join = "$baseUrl/restapi/v1/class/join";
+  String classUrl = "$baseUrl/restapi/v1/class";
+  String materialUrl = "$baseUrl/restapi/v1/material";
 
   Future<ResponseLogin> login(String email, String password) async {
     Map<String, String> data = {"email": email, "password": password};
@@ -49,7 +51,7 @@ class API {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     try {
       Response response =
-          await _dio.get("$getUser/$id", options: Options(headers: auth));
+          await _dio.get("$userUrl/$id", options: Options(headers: auth));
       return ResponseGetUser.fromJson(response.data);
     } catch (e) {
       return ResponseGetUser.fromJson({});
@@ -65,7 +67,7 @@ class API {
       'telepon': telepon
     };
     try {
-      Response response = await _dio.put("$updateUser/$id",
+      Response response = await _dio.put("$userUrl/$id",
           data: data,
           options:
               Options(headers: auth, contentType: Headers.jsonContentType));
@@ -79,7 +81,7 @@ class API {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     try {
       Response response =
-          await _dio.get(getClass, options: Options(headers: auth));
+          await _dio.get(classUrl, options: Options(headers: auth));
       return ResponseGetListClass.fromJson(response.data);
     } catch (e) {
       return ResponseGetListClass.fromJson({});
@@ -98,6 +100,30 @@ class API {
       return ResponseJoinClass.fromJson(response.data);
     } catch (e) {
       return ResponseJoinClass.fromJson({});
+    }
+  }
+
+  Future<ResponseJoinClass> classPage(
+      String page, String token, String userId) async {
+    Map<String, String> auth = {'Authorization': 'Bearer $token'};
+    try {
+      Response response =
+          await _dio.get("$classUrl/$page/10", options: Options(headers: auth));
+      return ResponseJoinClass.fromJson(response.data);
+    } catch (e) {
+      return ResponseJoinClass.fromJson({});
+    }
+  }
+
+  Future<MaterialByClassResponse> materialClass(
+      String classId, String token) async {
+    Map<String, String> auth = {'Authorization': 'Bearer $token'};
+    try {
+      Response response = await _dio.get("$materialUrl/class/$classId",
+          options: Options(headers: auth));
+      return MaterialByClassResponse.fromJson(response.data);
+    } catch (e) {
+      return MaterialByClassResponse.fromJson({});
     }
   }
 }
