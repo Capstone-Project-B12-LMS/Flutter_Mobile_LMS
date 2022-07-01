@@ -1,8 +1,9 @@
-import 'package:capstone_project_lms/provider/listclass_provider.dart';
 import 'package:capstone_project_lms/screen/detail_screen.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/acitiveclass_provider.dart';
 
 class MyCourseScreen extends StatelessWidget {
   const MyCourseScreen({Key? key}) : super(key: key);
@@ -18,23 +19,27 @@ class MyCourseScreen extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        body: Consumer<GetListClassProvider>(
+        body: Consumer<ActiveClassProvider>(
           builder: (context, data, child) {
             return ListView.builder(
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(classId: data.listClass.data?[index].id??'null'),)),
-                // Navigator.pushNamed(context, '/detail'),
-                child: listClassVertical(
-                    data.listClass.data?[index].name ?? '...',
-                    data.listClass.data?[index].room ?? '...',
-                    data.listClass.data?[index].users?.length.toString() ?? '...'),
-              );
-            },
-            itemCount: data.listClass.data?.length ?? 0,
-          );
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailScreen(
+                            classId: data.dataClass.data?[index].id ?? 'null'),
+                      )),
+                  child: listClassVertical(
+                      data.dataClass.data?[index].name ?? '...',
+                      data.dataClass.data?[index].room ?? '...',
+                      data.dataClass.data?[index].users?.length.toString() ??
+                          '...'),
+                );
+              },
+              itemCount: data.dataClass.data?.length ?? 0,
+            );
           },
-          // child: 
         ));
   }
 }

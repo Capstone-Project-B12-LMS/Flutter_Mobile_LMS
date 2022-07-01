@@ -1,3 +1,4 @@
+import 'package:capstone_project_lms/models/activeclass_response.dart';
 import 'package:capstone_project_lms/models/getclass_response.dart';
 import 'package:capstone_project_lms/models/getuser_response_model.dart';
 import 'package:capstone_project_lms/models/joinclass_response.dart';
@@ -124,6 +125,17 @@ class API {
       return MaterialByClassResponse.fromJson(response.data);
     } catch (e) {
       return MaterialByClassResponse.fromJson({});
+    }
+  }
+
+  Future<ActiveClassResponse> activeClass(String userId, String token) async {
+    Map<String, String> auth = {'Authorization': 'Bearer $token'};
+    try {
+      Response response = await _dio.get("$userUrl/class/$userId/ACTIVE",
+          options: Options(headers: auth));
+      return ActiveClassResponse.fromJson(response.data);
+    } catch (e) {
+      return ActiveClassResponse.fromJson({});
     }
   }
 }

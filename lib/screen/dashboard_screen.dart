@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/join_provider.dart';
-import '../provider/listclass_provider.dart';
 import 'detail_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -19,7 +19,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  // late SharedPreferences logindata;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyReq = GlobalKey<FormState>();
   final TextEditingController _textEditingController = TextEditingController();
@@ -28,7 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final TextEditingController txtClassReq = TextEditingController();
   @override
   void initState() {
-    Provider.of<GetListClassProvider>(context, listen: false).getListClass();
+    Provider.of<ActiveClassProvider>(context, listen: false).getActiveClass();
     super.initState();
   }
 
@@ -37,7 +36,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return await showDialog(
         context: context,
         builder: (context) {
-          // bool isChecked = false;
           return StatefulBuilder(builder: (context, setState) {
             return Dialog(
               shape: RoundedRectangleBorder(
@@ -332,8 +330,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           SliverToBoxAdapter(
             child: SizedBox(
               height: 150.0,
-              child: Consumer<GetListClassProvider>(
-                builder: (context, GetListClassProvider data, _) {
+              child: Consumer<ActiveClassProvider>(
+                builder: (context, ActiveClassProvider data, _) {
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
@@ -342,18 +340,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           builder: (context) {
                             return DetailScreen(
                               classId:
-                                  data.listClass.data?[index].id.toString() ??
+                                  data.dataClass.data?[index].id.toString() ??
                                       'null',
                             );
                           },
                         )),
                         child: listClass(
-                          data.listClass.data?[index].name ?? '...',
-                          data.listClass.data?[index].createdBy ?? '...',
+                          data.dataClass.data?[index].name ?? '...',
+                          data.dataClass.data?[index].createdBy ?? '...',
                         ),
                       );
                     },
-                    itemCount: data.listClass.data?.length ?? 0,
+                    itemCount: data.dataClass.data?.length ?? 0,
                   );
                 },
                 // child: ,
@@ -527,5 +525,4 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
 }

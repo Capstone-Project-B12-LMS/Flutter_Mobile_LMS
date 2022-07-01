@@ -1,4 +1,5 @@
 // import 'package:capstone_project_lms/screen/detail_class_screen.dart';
+import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
 import 'package:capstone_project_lms/provider/listclass_provider.dart';
@@ -40,6 +41,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (_) => SplashProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => ActiveClassProvider(),
       ),
     ],
     child: const MyApp(),
