@@ -16,6 +16,7 @@ import 'package:capstone_project_lms/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'provider/counselling_provider.dart';
 import 'screen/profile_screen.dart';
 
 void main() {
@@ -44,6 +45,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (_) => ActiveClassProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => CounsellingProvdider(),
       ),
     ],
     child: const MyApp(),

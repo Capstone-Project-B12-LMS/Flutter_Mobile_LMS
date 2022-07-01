@@ -1,5 +1,6 @@
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/positions.dart';
+import 'package:capstone_project_lms/provider/counselling_provider.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -103,11 +104,11 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> showInformationDialog(BuildContext context) async {
-      final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-      final TextEditingController txtFullName = TextEditingController();
-      final TextEditingController txtEmail = TextEditingController();
+    final TextEditingController txtTopic = TextEditingController();
+    final TextEditingController txtContent = TextEditingController();
+    Future<void> showInformationDialog(BuildContext context) async {
       Color secColor = HexColor('#415A80');
       return await showDialog(
           context: context,
@@ -147,15 +148,15 @@ class _DetailScreenState extends State<DetailScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: TextFormField(
-                                  controller: txtFullName,
+                                  controller: txtTopic,
                                   cursorColor: secColor,
                                   validator: (value) {
                                     return value!.isNotEmpty
                                         ? null
-                                        : "Full Name must be filled!";
+                                        : "Topic must be filled!";
                                   },
                                   decoration: InputDecoration(
-                                    hintText: 'Full Name',
+                                    hintText: 'Topic',
                                     prefixIcon: Icon(
                                       Icons.person_outline,
                                       color: secColor,
@@ -180,15 +181,15 @@ class _DetailScreenState extends State<DetailScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: TextFormField(
-                                  controller: txtEmail,
+                                  controller: txtContent,
                                   cursorColor: secColor,
                                   validator: (value) {
                                     return value!.isNotEmpty
                                         ? null
-                                        : "Email must be filled!";
+                                        : "Content must be filled!";
                                   },
                                   decoration: InputDecoration(
-                                    hintText: 'Enter Email Address',
+                                    hintText: 'Content',
                                     prefixIcon: Icon(
                                       Icons.email_outlined,
                                       color: secColor,
@@ -226,50 +227,110 @@ class _DetailScreenState extends State<DetailScreen> {
                                       side: BorderSide(color: secColor))),
                               backgroundColor:
                                   MaterialStateProperty.all(secColor)),
-                          onPressed: () {
+                          onPressed: () async {
                             final isValidForm =
                                 formKey.currentState!.validate();
                             if (isValidForm) {
-                              Navigator.pop(context);
-                              showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text(
-                                    'COUNSELLING REQUEST COMPLETE!',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  content: const Text(
-                                    'You\'ll receive a confirmation when your request has been accepted or declined.',
-                                    style: TextStyle(color: Colors.black),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  actions: <Widget>[
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: ElevatedButton(
-                                          style: ButtonStyle(
-                                              shape: MaterialStateProperty.all<
-                                                      RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                      side: BorderSide(
-                                                          color: secColor))),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      secColor)),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text("OK")),
+                              await Provider.of<CounsellingProvdider>(context,
+                                      listen: false)
+                                  .reqCounselling(txtTopic.text,
+                                      widget.classId!, txtContent.text);
+                              if (mounted) {
+                                Navigator.pop(context);
+                                if (Provider.of<CounsellingProvdider>(context,
+                                            listen: false)
+                                        .dataCounselling
+                                        .status ==
+                                    true) {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text(
+                                        'COUNSELLING REQUEST COMPLETE!',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      content: const Text(
+                                        'You\'ll receive a confirmation when your request has been accepted or declined.',
+                                        style: TextStyle(color: Colors.black),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      actions: <Widget>[
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                  shape: MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                          side: BorderSide(
+                                                              color:
+                                                                  secColor))),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          secColor)),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text("OK")),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
+                                  );
+                                } else {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text(
+                                        'COUNSELLING REQUEST FAILED!',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      content: const Text(
+                                        'Oops!\nPlease try again later..',
+                                        style: TextStyle(color: Colors.black),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      actions: <Widget>[
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                  shape: MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                          side: BorderSide(
+                                                              color:
+                                                                  secColor))),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          secColor)),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text("OK")),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              }
                             }
                           },
                           child: const Text("SUBMIT A REQUEST")),
@@ -659,7 +720,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                         backgroundColor:
                                             MaterialStateProperty.all(
                                                 secColor)),
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      // if(txtTopic)
+
                                       showInformationDialog(context);
                                     },
                                     child: const Text(

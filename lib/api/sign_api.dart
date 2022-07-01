@@ -1,4 +1,5 @@
 import 'package:capstone_project_lms/models/activeclass_response.dart';
+import 'package:capstone_project_lms/models/counselling_response.dart';
 import 'package:capstone_project_lms/models/getclass_response.dart';
 import 'package:capstone_project_lms/models/getuser_response_model.dart';
 import 'package:capstone_project_lms/models/joinclass_response.dart';
@@ -136,6 +137,24 @@ class API {
       return ActiveClassResponse.fromJson(response.data);
     } catch (e) {
       return ActiveClassResponse.fromJson({});
+    }
+  }
+
+  Future<CounsellingResponse> counsellingRequest(String topic, String userId,
+      String classId, String content, String token) async {
+    Map<String, String> auth = {'Authorization': 'Bearer $token'};
+    Map<String, String> data = {
+      "topic": topic,
+      "userId": userId,
+      "classId": classId,
+      "content": content
+    };
+    try {
+      Response response = await _dio.post("$baseUrl/restapi/v1/guidances",
+          options: Options(headers: auth),data: data);
+      return CounsellingResponse.fromJson(response.data);
+    } catch (e) {
+      return CounsellingResponse.fromJson({});
     }
   }
 }
