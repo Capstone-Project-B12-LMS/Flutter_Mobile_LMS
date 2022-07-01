@@ -3,6 +3,7 @@ import 'package:avatar_stack/positions.dart';
 import 'package:capstone_project_lms/provider/counselling_provider.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -617,14 +618,19 @@ class _DetailScreenState extends State<DetailScreen> {
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    materialClass.materialClass
-                                            .data?[_selectedIndex].content ??
-                                        '..',
-                                    style: const TextStyle(fontSize: 12),
-                                    maxLines: 4,
-                                    softWrap: true,
-                                  ),
+                                  HtmlWidget(
+                                      materialClass.materialClass
+                                              .data?[_selectedIndex].content ??
+                                          '..',
+                                      textStyle: const TextStyle(fontSize: 12)),
+                                  // Text(
+                                  //   materialClass.materialClass
+                                  //           .data?[_selectedIndex].content ??
+                                  //       '..',
+                                  //   style: const TextStyle(fontSize: 12),
+                                  //   maxLines: 4,
+                                  //   softWrap: true,
+                                  // ),
                                   TextButton(
                                       onPressed: () {
                                         showBarModalBottomSheet(
@@ -659,14 +665,20 @@ class _DetailScreenState extends State<DetailScreen> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
-                                                    Text(
-                                                      materialClass
-                                                              .materialClass
-                                                              .data?[
-                                                                  _selectedIndex]
-                                                              .content ??
-                                                          '..',
-                                                    ),
+                                                    HtmlWidget(materialClass
+                                                            .materialClass
+                                                            .data?[
+                                                                _selectedIndex]
+                                                            .content ??
+                                                        '..'),
+                                                    // Text(
+                                                    //   materialClass
+                                                    //           .materialClass
+                                                    //           .data?[
+                                                    //               _selectedIndex]
+                                                    //           .content ??
+                                                    //       '..',
+                                                    // ),
                                                   ],
                                                 ),
                                               ),
