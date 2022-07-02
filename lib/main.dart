@@ -1,4 +1,5 @@
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
+import 'package:capstone_project_lms/provider/feedback_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
 import 'package:capstone_project_lms/provider/listclass_provider.dart';
@@ -47,6 +48,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (_) => CounsellingProvdider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => FeedbackProvider(),
       ),
     ],
     child: const MyApp(),

@@ -19,8 +19,8 @@ class LoadingWidget extends StatelessWidget {
               indicatorType: Indicator.ballPulse,
               colors: [secColor, thColor, secColor],
               strokeWidth: 2,
-              backgroundColor: Colors.white,
-              pathBackgroundColor: Colors.white),
+              backgroundColor: Colors.transparent,
+              pathBackgroundColor: Colors.transparent),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/positions.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/provider/counselling_provider.dart';
+import 'package:capstone_project_lms/provider/feedback_provider.dart';
 import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:capstone_project_lms/widgets/loading_widget.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
@@ -23,7 +24,6 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-
   String? linkVideo;
   formatLink(String link) {
     String? videoId;
@@ -59,6 +59,8 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   void initState() {
+    Provider.of<FeedbackProvider>(context, listen: false)
+        .getFeedback(widget.classId!);
     // formatLink(link)
     _controller = YoutubePlayerController(
       initialVideoId: _ids.first,
@@ -806,37 +808,56 @@ class _DetailScreenState extends State<DetailScreen> {
                           ],
                         )),
                       if (konten == 3)
-                        Expanded(
-                            child: CustomScrollView(
-                          slivers: [
-                            SliverPadding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              sliver: SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content:
-                                              Text('Feedback ke-${index + 1}'),
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                        ));
+                        Expanded(child: Consumer<FeedbackProvider>(
+                          builder: (context, value, child) {
+                            return CustomScrollView(
+                              slivers: [
+                                SliverPadding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  sliver: SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Feedback ke-${index + 1}'),
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                            ));
+                                          },
+                                          child: listFeedBack(
+                                              value
+                                                      .feedbackResponse
+                                                      .data?[index]
+                                                      .user
+                                                      ?.fullName ??
+                                                  '..',
+                                              value
+                                                      .feedbackResponse
+                                                      .data?[index]
+                                                      .user
+                                                      ?.roles?[0]
+                                                      .name ??
+                                                  '..',
+                                              value.feedbackResponse
+                                                      .data?[index].content ??
+                                                  '..'),
+                                        );
                                       },
-                                      child: listFeedBack(
-                                          'Name ${index + 1}',
-                                          'Role..',
-                                          'Ini adalah feedback\nIni adalah feedback\nIni adalah feedback'),
-                                    );
-                                  },
-                                  childCount: 10, // 1000 list items
+
+                                      childCount:
+                                          value.feedbackResponse.data?.length ??
+                                              1, // 1000 list items
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                              ],
+                            );
+                          },
                         )),
                     ],
                   ),

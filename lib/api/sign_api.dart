@@ -1,5 +1,6 @@
 import 'package:capstone_project_lms/models/activeclass_response.dart';
 import 'package:capstone_project_lms/models/counselling_response.dart';
+import 'package:capstone_project_lms/models/feedback_response.dart';
 import 'package:capstone_project_lms/models/getclass_response.dart';
 import 'package:capstone_project_lms/models/getuser_response_model.dart';
 import 'package:capstone_project_lms/models/joinclass_response.dart';
@@ -12,15 +13,16 @@ import '../models/materialbyclass_response.dart';
 
 class API {
   static String baseUrl =
-      'http://ec2-34-219-136-154.us-west-2.compute.amazonaws.com';
+      'http://ec2-34-219-136-154.us-west-2.compute.amazonaws.com/restapi/v1';
   final Dio _dio = Dio();
 
-  String loginApi = "$baseUrl/restapi/v1/login";
-  String regisApi = "$baseUrl/restapi/v1/register";
-  String userUrl = "$baseUrl/restapi/v1/users";
-  String join = "$baseUrl/restapi/v1/class/join";
-  String classUrl = "$baseUrl/restapi/v1/class";
-  String materialUrl = "$baseUrl/restapi/v1/material";
+  String loginApi = "$baseUrl/login";
+  String regisApi = "$baseUrl/register";
+  String userUrl = "$baseUrl/users";
+  String join = "$baseUrl/class/join";
+  String classUrl = "$baseUrl/class";
+  String materialUrl = "$baseUrl/material";
+  String feedback = "$baseUrl/feedbacks/class";
 
   Future<ResponseLogin> login(String email, String password) async {
     Map<String, String> data = {"email": email, "password": password};
@@ -151,10 +153,21 @@ class API {
     };
     try {
       Response response = await _dio.post("$baseUrl/restapi/v1/guidances",
-          options: Options(headers: auth),data: data);
+          options: Options(headers: auth), data: data);
       return CounsellingResponse.fromJson(response.data);
     } catch (e) {
       return CounsellingResponse.fromJson({});
+    }
+  }
+
+  Future<FeedbackResponse> feedbackClass(String classId, String token) async {
+    Map<String, String> auth = {'Authorization': 'Bearer $token'};
+    try {
+      Response response = await _dio.get("$feedback/$classId",
+          options: Options(headers: auth));
+      return FeedbackResponse.fromJson(response.data);
+    } catch (e) {
+      return FeedbackResponse.fromJson({});
     }
   }
 }
