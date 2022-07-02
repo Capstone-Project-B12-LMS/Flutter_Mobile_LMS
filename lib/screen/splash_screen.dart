@@ -3,10 +3,12 @@ import 'package:capstone_project_lms/provider/splash_provider.dart';
 import 'package:capstone_project_lms/screen/login_screen.dart';
 import 'package:capstone_project_lms/screen/main_screen.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
+import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 
+import '../provider/acitiveclass_provider.dart';
 import '../provider/getuser_provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -53,27 +55,18 @@ class _SplashScreenState extends State<SplashScreen> {
             .userDataProvider;
         if (a.status == false || a.status == null) {
           Provider.of<SplashProvider>(context, listen: false).setBool(false);
-          message();
+          PopUpDialogWidget(
+          text: 'Your session was endded..', type: ContentType.warning);
         } else {
           Provider.of<SplashProvider>(context, listen: false).setBool(true);
+          Provider.of<ActiveClassProvider>(context, listen: false)
+              .getActiveClass();
         }
       }
     } else {
       Provider.of<SplashProvider>(context, listen: false).setBool(false);
-      message();
+      PopUpDialogWidget(
+          text: 'Your session was endded..', type: ContentType.warning);
     }
-  }
-
-  message() {
-    var snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Oops!',
-          message: 'Your session was endded..',
-          contentType: ContentType.warning,
-        ));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

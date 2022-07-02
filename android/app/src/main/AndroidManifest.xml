@@ -2,7 +2,7 @@
     package="com.example.capstone_project_lms">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="capstone_project_lms"
+        android:label="Study Space"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icons">
         <activity

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:capstone_project_lms/widgets/profile_widgets.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -131,98 +132,98 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       side: BorderSide(color: secColor))),
                           backgroundColor: MaterialStateProperty.all(secColor)),
                       onPressed: () async {
-                        logindata = await SharedPreferences.getInstance();
-                        var token = logindata.getString('token')!;
-                        var userId = logindata.getString('userId')!;
-                        try {
-                          String? newName, newEmail, newTelepon;
-                          if (userData.status == true) {
-                            setState(() {
-                              if (txtemail.text.isEmpty) {
-                                newEmail = userData.data!.email;
-                              } else {
-                                final bool isValid =
-                                    EmailValidator.validate(txtemail.text);
-                                if (isValid) {
-                                  newEmail = txtemail.text;
+                        if (txtemail.text == "" &&
+                            txtfullname.text == "" &&
+                            txttelepon.text == "") {
+                          PopUpDialogWidget(
+                              text: 'Nothing Changes..',
+                              type: ContentType.warning);
+                        } else {
+                          logindata = await SharedPreferences.getInstance();
+                          var token = logindata.getString('token')!;
+                          var userId = logindata.getString('userId')!;
+                          try {
+                            String? newName, newEmail, newTelepon;
+                            if (userData.status == true) {
+                              setState(() {
+                                if (txtemail.text.isEmpty) {
+                                  newEmail = userData.data!.email;
                                 } else {
-                                  var snackBar = SnackBar(
-                                      elevation: 0,
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor: Colors.transparent,
-                                      content: AwesomeSnackbarContent(
-                                        title: 'Oops!',
-                                        message: 'Email is not valid!',
-                                        contentType: ContentType.failure,
-                                      ));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
+                                  final bool isValid =
+                                      EmailValidator.validate(txtemail.text);
+                                  if (isValid) {
+                                    newEmail = txtemail.text;
+                                  } else {
+                                    var snackBar = SnackBar(
+                                        elevation: 0,
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.transparent,
+                                        content: AwesomeSnackbarContent(
+                                          title: 'Oops!',
+                                          message: 'Email is not valid!',
+                                          contentType: ContentType.failure,
+                                        ));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
                                 }
-                              }
-                              if (txtfullname.text.isEmpty) {
-                                newName = userData.data!.fullName;
-                              } else {
-                                newName = txtfullname.text;
-                              }
-                              if (txttelepon.text.isEmpty) {
-                                newTelepon = userData.data!.telepon;
-                              } else {
-                                if (txttelepon.text.length > 10) {
-                                  newTelepon = txttelepon.text;
+                                if (txtfullname.text.isEmpty) {
+                                  newName = userData.data!.fullName;
                                 } else {
-                                  var snackBar = SnackBar(
-                                      elevation: 0,
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor: Colors.transparent,
-                                      content: AwesomeSnackbarContent(
-                                        title: 'Oops!',
-                                        message:
-                                            'Phone Number must be at least 11 numeric',
-                                        contentType: ContentType.failure,
-                                      ));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
+                                  newName = txtfullname.text;
                                 }
-                              }
-                              if (newEmail != null &&
-                                  newEmail != null &&
-                                  newTelepon != null) {
-                                API()
-                                    .updateData(userId, token, newEmail!,
-                                        newName!, newTelepon!)
-                                    .then((value) {
-                                  var snackBar = SnackBar(
-                                      elevation: 0,
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor: Colors.transparent,
-                                      content: AwesomeSnackbarContent(
-                                        title: 'Success',
-                                        message: 'Data saved successfully',
-                                        contentType: ContentType.success,
-                                      ));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                  context
-                                      .read<GetUserProvider>()
-                                      .getUserData();
-                                  txtemail.clear();
-                                  txtfullname.clear();
-                                  txttelepon.clear();
-                                });
-                              }
-                            });
+                                if (txttelepon.text.isEmpty) {
+                                  newTelepon = userData.data!.telepon;
+                                } else {
+                                  if (txttelepon.text.length > 10) {
+                                    newTelepon = txttelepon.text;
+                                  } else {
+                                    var snackBar = SnackBar(
+                                        elevation: 0,
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.transparent,
+                                        content: AwesomeSnackbarContent(
+                                          title: 'Oops!',
+                                          message:
+                                              'Phone Number must be at least 11 numeric',
+                                          contentType: ContentType.failure,
+                                        ));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                }
+                                if (newEmail != null &&
+                                    newEmail != null &&
+                                    newTelepon != null) {
+                                  API()
+                                      .updateData(userId, token, newEmail!,
+                                          newName!, newTelepon!)
+                                      .then((value) {
+                                    var snackBar = SnackBar(
+                                        elevation: 0,
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.transparent,
+                                        content: AwesomeSnackbarContent(
+                                          title: 'Success',
+                                          message: 'Data saved successfully',
+                                          contentType: ContentType.success,
+                                        ));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    context
+                                        .read<GetUserProvider>()
+                                        .getUserData();
+                                    txtemail.clear();
+                                    txtfullname.clear();
+                                    txttelepon.clear();
+                                  });
+                                }
+                              });
+                            }
+                          } catch (e) {
+                            PopUpDialogWidget(
+                                text: 'text', type: ContentType.failure);
                           }
-                        } catch (e) {
-                          var snackBar = SnackBar(
-                              elevation: 0,
-                              behavior: SnackBarBehavior.floating,
-                              backgroundColor: Colors.transparent,
-                              content: AwesomeSnackbarContent(
-                                title: 'Oops!',
-                                message: 'Something wrong..\nTry again later..',
-                                contentType: ContentType.failure,
-                              ));
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       },
                       child: const Text(
