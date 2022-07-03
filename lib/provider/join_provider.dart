@@ -22,11 +22,10 @@ class JoinProvider with ChangeNotifier {
 
   joinClass(String token, String userId, String classCode) async {
     try {
-      _joinresClass = await API().joinClass(classCode, userId, token);
+      _joinresClass = await API().joinClass(classCode, token, userId);
       notifyListeners();
     } catch (e) {
       notifyListeners();
     }
   }
-
 }

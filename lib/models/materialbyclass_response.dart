@@ -29,12 +29,11 @@ class MaterialByClassResponse {
 
 class Data {
   String? id;
-  List<int>? createdAt;
   String? createdBy;
   String? updatedAt;
   String? updatedBy;
   bool? isDeleted;
-  Classes? classes;
+  Classes? classEntity;
   String? title;
   String? content;
   String? topic;
@@ -46,12 +45,11 @@ class Data {
 
   Data(
       {this.id,
-      this.createdAt,
       this.createdBy,
       this.updatedAt,
       this.updatedBy,
       this.isDeleted,
-      this.classes,
+      this.classEntity,
       this.title,
       this.content,
       this.topic,
@@ -63,13 +61,13 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    createdAt = json['createdAt'].cast<int>();
     createdBy = json['createdBy'];
     updatedAt = json['updatedAt'];
     updatedBy = json['updatedBy'];
     isDeleted = json['isDeleted'];
-    classes =
-        json['classes'] != null ? Classes.fromJson(json['classes']) : null;
+    classEntity = json['classEntity'] != null
+        ? Classes.fromJson(json['classEntity'])
+        : null;
     title = json['title'];
     content = json['content'];
     topic = json['topic'];
@@ -84,13 +82,12 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['createdAt'] = createdAt;
     data['createdBy'] = createdBy;
     data['updatedAt'] = updatedAt;
     data['updatedBy'] = updatedBy;
     data['isDeleted'] = isDeleted;
-    if (classes != null) {
-      data['classes'] = classes!.toJson();
+    if (classEntity != null) {
+      data['classEntity'] = classEntity!.toJson();
     }
     data['title'] = title;
     data['content'] = content;
@@ -108,39 +105,36 @@ class Data {
 
 class Classes {
   String? id;
-  List<int>? createdAt;
   String? createdBy;
-  List<int>? updatedAt;
   String? updatedBy;
   bool? isDeleted;
   String? name;
   String? room;
+  String? reportUrl;
   String? code;
   String? status;
   List<Users>? users;
 
   Classes(
       {this.id,
-      this.createdAt,
       this.createdBy,
-      this.updatedAt,
       this.updatedBy,
       this.isDeleted,
       this.name,
       this.room,
+      this.reportUrl,
       this.code,
       this.status,
       this.users});
 
   Classes.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    createdAt = json['createdAt'].cast<int>();
     createdBy = json['createdBy'];
-    updatedAt = json['updatedAt'].cast<int>();
     updatedBy = json['updatedBy'];
     isDeleted = json['isDeleted'];
     name = json['name'];
     room = json['room'];
+    reportUrl = json['reportUrl'];
     code = json['code'];
     status = json['status'];
     if (json['users'] != null) {
@@ -154,13 +148,12 @@ class Classes {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['createdAt'] = createdAt;
     data['createdBy'] = createdBy;
-    data['updatedAt'] = updatedAt;
     data['updatedBy'] = updatedBy;
     data['isDeleted'] = isDeleted;
     data['name'] = name;
     data['room'] = room;
+    data['reportUrl'] = reportUrl;
     data['code'] = code;
     data['status'] = status;
     if (users != null) {
@@ -172,9 +165,7 @@ class Classes {
 
 class Users {
   String? id;
-  List<int>? createdAt;
   String? createdBy;
-  List<int>? updatedAt;
   String? updatedBy;
   bool? isDeleted;
   String? fullName;
@@ -191,9 +182,7 @@ class Users {
 
   Users(
       {this.id,
-      this.createdAt,
       this.createdBy,
-      this.updatedAt,
       this.updatedBy,
       this.isDeleted,
       this.fullName,
@@ -210,9 +199,7 @@ class Users {
 
   Users.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    createdAt = json['createdAt'].cast<int>();
     createdBy = json['createdBy'];
-    updatedAt = json['updatedAt'].cast<int>();
     updatedBy = json['updatedBy'];
     isDeleted = json['isDeleted'];
     fullName = json['fullName'];
@@ -241,9 +228,7 @@ class Users {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['createdAt'] = createdAt;
     data['createdBy'] = createdBy;
-    data['updatedAt'] = updatedAt;
     data['updatedBy'] = updatedBy;
     data['isDeleted'] = isDeleted;
     data['fullName'] = fullName;
@@ -267,7 +252,6 @@ class Users {
 
 class Roles {
   String? id;
-  List<int>? createdAt;
   String? createdBy;
   String? updatedAt;
   String? updatedBy;
@@ -277,7 +261,6 @@ class Roles {
 
   Roles(
       {this.id,
-      this.createdAt,
       this.createdBy,
       this.updatedAt,
       this.updatedBy,
@@ -287,7 +270,6 @@ class Roles {
 
   Roles.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    createdAt = json['createdAt'].cast<int>();
     createdBy = json['createdBy'];
     updatedAt = json['updatedAt'];
     updatedBy = json['updatedBy'];
@@ -299,7 +281,6 @@ class Roles {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['createdAt'] = createdAt;
     data['createdBy'] = createdBy;
     data['updatedAt'] = updatedAt;
     data['updatedBy'] = updatedBy;

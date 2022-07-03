@@ -163,8 +163,8 @@ class API {
   Future<FeedbackResponse> feedbackClass(String classId, String token) async {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     try {
-      Response response = await _dio.get("$feedback/$classId",
-          options: Options(headers: auth));
+      Response response =
+          await _dio.get("$feedback/$classId", options: Options(headers: auth));
       return FeedbackResponse.fromJson(response.data);
     } catch (e) {
       return FeedbackResponse.fromJson({});

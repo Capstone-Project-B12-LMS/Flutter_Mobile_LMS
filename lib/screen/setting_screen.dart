@@ -1,6 +1,5 @@
-import 'package:capstone_project_lms/provider/getuser_provider.dart';
+import 'package:capstone_project_lms/widgets/dialog_popup_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -34,12 +33,8 @@ class SettingScreen extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () async {
-              context.read<GetUserProvider>().clearData();
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/login', (route) => false);
-              logindata = await SharedPreferences.getInstance();
-              logindata.remove('token');
-              logindata.remove('userId');
+              ValidationDialog(
+                  context, 'SIGN OUT?', 'Are you sure want to Sign Out?');
             },
             child: const Card(
               elevation: 2,

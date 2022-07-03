@@ -51,6 +51,8 @@ dependencies:
   jwt_decode: ^0.3.1
   loading_indicator: ^3.1.0
   flutter_widget_from_html: ^0.8.5
+  url_launcher: ^6.1.4
+  webview_flutter: ^3.0.4
   
 
 dev_dependencies:

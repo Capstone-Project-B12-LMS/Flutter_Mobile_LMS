@@ -21,6 +21,7 @@ class GetMaterialClassProvider with ChangeNotifier {
   getListClass(String classId) async {
     changeStatus(DetailState.loading);
     try {
+      print(classId);
       late SharedPreferences logindata;
       logindata = await SharedPreferences.getInstance();
       String token = logindata.getString('token')!;

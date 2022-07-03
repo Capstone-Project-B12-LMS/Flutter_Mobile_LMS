@@ -27,7 +27,7 @@ class ListMemberScreen extends StatelessWidget {
                   backgroundColor: Colors.amber,
                 ),
                 title: Text(
-                  value.materialClass.data?[0].classes?.users?[index]
+                  value.materialClass.data?[0].classEntity?.users?[index]
                           .fullName ??
                       '..',
                   style: const TextStyle(
@@ -36,14 +36,15 @@ class ListMemberScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                  value.materialClass.data?[0].classes?.users?[index].roles?[0]
-                          .name ??
+                  value.materialClass.data?[0].classEntity?.users?[index]
+                          .roles?[0].name ??
                       '..',
                   style: const TextStyle(color: Colors.grey),
                 ),
               );
             },
-            itemCount: value.materialClass.data?[0].classes?.users?.length ?? 1,
+            itemCount:
+                value.materialClass.data?[0].classEntity?.users?.length ?? 1,
           );
         },
         // child:

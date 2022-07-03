@@ -4,7 +4,6 @@ import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:capstone_project_lms/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
-// import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../provider/acitiveclass_provider.dart';

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
@@ -5,12 +7,13 @@ import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
-import 'package:capstone_project_lms/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../provider/join_provider.dart';
 import '../provider/material_provider.dart';
+import '../widgets/loading_widget.dart';
 import 'detail_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -109,10 +112,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               await Provider.of<JoinProvider>(context,
                                       listen: false)
                                   .joinClass(
-                                      Provider.of<JoinProvider>(context,
+                                      Provider.of<GetUserProvider>(context,
                                               listen: false)
-                                          .token,
-                                      Provider.of<JoinProvider>(context,
+                                          .userToken,
+                                      Provider.of<GetUserProvider>(context,
                                               listen: false)
                                           .userId,
                                       _textEditingController.text);
@@ -122,24 +125,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         .joinResClass
                                         .status ==
                                     true) {
-                                  PopUpDialogWidget(
-                                    text:
-                                        'Join Success!\nCheck your new class!',
-                                    type: ContentType.success,
-                                  );
-                                  // var snackBar = SnackBar(
-                                  //     elevation: 0,
-                                  //     behavior: SnackBarBehavior.floating,
-                                  //     backgroundColor: Colors.transparent,
-                                  //     content: AwesomeSnackbarContent(
-                                  //       title: 'Success',
-                                  //       message:
-                                  //           'Join Success!\nCheck your new class!',
-                                  //       contentType: ContentType.success,
-                                  //     ));
-                                  // ScaffoldMessenger.of(context)
-                                  //     .showSnackBar(snackBar);
+                                  var snackBar = SnackBar(
+                                      elevation: 0,
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.transparent,
+                                      content: AwesomeSnackbarContent(
+                                        title: 'Success',
+                                        message:
+                                            'Join Success!\nCheck your new class!',
+                                        contentType: ContentType.success,
+                                      ));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
                                   Navigator.pop(context);
+                                  print(Provider.of<JoinProvider>(context,
+                                          listen: false)
+                                      .joinResClass
+                                      .data
+                                      ?.id);
+                                  Provider.of<GetMaterialClassProvider>(context,
+                                          listen: false)
+                                      .getListClass(Provider.of<JoinProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .joinResClass
+                                              .data
+                                              ?.id ??
+                                          'null');
+                                  Provider.of<ActiveClassProvider>(context,
+                                          listen: false)
+                                      .getActiveClass();
 
                                   _textEditingController.clear();
                                 } else {
@@ -178,6 +193,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.grey)),
                           onPressed: () {
+                            _textEditingController.clear();
                             Navigator.of(context).pop();
                           },
                           child: const Text("CANCEL")),
@@ -191,6 +207,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
+  void initState() {
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Color secColor = HexColor('#415A80');
     return Scaffold(
@@ -200,7 +222,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       body: Consumer<ActiveClassProvider>(
-        builder: (context, value, child) {
+        builder: (context, value, _) {
           switch (value.dataStatus) {
             case DataStatus.none:
               return Padding(
