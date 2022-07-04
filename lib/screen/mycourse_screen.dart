@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/screen/detail_screen.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,14 @@ import 'package:provider/provider.dart';
 import '../provider/acitiveclass_provider.dart';
 import '../provider/material_provider.dart';
 
-class MyCourseScreen extends StatelessWidget {
+class MyCourseScreen extends StatefulWidget {
   const MyCourseScreen({Key? key}) : super(key: key);
 
+  @override
+  State<MyCourseScreen> createState() => _MyCourseScreenState();
+}
+
+class _MyCourseScreenState extends State<MyCourseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,17 +31,52 @@ class MyCourseScreen extends StatelessWidget {
             return ListView.builder(
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
-                    Provider.of<GetMaterialClassProvider>(context,
+                  onTap: () async {
+                    await Provider.of<GetMaterialClassProvider>(context,
                             listen: false)
-                        .getListClass(data.dataClass.data?[index].id ?? 'null');
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailScreen(
-                              classId:
-                                  data.dataClass.data?[index].id ?? 'null'),
-                        ));
+                        .getListClass(
+                            data.dataClass.data?[index].id.toString() ??
+                                'null');
+
+                    if (mounted) {
+                      var data = Provider.of<GetMaterialClassProvider>(context,
+                              listen: false)
+                          .materialClass
+                          .data;
+                      try {
+                        if (data![index].id != "null") {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return DetailScreen(
+                                classId: data[index].id.toString(),
+                              );
+                            },
+                          ));
+                        } else {
+                          var snackBar = SnackBar(
+                              elevation: 0,
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Colors.transparent,
+                              content: AwesomeSnackbarContent(
+                                title: 'Oops!',
+                                message: 'Class Materi is Empty :(',
+                                contentType: ContentType.failure,
+                              ));
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      } catch (e) {
+                        var snackBar = SnackBar(
+                            elevation: 0,
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: Colors.transparent,
+                            content: AwesomeSnackbarContent(
+                              title: 'Oops!',
+                              message: 'Class Materi is Empty :(',
+                              contentType: ContentType.failure,
+                            ));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    }
                   },
                   child: listClassVertical(
                       data.dataClass.data?[index].name ?? '...',

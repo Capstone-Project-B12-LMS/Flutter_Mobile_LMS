@@ -25,17 +25,16 @@ class GetMaterialClassProvider with ChangeNotifier {
       logindata = await SharedPreferences.getInstance();
       String token = logindata.getString('token')!;
       _materialClass = await API().materialClass(classId, token);
-      print(_materialClass.data?.length);
-      notifyListeners();
-      // if (_materialClass.data!.isEmpty) {
-      //   changeStatus(DetailState.error);
-      // } else {
-      //   changeStatus(DetailState.none);
-      // }
+      changeStatus(DetailState.none);
       notifyListeners();
     } catch (e) {
       changeStatus(DetailState.error);
       notifyListeners();
     }
+  }
+
+  clearData() {
+    _materialClass = MaterialByClassResponse();
+    notifyListeners();
   }
 }

@@ -348,30 +348,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () {
-                              var data = Provider.of<GetMaterialClassProvider>(
+                            onTap: () async {
+                              await Provider.of<GetMaterialClassProvider>(
                                       context,
                                       listen: false)
-                                  .materialClass
-                                  .data;
-                              try {
-                                if (data != null) {
-                                  Provider.of<GetMaterialClassProvider>(context,
-                                          listen: false)
-                                      .getListClass(value
-                                              .dataClass.data?[index].id
-                                              .toString() ??
-                                          'null');
-                                  Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) {
-                                      return DetailScreen(
-                                        classId: value.dataClass.data?[index].id
-                                                .toString() ??
-                                            'null',
-                                      );
-                                    },
-                                  ));
-                                } else {
+                                  .getListClass(value.dataClass.data?[index].id
+                                          .toString() ??
+                                      'null');
+
+                              if (mounted) {
+                                var data =
+                                    Provider.of<GetMaterialClassProvider>(
+                                            context,
+                                            listen: false)
+                                        .materialClass
+                                        .data;
+                                try {
+                                  if (data![index].id != "null") {
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return DetailScreen(
+                                          classId: value
+                                                  .dataClass.data?[index].id
+                                                  .toString() ??
+                                              'null',
+                                        );
+                                      },
+                                    ));
+                                  } else {
+                                    var snackBar = SnackBar(
+                                        elevation: 0,
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.transparent,
+                                        content: AwesomeSnackbarContent(
+                                          title: 'Oops!',
+                                          message: 'Class Materi is Empty :(',
+                                          contentType: ContentType.failure,
+                                        ));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                } catch (e) {
                                   var snackBar = SnackBar(
                                       elevation: 0,
                                       behavior: SnackBarBehavior.floating,
@@ -384,8 +401,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
                                 }
-                              } catch (e) {
-                                print("somethin wrong $e");
                               }
                             },
                             child: listClass(

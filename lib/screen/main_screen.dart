@@ -15,6 +15,8 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
+DateTime pre_backpress = DateTime.now();
+
 class _MainScreenState extends State<MainScreen> {
   late SharedPreferences loginData;
   late ResponseGetListClass listClass;
@@ -39,30 +41,50 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final timegap = DateTime.now().difference(pre_backpress);
+    final cantExit = timegap >= const Duration(seconds: 2);
     _selectedIndex = Provider.of<NavbarProvider>(context).selectedIndex;
     Color secColor = HexColor('#9EC9E2');
-    return Scaffold(
-      body: Center(
-        child: pages.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white54,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        backgroundColor: secColor,
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-              ),
-              label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'My Class'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Settings'),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+    return WillPopScope(
+      onWillPop: ()async {
+        final timegap = DateTime.now().difference(pre_backpress);
+        final cantExit = timegap >= const Duration(seconds: 2);
+        pre_backpress = DateTime.now();
+        if (cantExit) {
+          //show snackbar
+          const snack = SnackBar(
+            content: Text('Press Back button again to Exit'),
+            duration: Duration(seconds: 2),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snack);
+          return false; // false will do nothing when back press
+        } else {
+          return true; // true will exit the app
+        }
+      },
+      child: Scaffold(
+        body: Center(
+          child: pages.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white54,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          backgroundColor: secColor,
+          type: BottomNavigationBarType.fixed,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                ),
+                label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.book), label: 'My Class'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: 'Settings'),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
