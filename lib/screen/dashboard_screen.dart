@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
@@ -9,7 +7,6 @@ import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../provider/join_provider.dart';
 import '../provider/material_provider.dart';
@@ -209,12 +206,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
-  void initState() {
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Color secColor = HexColor('#415A80');
     return Scaffold(
@@ -358,20 +349,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              Provider.of<GetMaterialClassProvider>(context,
+                              var data = Provider.of<GetMaterialClassProvider>(
+                                      context,
                                       listen: false)
-                                  .getListClass(value.dataClass.data?[index].id
-                                          .toString() ??
-                                      'null');
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return DetailScreen(
-                                    classId: value.dataClass.data?[index].id
-                                            .toString() ??
-                                        'null',
-                                  );
-                                },
-                              ));
+                                  .materialClass
+                                  .data;
+                              try {
+                                if (data != null) {
+                                  Provider.of<GetMaterialClassProvider>(context,
+                                          listen: false)
+                                      .getListClass(value
+                                              .dataClass.data?[index].id
+                                              .toString() ??
+                                          'null');
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return DetailScreen(
+                                        classId: value.dataClass.data?[index].id
+                                                .toString() ??
+                                            'null',
+                                      );
+                                    },
+                                  ));
+                                } else {
+                                  var snackBar = SnackBar(
+                                      elevation: 0,
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.transparent,
+                                      content: AwesomeSnackbarContent(
+                                        title: 'Oops!',
+                                        message: 'Class Materi is Empty :(',
+                                        contentType: ContentType.failure,
+                                      ));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              } catch (e) {
+                                print("somethin wrong $e");
+                              }
                             },
                             child: listClass(
                               value.dataClass.data?[index].name ?? '...',

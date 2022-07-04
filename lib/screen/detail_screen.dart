@@ -35,7 +35,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return videoId;
   }
 
-  final List<String> _ids = [];
+  // final List<String> _ids = [];
 
   bool _muted = false;
   final bool _isPlayerReady = false;
@@ -92,7 +92,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   void dispose() {
-    _ids.clear();
+    // _ids.clear();
     _controller.dispose();
     _idController.dispose();
     _seekToController.dispose();
@@ -451,11 +451,6 @@ class _DetailScreenState extends State<DetailScreen> {
                               '');
                       _controller.load(vidId);
                     }
-                  },
-                  onEnded: (data) {
-                    _controller.load(
-                        _ids[(_ids.indexOf(data.videoId) + 1) % _ids.length]);
-                    _showSnackBar('Next Video Started!');
                   },
                 ),
                 builder: (context, player) => Scaffold(
@@ -991,7 +986,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
                                             childCount: value.feedbackResponse
                                                     .data?.length ??
-                                                1, // 1000 list items
+                                                0, // 1000 list items
                                           ),
                                         ),
                                       ),
