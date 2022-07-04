@@ -40,20 +40,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               child: SizedBox(
-                height: 300,
+                // height: 300,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Class Code",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text(
+                        "Class Code",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
                     ),
                     const Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Text(
                         "Ask the admin / mentor for the class code, then enter the code here.",
                         textAlign: TextAlign.center,
@@ -64,39 +68,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Form(
                           key: _formKey,
-                          child: TextFormField(
-                            controller: _textEditingController,
-                            cursorColor: secColor,
-                            validator: (value) {
-                              return value!.isNotEmpty
-                                  ? null
-                                  : "Code class Must be filled!";
-                            },
-                            decoration: InputDecoration(
-                              hintText: 'Enter Class Code',
-                              prefixIcon: Icon(
-                                Icons.person_outline,
-                                color: secColor,
-                              ),
-                              hintStyle: const TextStyle(color: Colors.grey),
-                              enabledBorder: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 2),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(color: secColor, width: 2),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              controller: _textEditingController,
+                              cursorColor: secColor,
+                              validator: (value) {
+                                return value!.isNotEmpty
+                                    ? null
+                                    : "Code class Must be filled!";
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Enter Class Code',
+                                prefixIcon: Icon(
+                                  Icons.person_outline,
+                                  color: secColor,
+                                ),
+                                hintStyle: const TextStyle(color: Colors.grey),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12.0)),
+                                  borderSide:
+                                      BorderSide(color: Colors.grey, width: 2),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: secColor, width: 2),
+                                ),
                               ),
                             ),
                           )),
                     ),
                     Container(
-                      padding:
-                          const EdgeInsets.only(top: 5, left: 10, right: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                           style: ButtonStyle(
@@ -138,11 +144,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
                                   Navigator.pop(context);
-                                  print(Provider.of<JoinProvider>(context,
-                                          listen: false)
-                                      .joinResClass
-                                      .data
-                                      ?.id);
                                   Provider.of<GetMaterialClassProvider>(context,
                                           listen: false)
                                       .getListClass(Provider.of<JoinProvider>(
@@ -180,7 +181,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: const Text("JOIN")),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                           style: ButtonStyle(

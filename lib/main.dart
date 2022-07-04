@@ -66,6 +66,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Study Space',
       theme: ThemeData(
+          backgroundColor: Colors.white,
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins',
           appBarTheme: const AppBarTheme(

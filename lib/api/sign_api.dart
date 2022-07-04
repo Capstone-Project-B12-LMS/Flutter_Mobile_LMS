@@ -152,7 +152,7 @@ class API {
       "content": content
     };
     try {
-      Response response = await _dio.post("$baseUrl/restapi/v1/guidances",
+      Response response = await _dio.post("$baseUrl/guidances",
           options: Options(headers: auth), data: data);
       return CounsellingResponse.fromJson(response.data);
     } catch (e) {
