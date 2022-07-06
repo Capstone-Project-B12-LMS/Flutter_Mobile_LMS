@@ -35,8 +35,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return videoId;
   }
 
-
-  bool _muted = false;
+  final bool _muted = false;
   final bool _isPlayerReady = false;
   bool isSelected = false;
   int _selectedIndex = 0;
@@ -408,22 +407,6 @@ class _DetailScreenState extends State<DetailScreen> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        _muted ? Icons.volume_off : Icons.volume_up,
-                        color: Colors.white,
-                      ),
-                      onPressed: _isPlayerReady
-                          ? () {
-                              _muted
-                                  ? _controller.unMute()
-                                  : _controller.mute();
-                              setState(() {
-                                _muted = !_muted;
-                              });
-                            }
-                          : null,
                     ),
                   ],
                   bottomActions: [
@@ -949,36 +932,25 @@ class _DetailScreenState extends State<DetailScreen> {
                                         sliver: SliverList(
                                           delegate: SliverChildBuilderDelegate(
                                             (BuildContext context, int index) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        'Feedback ke-${index + 1}'),
-                                                    duration: const Duration(
-                                                        milliseconds: 300),
-                                                  ));
-                                                },
-                                                child: listFeedBack(
-                                                    value
-                                                            .feedbackResponse
-                                                            .data?[index]
-                                                            .user
-                                                            ?.fullName ??
-                                                        '..',
-                                                    value
-                                                            .feedbackResponse
-                                                            .data?[index]
-                                                            .user
-                                                            ?.roles?[0]
-                                                            .name ??
-                                                        '..',
-                                                    value
-                                                            .feedbackResponse
-                                                            .data?[index]
-                                                            .content ??
-                                                        '..'),
-                                              );
+                                              return listFeedBack(
+                                                  value
+                                                          .feedbackResponse
+                                                          .data?[index]
+                                                          .user
+                                                          ?.fullName ??
+                                                      '..',
+                                                  value
+                                                          .feedbackResponse
+                                                          .data?[index]
+                                                          .user
+                                                          ?.roles?[0]
+                                                          .name ??
+                                                      '..',
+                                                  value
+                                                          .feedbackResponse
+                                                          .data?[index]
+                                                          .content ??
+                                                      '..');
                                             },
 
                                             childCount: value.feedbackResponse

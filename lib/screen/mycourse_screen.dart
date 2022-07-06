@@ -27,7 +27,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
           centerTitle: true,
         ),
         body: Consumer<ActiveClassProvider>(
-          builder: (context, data, child) {
+          builder: (context, data, _) {
             return ListView.builder(
               itemBuilder: (context, index) {
                 return GestureDetector(
@@ -39,20 +39,30 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                 'null');
 
                     if (mounted) {
-                      var data = Provider.of<GetMaterialClassProvider>(context,
+                      var dataClass = Provider.of<GetMaterialClassProvider>(
+                              context,
                               listen: false)
                           .materialClass
-                          .data;
+                          .data?[0];
                       try {
-                        if (data![index].id != "null") {
+                        if (dataClass != null) {
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) {
                               return DetailScreen(
-                                classId: data[index].id.toString(),
+                                classId:
+                                    data.dataClass.data?[index].id.toString(),
                               );
                             },
                           ));
                         } else {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return DetailScreen(
+                                classId:
+                                    data.dataClass.data?[index].id.toString(),
+                              );
+                            },
+                          ));
                           var snackBar = SnackBar(
                               elevation: 0,
                               behavior: SnackBarBehavior.floating,
@@ -60,7 +70,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                               content: AwesomeSnackbarContent(
                                 title: 'Oops!',
                                 message: 'Class Materi is Empty :(',
-                                contentType: ContentType.failure,
+                                contentType: ContentType.warning,
                               ));
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }

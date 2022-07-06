@@ -362,9 +362,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             context,
                                             listen: false)
                                         .materialClass
-                                        .data;
+                                        .data?[0];
                                 try {
-                                  if (data![index].id != "null") {
+                                  if (data != null) {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
                                         return DetailScreen(
@@ -376,6 +376,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       },
                                     ));
                                   } else {
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return DetailScreen(
+                                          classId: value
+                                                  .dataClass.data?[index].id
+                                                  .toString() ??
+                                              'null',
+                                        );
+                                      },
+                                    ));
                                     var snackBar = SnackBar(
                                         elevation: 0,
                                         behavior: SnackBarBehavior.floating,
@@ -383,7 +393,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         content: AwesomeSnackbarContent(
                                           title: 'Oops!',
                                           message: 'Class Materi is Empty :(',
-                                          contentType: ContentType.failure,
+                                          contentType: ContentType.warning,
                                         ));
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
@@ -395,7 +405,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       backgroundColor: Colors.transparent,
                                       content: AwesomeSnackbarContent(
                                         title: 'Oops!',
-                                        message: 'Class Materi is Empty :(',
+                                        message: 'Something wrong...\n$e',
                                         contentType: ContentType.failure,
                                       ));
                                   ScaffoldMessenger.of(context)

@@ -246,6 +246,16 @@ class _LoginScreenState extends State<LoginScreen> {
           if (mounted) {
             Provider.of<ActiveClassProvider>(context, listen: false)
                 .getActiveClass();
+            var snackBar = SnackBar(
+                elevation: 0,
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: Colors.transparent,
+                content: AwesomeSnackbarContent(
+                  title: 'Sign In!',
+                  message: 'Login Successfully!',
+                  contentType: ContentType.success,
+                ));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
             Navigator.pushNamedAndRemoveUntil(
                 context, '/main', (route) => false);
             context.read<GetUserProvider>().getUserData();
