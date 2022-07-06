@@ -1,7 +1,7 @@
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
 
-Widget listClass(String title, String progress) {
+Widget listClass(String title, String progress, String role) {
   return SizedBox(
     width: 150,
     child: Card(
@@ -27,10 +27,10 @@ Widget listClass(String title, String progress) {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Class Admin',
+                Text(
+                  'Class as $role',
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey, fontSize: 10),
+                  style: const TextStyle(color: Colors.grey, fontSize: 10),
                 ),
                 Text(
                   progress,

@@ -35,7 +35,6 @@ class _DetailScreenState extends State<DetailScreen> {
     return videoId;
   }
 
-  // final List<String> _ids = [];
 
   bool _muted = false;
   final bool _isPlayerReady = false;
@@ -51,7 +50,6 @@ class _DetailScreenState extends State<DetailScreen> {
   void listener() {
     if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
       setState(() {
-        // _playerState = _controller.value.playerState;
         _videoMetaData = _controller.metadata;
       });
     }
@@ -92,7 +90,6 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   void dispose() {
-    // _ids.clear();
     _controller.dispose();
     _idController.dispose();
     _seekToController.dispose();

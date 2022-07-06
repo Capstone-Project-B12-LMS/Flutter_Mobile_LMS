@@ -406,6 +406,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: listClass(
                               value.dataClass.data?[index].name ?? '...',
                               value.dataClass.data?[index].createdBy ?? '...',
+                              value.dataClass.data?[index].createdBy ==
+                                      Provider.of<GetUserProvider>(context,
+                                              listen: false)
+                                          .userDataProvider
+                                          .data!
+                                          .email
+                                  ? 'Admin'
+                                  : 'User',
                             ),
                           );
                         },
@@ -424,7 +432,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               );
           }
         },
-        // child:
       ),
     );
   }

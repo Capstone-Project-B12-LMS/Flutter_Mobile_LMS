@@ -12,6 +12,7 @@ class ActiveClassProvider with ChangeNotifier {
   DataStatus _dataStatus = DataStatus.none;
   DataStatus get dataStatus => _dataStatus;
 
+
   changeStatus(DataStatus status) {
     _dataStatus = status;
     notifyListeners();
