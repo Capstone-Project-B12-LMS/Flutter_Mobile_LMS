@@ -1,5 +1,6 @@
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/screen/dashboard_screen.dart';
+import 'package:capstone_project_lms/screen/history_screen.dart';
 import 'package:capstone_project_lms/screen/mycourse_screen.dart';
 import 'package:capstone_project_lms/screen/setting_screen.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
@@ -15,6 +16,7 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
+// ignore: non_constant_identifier_names
 DateTime pre_backpress = DateTime.now();
 
 class _MainScreenState extends State<MainScreen> {
@@ -31,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   List pages = [
     const DashboardScreen(),
     const MyCourseScreen(),
+    const HistoryScreen(),
     const SettingScreen()
   ];
   void _onItemTapped(int index) {
@@ -41,12 +44,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final timegap = DateTime.now().difference(pre_backpress);
-    final cantExit = timegap >= const Duration(seconds: 2);
     _selectedIndex = Provider.of<NavbarProvider>(context).selectedIndex;
     Color secColor = HexColor('#9EC9E2');
     return WillPopScope(
-      onWillPop: ()async {
+      onWillPop: () async {
         final timegap = DateTime.now().difference(pre_backpress);
         final cantExit = timegap >= const Duration(seconds: 2);
         pre_backpress = DateTime.now();
@@ -79,6 +80,8 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.book), label: 'My Class'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.history), label: 'History'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.settings), label: 'Settings'),
           ],

@@ -126,8 +126,8 @@ Future<void> showInformationDialog(BuildContext context, String title,
       });
 }
 
-Future<void> ValidationDialog(BuildContext context, String title,
-    String subtitle) async {
+Future<void> validationDialog(
+    BuildContext context, String title, String subtitle) async {
   Color secColor = HexColor('#415A80');
   return await showDialog(
       context: context,

@@ -118,3 +118,29 @@ Widget listFeedBack(String name, String role, String feedback) {
     ),
   );
 }
+
+Widget listHistory(String title, String date) {
+  return Card(
+    elevation: 2,
+    shadowColor: HexColor('#9EC9E2'),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          title: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(date),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: Text(
+            'Melakukan apapun yang user inginkan',
+            style: TextStyle(fontSize: 12),
+          ),
+        )
+      ],
+    ),
+  );
+}

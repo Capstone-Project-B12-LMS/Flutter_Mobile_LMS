@@ -35,7 +35,6 @@ class _DetailScreenState extends State<DetailScreen> {
     return videoId;
   }
 
-  final bool _muted = false;
   final bool _isPlayerReady = false;
   bool isSelected = false;
   int _selectedIndex = 0;
@@ -363,28 +362,7 @@ class _DetailScreenState extends State<DetailScreen> {
             });
           });
     }
-
-    void _showSnackBar(String message) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            message,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 16.0,
-            ),
-          ),
-          backgroundColor: Colors.blueAccent,
-          behavior: SnackBarBehavior.floating,
-          elevation: 1.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.0),
-          ),
-        ),
-      );
-    }
-
+    
     String ppt = '';
     return Consumer<GetMaterialClassProvider>(
       builder: (context, materialClass, child) {
