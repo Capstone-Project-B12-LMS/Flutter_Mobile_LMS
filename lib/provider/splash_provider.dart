@@ -7,10 +7,10 @@ class SplashProvider with ChangeNotifier {
   setBool(bool dataBool) async {
     try {
       _isTrue = dataBool;
+      // print(_isTrue);
       notifyListeners();
     } catch (e) {
       notifyListeners();
     }
   }
-
 }

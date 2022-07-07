@@ -66,29 +66,29 @@ Widget listClassVertical(String title, String role, String progress) {
   );
 }
 
-Widget listClassHorizontal(String title, String role, String progress) {
-  return SizedBox(
-    height: 150,
-    width: 150,
-    child: ListTile(
-      leading: const Icon(Icons.book),
-      title: Text(title),
-      subtitle: Text(role),
-      trailing: Column(
-        children: [
-          const Text(
-            'Members',
-            style: TextStyle(color: Colors.grey, fontSize: 12),
-          ),
-          Text(
-            progress,
-            style: const TextStyle(color: Colors.black, fontSize: 16),
-          )
-        ],
-      ),
-    ),
-  );
-}
+// Widget listClassHorizontal(String title, String role, String progress) {
+//   return SizedBox(
+//     height: 150,
+//     width: 150,
+//     child: ListTile(
+//       leading: const Icon(Icons.book),
+//       title: Text(title),
+//       subtitle: Text(role),
+//       trailing: Column(
+//         children: [
+//           const Text(
+//             'Members',
+//             style: TextStyle(color: Colors.grey, fontSize: 12),
+//           ),
+//           Text(
+//             progress,
+//             style: const TextStyle(color: Colors.black, fontSize: 16),
+//           )
+//         ],
+//       ),
+//     ),
+//   );
+// }
 
 Widget listFeedBack(String name, String role, String feedback) {
   return Card(

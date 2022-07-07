@@ -16,9 +16,6 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-// ignore: non_constant_identifier_names
-DateTime pre_backpress = DateTime.now();
-
 class _MainScreenState extends State<MainScreen> {
   late SharedPreferences loginData;
   late ResponseGetListClass listClass;
@@ -42,15 +39,16 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  DateTime preBackpress = DateTime.now();
   @override
   Widget build(BuildContext context) {
     _selectedIndex = Provider.of<NavbarProvider>(context).selectedIndex;
     Color secColor = HexColor('#9EC9E2');
     return WillPopScope(
       onWillPop: () async {
-        final timegap = DateTime.now().difference(pre_backpress);
+        final timegap = DateTime.now().difference(preBackpress);
         final cantExit = timegap >= const Duration(seconds: 2);
-        pre_backpress = DateTime.now();
+        preBackpress = DateTime.now();
         if (cantExit) {
           //show snackbar
           const snack = SnackBar(

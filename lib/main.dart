@@ -13,6 +13,7 @@ import 'package:capstone_project_lms/screen/main_screen.dart';
 import 'package:capstone_project_lms/screen/registration_screen.dart';
 import 'package:capstone_project_lms/screen/detail_screen.dart';
 import 'package:capstone_project_lms/screen/splash_screen.dart';
+import 'package:capstone_project_lms/screen/splash_screen2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,7 +77,7 @@ class MyApp extends StatelessWidget {
             titleTextStyle: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
           )),
-      initialRoute: '/splash',
+      initialRoute: '/splash2',
       routes: {
         '/login': (context) => const LoginScreen(),
         '/registration': (context) => const RegistrationScreen(),
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => const ProfileScreen(),
         '/members': (context) => const ListMemberScreen(),
         '/splash': (context) => const SplashScreen(),
+        '/splash2': (context) => const SplashScreen2(),
       },
     );
   }
