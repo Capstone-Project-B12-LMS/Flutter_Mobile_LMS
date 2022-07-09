@@ -51,19 +51,21 @@ class _SplashScreen2State extends State<SplashScreen2> {
                 contentType: ContentType.warning,
               ));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          Navigator.pushNamed(context, '/splash');
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/splash', (route) => false);
         } else {
           Provider.of<SplashProvider>(context, listen: false).setBool(true);
           Provider.of<ActiveClassProvider>(context, listen: false)
               .getActiveClass();
           Provider.of<ActivityHistoryProvider>(context, listen: false)
               .history();
-          Navigator.pushNamed(context, '/splash');
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/splash', (route) => false);
         }
       }
     } else {
       Provider.of<SplashProvider>(context, listen: false).setBool(false);
-      Navigator.pushNamed(context, '/splash');
+      Navigator.pushNamedAndRemoveUntil(context, '/splash', (route) => false);
     }
   }
 }

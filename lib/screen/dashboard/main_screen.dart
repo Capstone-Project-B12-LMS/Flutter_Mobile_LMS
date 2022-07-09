@@ -38,6 +38,7 @@ class _MainScreenState extends State<MainScreen> {
       context.read<NavbarProvider>().getIndexNavbar(index);
     });
   }
+  
 
   DateTime preBackpress = DateTime.now();
   @override
