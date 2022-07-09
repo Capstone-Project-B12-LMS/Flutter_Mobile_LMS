@@ -1,10 +1,11 @@
 import 'package:capstone_project_lms/models/activeclass_response.dart';
+import 'package:capstone_project_lms/models/activityhistory_response.dart';
 import 'package:capstone_project_lms/models/counselling_response.dart';
 import 'package:capstone_project_lms/models/feedback_response.dart';
 import 'package:capstone_project_lms/models/getclass_response.dart';
 import 'package:capstone_project_lms/models/getuser_response_model.dart';
 import 'package:capstone_project_lms/models/joinclass_response.dart';
-import 'package:capstone_project_lms/models/login_response_model.dart';
+import 'package:capstone_project_lms/screen/login/login_response_model.dart';
 import 'package:capstone_project_lms/models/register_response_model.dart';
 import 'package:capstone_project_lms/models/updateuser_response.dart';
 import 'package:dio/dio.dart';
@@ -23,6 +24,7 @@ class API {
   String classUrl = "$baseUrl/class";
   String materialUrl = "$baseUrl/material";
   String feedback = "$baseUrl/feedbacks/class";
+  String activity = "$baseUrl/activityhistory/user";
 
   Future<ResponseLogin> login(String email, String password) async {
     Map<String, String> data = {"email": email, "password": password};
@@ -168,6 +170,18 @@ class API {
       return FeedbackResponse.fromJson(response.data);
     } catch (e) {
       return FeedbackResponse.fromJson({});
+    }
+  }
+
+  Future<ActivityHistoryResponse> activityHistory(
+      String userId, String token) async {
+    Map<String, String> auth = {'Authorization': 'Bearer $token'};
+    try {
+      Response response =
+          await _dio.get("$activity/$userId", options: Options(headers: auth));
+      return ActivityHistoryResponse.fromJson(response.data);
+    } catch (e) {
+      return ActivityHistoryResponse.fromJson({});
     }
   }
 }

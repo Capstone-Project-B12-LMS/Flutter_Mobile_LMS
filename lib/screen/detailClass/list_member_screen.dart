@@ -1,4 +1,4 @@
-import 'package:capstone_project_lms/provider/material_provider.dart';
+import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +18,7 @@ class ListMemberScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Consumer<GetMaterialClassProvider>(
+      body: Consumer<ActiveClassProvider>(
         builder: (context, value, _) {
           return ListView.builder(
             itemBuilder: (context, index) {

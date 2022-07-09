@@ -32,11 +32,6 @@ Widget listClass(String title, String progress, String role) {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(color: Colors.grey, fontSize: 10),
                 ),
-                Text(
-                  progress,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.black, fontSize: 12),
-                )
               ],
             )
           ],
@@ -65,30 +60,6 @@ Widget listClassVertical(String title, String role, String progress) {
     ),
   );
 }
-
-// Widget listClassHorizontal(String title, String role, String progress) {
-//   return SizedBox(
-//     height: 150,
-//     width: 150,
-//     child: ListTile(
-//       leading: const Icon(Icons.book),
-//       title: Text(title),
-//       subtitle: Text(role),
-//       trailing: Column(
-//         children: [
-//           const Text(
-//             'Members',
-//             style: TextStyle(color: Colors.grey, fontSize: 12),
-//           ),
-//           Text(
-//             progress,
-//             style: const TextStyle(color: Colors.black, fontSize: 16),
-//           )
-//         ],
-//       ),
-//     ),
-//   );
-// }
 
 Widget listFeedBack(String name, String role, String feedback) {
   return Card(
@@ -119,7 +90,7 @@ Widget listFeedBack(String name, String role, String feedback) {
   );
 }
 
-Widget listHistory(String title, String date) {
+Widget listHistory(String title, String action, List date) {
   return Card(
     elevation: 2,
     shadowColor: HexColor('#9EC9E2'),
@@ -131,13 +102,13 @@ Widget listHistory(String title, String date) {
             title,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          subtitle: Text(date),
+          subtitle: Text("Date: ${date[2]}/${date[1]}/${date[0]}"),
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Text(
-            'Melakukan apapun yang user inginkan',
-            style: TextStyle(fontSize: 12),
+            action,
+            style: const TextStyle(fontSize: 12),
           ),
         )
       ],

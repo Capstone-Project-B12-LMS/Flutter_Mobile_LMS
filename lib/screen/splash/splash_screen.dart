@@ -1,14 +1,11 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/provider/splash_provider.dart';
-import 'package:capstone_project_lms/screen/login_screen.dart';
-import 'package:capstone_project_lms/screen/main_screen.dart';
+import 'package:capstone_project_lms/screen/login/login_screen.dart';
+import 'package:capstone_project_lms/screen/dashboard/main_screen.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 
-import '../provider/acitiveclass_provider.dart';
-import '../provider/getuser_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

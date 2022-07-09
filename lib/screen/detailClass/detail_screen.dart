@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/positions.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/counselling_provider.dart';
 import 'package:capstone_project_lms/provider/feedback_provider.dart';
-import 'package:capstone_project_lms/widgets/loading_widget.dart';
+import 'package:capstone_project_lms/widgets/loading_inscreen_widget.dart';
+// import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -15,10 +17,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../provider/material_provider.dart';
-import '../widgets/hexcolor_widget.dart';
-import '../widgets/list_class_widget.dart';
-import '../widgets/popupdialog_widget.dart';
+// import '../../provider/material_provider.dart';
+import '../../provider/activityhistory_provider.dart';
+import '../../widgets/hexcolor_widget.dart';
+import '../../widgets/list_class_widget.dart';
+import '../../widgets/popupdialog_widget.dart';
+// import '../dashboard/main_provider.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({Key? key, this.classId = ''}) : super(key: key);
@@ -58,12 +62,11 @@ class _DetailScreenState extends State<DetailScreen> {
     Provider.of<FeedbackProvider>(context, listen: false)
         .getFeedback(widget.classId!);
     _controller = YoutubePlayerController(
-      initialVideoId:
-          Provider.of<GetMaterialClassProvider>(context, listen: false)
-                  .materialClass
-                  .data?[0]
-                  .videoUrl ??
-              '',
+      initialVideoId: Provider.of<ActiveClassProvider>(context, listen: false)
+              .materialClass
+              .data?[0]
+              .videoUrl ??
+          '',
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: false,
@@ -238,6 +241,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                   .reqCounselling(txtTopic.text,
                                       widget.classId!, txtContent.text);
                               if (mounted) {
+                                Provider.of<ActivityHistoryProvider>(context,
+                                        listen: false)
+                                    .history();
                                 Navigator.pop(context);
                                 if (Provider.of<CounsellingProvdider>(context,
                                             listen: false)
@@ -362,12 +368,12 @@ class _DetailScreenState extends State<DetailScreen> {
             });
           });
     }
-    
+
     String ppt = '';
-    return Consumer<GetMaterialClassProvider>(
+    return Consumer<ActiveClassProvider>(
       builder: (context, materialClass, child) {
-        switch (materialClass.detailState) {
-          case DetailState.none:
+        switch (materialClass.dataStatus) {
+          case DataStatus.none:
             return YoutubePlayerBuilder(
                 player: YoutubePlayer(
                   controller: _controller,
@@ -400,13 +406,13 @@ class _DetailScreenState extends State<DetailScreen> {
                         _controller.value.copyWith(isReady: true),
                       );
                     } else {
-                      var vidId = formatLink(
-                          Provider.of<GetMaterialClassProvider>(context,
-                                      listen: false)
-                                  .materialClass
-                                  .data?[_selectedIndex]
-                                  .videoUrl ??
-                              '');
+                      var vidId = formatLink(Provider.of<ActiveClassProvider>(
+                                  context,
+                                  listen: false)
+                              .materialClass
+                              .data?[_selectedIndex]
+                              .videoUrl ??
+                          '');
                       _controller.load(vidId);
                     }
                   },
@@ -438,12 +444,18 @@ class _DetailScreenState extends State<DetailScreen> {
                         child: Column(
                           children: [
                             if (materialClass.materialClass
-                                    .data?[_selectedIndex].videoUrl !=
-                                null)
+                                        .data?[_selectedIndex].videoUrl !=
+                                    null &&
+                                materialClass.materialClass
+                                        .data?[_selectedIndex].videoUrl !=
+                                    "")
                               player,
                             if (materialClass.materialClass
-                                    .data?[_selectedIndex].fileUrl !=
-                                null)
+                                        .data?[_selectedIndex].fileUrl !=
+                                    null &&
+                                materialClass.materialClass
+                                        .data?[_selectedIndex].fileUrl !=
+                                    "")
                               LayoutBuilder(
                                 builder: (context, constraints) {
                                   return SizedBox(
@@ -609,7 +621,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       Text(
                                                         materialClass
                                                                 .materialClass
-                                                                .data?[0]
+                                                                .data?[
+                                                                    _selectedIndex]
                                                                 .createdBy ??
                                                             '..',
                                                         style: const TextStyle(
@@ -622,7 +635,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       Text(
                                                         materialClass
                                                                 .materialClass
-                                                                .data?[0]
+                                                                .data?[
+                                                                    _selectedIndex]
                                                                 .createdBy ??
                                                             '..',
                                                         style: const TextStyle(
@@ -635,22 +649,25 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 ),
                                               ],
                                             ),
-                                            HtmlWidget(
-                                                materialClass
-                                                        .materialClass
-                                                        .data?[_selectedIndex]
-                                                        .content ??
-                                                    '..',
-                                                onErrorBuilder: (context,
-                                                        element, error) =>
-                                                    Text(
-                                                        '$element error: $error'),
-                                                onLoadingBuilder: (context,
-                                                        element,
-                                                        loadingProgress) =>
-                                                    const CircularProgressIndicator(),
-                                                textStyle: const TextStyle(
-                                                    fontSize: 12)),
+                                            SizedBox(
+                                              height: 50,
+                                              child: HtmlWidget(
+                                                  materialClass
+                                                          .materialClass
+                                                          .data?[_selectedIndex]
+                                                          .content ??
+                                                      '..',
+                                                  onErrorBuilder: (context,
+                                                          element, error) =>
+                                                      Text(
+                                                          '$element error: $error'),
+                                                  onLoadingBuilder: (context,
+                                                          element,
+                                                          loadingProgress) =>
+                                                      const CircularProgressIndicator(),
+                                                  textStyle: const TextStyle(
+                                                      fontSize: 12)),
+                                            ),
                                             TextButton(
                                                 onPressed: () {
                                                   showBarModalBottomSheet(
@@ -793,7 +810,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                               setState(() {
                                                 _selectedIndex = index;
                                               });
-                                              if (Provider.of<GetMaterialClassProvider>(
+                                              if (Provider.of<ActiveClassProvider>(
                                                           context,
                                                           listen: false)
                                                       .materialClass
@@ -801,7 +818,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       .videoUrl !=
                                                   null) {
                                                 var vidId = formatLink(
-                                                    Provider.of<GetMaterialClassProvider>(
+                                                    Provider.of<ActiveClassProvider>(
                                                                 context,
                                                                 listen: false)
                                                             .materialClass
@@ -810,7 +827,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                         '');
                                                 _controller.load(vidId);
                                               } else if (Provider.of<
-                                                              GetMaterialClassProvider>(
+                                                              ActiveClassProvider>(
                                                           context,
                                                           listen: false)
                                                       .materialClass
@@ -885,11 +902,60 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       MaterialStateProperty.all(
                                                           secColor)),
                                               onPressed: () async {
-                                                final Uri url = Uri.parse(
-                                                    'https://youtu.be/iP3PcDNhJXI');
+                                                String? dataUrl = Provider.of<
+                                                            ActiveClassProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .dataClass
+                                                    .data?[0]
+                                                    .reportUrl;
+                                                try {
+                                                  if (dataUrl != null) {
+                                                    final Uri url =
+                                                        Uri.parse(dataUrl);
 
-                                                if (await canLaunchUrl(url)) {
-                                                  await launchUrl(url);
+                                                    if (await canLaunchUrl(
+                                                        url)) {
+                                                      await launchUrl(url);
+                                                    }
+                                                  } else {
+                                                    var snackBar = SnackBar(
+                                                        elevation: 0,
+                                                        behavior:
+                                                            SnackBarBehavior
+                                                                .floating,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        content:
+                                                            AwesomeSnackbarContent(
+                                                          title: 'Oops!',
+                                                          message:
+                                                              'Report still in progress',
+                                                          contentType:
+                                                              ContentType
+                                                                  .warning,
+                                                        ));
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackBar);
+                                                  }
+                                                } catch (e) {
+                                                  var snackBar = SnackBar(
+                                                      elevation: 0,
+                                                      behavior: SnackBarBehavior
+                                                          .floating,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      content:
+                                                          AwesomeSnackbarContent(
+                                                        title: 'Oops!',
+                                                        message:
+                                                            'Something Wrong..',
+                                                        contentType:
+                                                            ContentType.failure,
+                                                      ));
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackBar);
                                                 }
                                               },
                                               child: const Text(
@@ -947,9 +1013,13 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ));
 
-          case DetailState.loading:
-            return const LoadingWidget();
-          case DetailState.error:
+          case DataStatus.loading:
+            return AlertDialog(
+              content: loadingInScreen(),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+            );
+          case DataStatus.error:
             return PopUpDialogWidget(
               text: 'Something Wrong...',
               type: ContentType.failure,

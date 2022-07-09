@@ -1,11 +1,11 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
+import 'package:capstone_project_lms/provider/activityhistory_provider.dart';
+import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/splash_provider.dart';
 import 'package:capstone_project_lms/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../provider/acitiveclass_provider.dart';
-import '../provider/getuser_provider.dart';
 
 class SplashScreen2 extends StatefulWidget {
   const SplashScreen2({Key? key}) : super(key: key);
@@ -56,6 +56,8 @@ class _SplashScreen2State extends State<SplashScreen2> {
           Provider.of<SplashProvider>(context, listen: false).setBool(true);
           Provider.of<ActiveClassProvider>(context, listen: false)
               .getActiveClass();
+          Provider.of<ActivityHistoryProvider>(context, listen: false)
+              .history();
           Navigator.pushNamed(context, '/splash');
         }
       }

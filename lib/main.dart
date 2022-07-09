@@ -1,24 +1,26 @@
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
+import 'package:capstone_project_lms/provider/activityhistory_provider.dart';
 import 'package:capstone_project_lms/provider/feedback_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
 import 'package:capstone_project_lms/provider/listclass_provider.dart';
+// import 'package:capstone_project_lms/screen/dashboard/main_provider.dart';
 import 'package:capstone_project_lms/provider/login_provider.dart';
-import 'package:capstone_project_lms/provider/material_provider.dart';
+// import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/provider/splash_provider.dart';
-import 'package:capstone_project_lms/screen/list_member_screen.dart';
-import 'package:capstone_project_lms/screen/login_screen.dart';
-import 'package:capstone_project_lms/screen/main_screen.dart';
-import 'package:capstone_project_lms/screen/registration_screen.dart';
-import 'package:capstone_project_lms/screen/detail_screen.dart';
-import 'package:capstone_project_lms/screen/splash_screen.dart';
-import 'package:capstone_project_lms/screen/splash_screen2.dart';
+import 'package:capstone_project_lms/screen/detailClass/list_member_screen.dart';
+import 'package:capstone_project_lms/screen/login/login_screen.dart';
+import 'package:capstone_project_lms/screen/dashboard/main_screen.dart';
+import 'package:capstone_project_lms/screen/login/registration_screen.dart';
+import 'package:capstone_project_lms/screen/detailClass/detail_screen.dart';
+import 'package:capstone_project_lms/screen/splash/splash_screen.dart';
+import 'package:capstone_project_lms/screen/splash/splash_screen2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/counselling_provider.dart';
-import 'screen/profile_screen.dart';
+import 'screen/dashboard/profile_screen.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -39,9 +41,6 @@ void main() {
         create: (_) => JoinProvider(),
       ),
       ChangeNotifierProvider(
-        create: (_) => GetMaterialClassProvider(),
-      ),
-      ChangeNotifierProvider(
         create: (_) => SplashProvider(),
       ),
       ChangeNotifierProvider(
@@ -52,6 +51,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (_) => FeedbackProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => ActivityHistoryProvider(),
       ),
     ],
     child: const MyApp(),

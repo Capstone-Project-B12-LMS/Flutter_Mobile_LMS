@@ -1,16 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:capstone_project_lms/widgets/profile_widgets.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../api/sign_api.dart';
-import '../provider/getuser_provider.dart';
-import '../widgets/hexcolor_widget.dart';
+import '../../api/sign_api.dart';
+import '../../widgets/hexcolor_widget.dart';
+import '../../widgets/loading_inscreen_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -77,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 20,
                 ),
                 widgetTextField(
-                    'Name',
+                    'Full Name',
                     context
                             .watch<GetUserProvider>()
                             .userDataProvider
@@ -88,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     txtfullname,
                     true),
                 widgetTextField(
-                    'Email',
+                    'Email Address',
                     context
                             .watch<GetUserProvider>()
                             .userDataProvider
@@ -109,16 +109,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     TextInputType.phone,
                     txttelepon,
                     true),
-                widgetTextFieldRole(
-                  'Occupation',
-                  context
-                          .watch<GetUserProvider>()
-                          .userDataProvider
-                          .data
-                          ?.roles?[0]
-                          .name ??
-                      '...',
-                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
@@ -195,6 +185,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 if (newEmail != null &&
                                     newEmail != null &&
                                     newTelepon != null) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: AlertDialog(
+                                      content: loadingInScreen(),
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                    ),
+                                    duration: const Duration(seconds: 1),
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                  ));
                                   API()
                                       .updateData(userId, token, newEmail!,
                                           newName!, newTelepon!)

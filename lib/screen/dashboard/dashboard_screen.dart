@@ -1,17 +1,19 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
+import 'package:capstone_project_lms/provider/join_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/join_provider.dart';
-import '../provider/material_provider.dart';
-import '../widgets/loading_widget.dart';
-import 'detail_screen.dart';
+import '../../provider/activityhistory_provider.dart';
+import '../../widgets/loading_inscreen_widget.dart';
+import '../../widgets/loading_widget.dart';
+import '../detailClass/detail_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -23,9 +25,6 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _textEditingController = TextEditingController();
-  final TextEditingController txtFullNameReq = TextEditingController();
-  final TextEditingController txtEmailReq = TextEditingController();
-  final TextEditingController txtClassReq = TextEditingController();
 
   Future<void> showInformationDialog(BuildContext context) async {
     Color secColor = HexColor('#415A80');
@@ -112,6 +111,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   MaterialStateProperty.all(secColor)),
                           onPressed: () async {
                             try {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: AlertDialog(
+                                  content: loadingInScreen(),
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                ),
+                                duration: const Duration(seconds: 1),
+                                backgroundColor: Colors.transparent,
+                                elevation: 0,
+                              ));
                               await Provider.of<JoinProvider>(context,
                                       listen: false)
                                   .joinClass(
@@ -141,7 +151,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
                                   Navigator.pop(context);
-                                  Provider.of<GetMaterialClassProvider>(context,
+                                  Provider.of<ActiveClassProvider>(context,
                                           listen: false)
                                       .getListClass(Provider.of<JoinProvider>(
                                                   context,
@@ -153,7 +163,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   Provider.of<ActiveClassProvider>(context,
                                           listen: false)
                                       .getActiveClass();
-
+                                  Provider.of<ActivityHistoryProvider>(context,
+                                          listen: false)
+                                      .history();
                                   _textEditingController.clear();
                                 } else {
                                   var snackBar = SnackBar(
@@ -221,6 +233,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return Padding(
                 padding: const EdgeInsets.all(10),
                 child: CustomScrollView(slivers: [
+                  //User Dashboard
                   SliverAppBar(
                     automaticallyImplyLeading: false,
                     backgroundColor: Colors.white,
@@ -246,37 +259,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Hi ${context.watch<GetUserProvider>().userDataProvider.data?.fullName ?? 'Alexa'} !',
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14),
-                                        ),
-                                        Text(
-                                          context
-                                                  .watch<GetUserProvider>()
-                                                  .userDataProvider
-                                                  .data
-                                                  ?.roles?[0]
-                                                  .name ??
-                                              'Roles',
-                                          style: const TextStyle(
-                                              color: Colors.grey, fontSize: 12),
-                                        )
-                                      ],
+                                    child: Text(
+                                      'Hi ${context.watch<GetUserProvider>().userDataProvider.data?.fullName ?? 'Alexa'} !',
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ],
                               ),
+                              //Notification Button
                               IconButton(
                                   onPressed: () {
-                                    PopUpDialogWidget(
-                                        text: 'Comingsoon',
-                                        type: ContentType.warning);
+                                    context
+                                        .read<NavbarProvider>()
+                                        .getIndexNavbar(2);
                                   },
                                   icon:
                                       const Icon(Icons.notifications_outlined))
@@ -289,6 +287,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SliverPadding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                   ),
+                  //Join class Button
                   SliverToBoxAdapter(
                     child: ElevatedButton.icon(
                       style: ButtonStyle(
@@ -300,7 +299,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           backgroundColor: MaterialStateProperty.all(secColor)),
                       icon: const Icon(Icons.door_front_door),
                       label: const Text(
-                        'Join Class',
+                        'JOIN CLASS',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
@@ -312,125 +311,159 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SliverPadding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                   ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Active Class',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              context.read<NavbarProvider>().getIndexNavbar(1);
-                            },
-                            child: const Text(
-                              'View All',
+                  //Active Class Text
+                  if (value.dataClass.data != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Active Class',
                               style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
                             ),
-                          ),
-                        ],
+                            GestureDetector(
+                              onTap: () {
+                                context
+                                    .read<NavbarProvider>()
+                                    .getIndexNavbar(1);
+                              },
+                              child: const Text(
+                                'View All',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 150.0,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () async {
-                              await Provider.of<GetMaterialClassProvider>(
-                                      context,
-                                      listen: false)
-                                  .getListClass(value.dataClass.data?[index].id
-                                          .toString() ??
-                                      'null');
-
-                              if (mounted) {
-                                var data =
-                                    Provider.of<GetMaterialClassProvider>(
+                  if (value.dataClass.data != null)
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                          height: 150.0,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () async {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: AlertDialog(
+                                      content: loadingInScreen(),
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                    ),
+                                    duration: const Duration(seconds: 1),
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                  ));
+                                  await Provider.of<ActiveClassProvider>(
+                                          context,
+                                          listen: false)
+                                      .getListClass(value
+                                              .dataClass.data?[index].id
+                                              .toString() ??
+                                          'null');
+                                  if (mounted) {
+                                    var data = Provider.of<ActiveClassProvider>(
                                             context,
                                             listen: false)
                                         .materialClass
                                         .data?[0];
-                                try {
-                                  if (data != null) {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return DetailScreen(
-                                          classId: value
-                                                  .dataClass.data?[index].id
-                                                  .toString() ??
-                                              'null',
-                                        );
-                                      },
-                                    ));
-                                  } else {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return DetailScreen(
-                                          classId: value
-                                                  .dataClass.data?[index].id
-                                                  .toString() ??
-                                              'null',
-                                        );
-                                      },
-                                    ));
-                                    var snackBar = SnackBar(
-                                        elevation: 0,
-                                        behavior: SnackBarBehavior.floating,
-                                        backgroundColor: Colors.transparent,
-                                        content: AwesomeSnackbarContent(
-                                          title: 'Oops!',
-                                          message: 'Class Materi is Empty :(',
-                                          contentType: ContentType.warning,
+                                    try {
+                                      if (data != null) {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                          builder: (context) {
+                                            return DetailScreen(
+                                              classId: value
+                                                      .dataClass.data?[index].id
+                                                      .toString() ??
+                                                  'null',
+                                            );
+                                          },
                                         ));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                                      } else {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                          builder: (context) {
+                                            return DetailScreen(
+                                              classId: value
+                                                      .dataClass.data?[index].id
+                                                      .toString() ??
+                                                  'null',
+                                            );
+                                          },
+                                        ));
+                                        var snackBar = SnackBar(
+                                            elevation: 0,
+                                            behavior: SnackBarBehavior.floating,
+                                            backgroundColor: Colors.transparent,
+                                            content: AwesomeSnackbarContent(
+                                              title: 'Oops!',
+                                              message:
+                                                  'Class Materi is Empty :(',
+                                              contentType: ContentType.warning,
+                                            ));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    } catch (e) {
+                                      var snackBar = SnackBar(
+                                          elevation: 0,
+                                          behavior: SnackBarBehavior.floating,
+                                          backgroundColor: Colors.transparent,
+                                          content: AwesomeSnackbarContent(
+                                            title: 'Oops!',
+                                            message: 'Something wrong...\n$e',
+                                            contentType: ContentType.failure,
+                                          ));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    }
                                   }
-                                } catch (e) {
-                                  var snackBar = SnackBar(
-                                      elevation: 0,
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor: Colors.transparent,
-                                      content: AwesomeSnackbarContent(
-                                        title: 'Oops!',
-                                        message: 'Something wrong...\n$e',
-                                        contentType: ContentType.failure,
-                                      ));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                }
-                              }
+                                },
+                                child: listClass(
+                                  value.dataClass.data?[index].name ?? '...',
+                                  value.dataClass.data?[index].createdBy ??
+                                      '...',
+                                  value.dataClass.data?[index].createdBy ==
+                                          Provider.of<GetUserProvider>(context,
+                                                  listen: false)
+                                              .userDataProvider
+                                              .data!
+                                              .email
+                                      ? 'Admin'
+                                      : 'User',
+                                ),
+                              );
                             },
-                            child: listClass(
-                              value.dataClass.data?[index].name ?? '...',
-                              value.dataClass.data?[index].createdBy ?? '...',
-                              value.dataClass.data?[index].createdBy ==
-                                      Provider.of<GetUserProvider>(context,
-                                              listen: false)
-                                          .userDataProvider
-                                          .data!
-                                          .email
-                                  ? 'Admin'
-                                  : 'User',
-                            ),
-                          );
-                        },
-                        itemCount: value.dataClass.data?.length ?? 0,
+                            itemCount: value.dataClass.data?.length ?? 0,
+                          )),
+                    ),
+                  if (value.dataClass.data == null)
+                    SliverToBoxAdapter(
+                      child: LottieBuilder.asset(
+                        "assets/emptyScreen.json",
+                        fit: BoxFit.fill,
                       ),
                     ),
-                  ),
+                  if (value.dataClass.data == null)
+                    const SliverToBoxAdapter(
+                        child: Center(
+                      child: Text(
+                        'Oops, you haven\'t join any class..',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    )),
                 ]),
               );
             case DataStatus.loading:

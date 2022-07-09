@@ -1,10 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../provider/getuser_provider.dart';
 
 Future<void> showInformationDialog(BuildContext context, String title,
     String subtitle, String buttonText) async {
