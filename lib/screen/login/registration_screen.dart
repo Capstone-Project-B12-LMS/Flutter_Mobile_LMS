@@ -182,7 +182,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               } else if (Fzregex.hasMatch(txtpassword.text,
                                       FzPattern.passwordHard) ==
                                   false) {
-                                return 'Password must be 8-20 characters,\nno spaces and must contain at least 3\nof these characters: 1 uppercase,\n1 number, 1 symbols.';
+                                if (txtpassword.text.length > 15) {
+                                  return 'Password must <= 15 character';
+                                } else {
+                                  return 'Password must be 8-20 characters,\nno spaces and must contain at least 3\nof these characters: 1 uppercase,\n1 number, 1 symbols.';
+                                }
+                              } else if (txtpassword.text.length > 15) {
+                                return 'Password must <= 15 character';
                               }
                               return null;
                             },

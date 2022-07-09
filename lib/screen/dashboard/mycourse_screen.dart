@@ -217,14 +217,14 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
           builder: (context, data, _) {
             return Column(
               children: [
-                if (data.dataClass.data == null)
+                if (data.dataClass.data!.isEmpty)
                   SizedBox(
                     child: LottieBuilder.asset(
                       "assets/emptyScreen.json",
                       fit: BoxFit.fill,
                     ),
                   ),
-                if (data.dataClass.data == null)
+                if (data.dataClass.data!.isEmpty)
                   const SizedBox(
                       child: Center(
                     child: Text(
@@ -233,7 +233,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   )),
-                if (data.dataClass.data == null)
+                if (data.dataClass.data!.isEmpty)
                   SizedBox(
                     child: ElevatedButton.icon(
                       style: ButtonStyle(
@@ -254,7 +254,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                       },
                     ),
                   ),
-                if (data.dataClass.data != null)
+                if (data.dataClass.data!.isNotEmpty)
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -280,12 +280,12 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                       'null');
 
                               if (mounted) {
-                                var dataClass =
-                                    Provider.of<ActiveClassProvider>(context,
-                                            listen: false)
-                                        .materialClass
-                                        .data?[0];
                                 try {
+                                  var dataClass =
+                                      Provider.of<ActiveClassProvider>(context,
+                                              listen: false)
+                                          .materialClass
+                                          .data?[0];
                                   if (dataClass != null) {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
@@ -326,7 +326,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                       content: AwesomeSnackbarContent(
                                         title: 'Oops!',
                                         message: 'Class Materi is Empty :(',
-                                        contentType: ContentType.failure,
+                                        contentType: ContentType.warning,
                                       ));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);

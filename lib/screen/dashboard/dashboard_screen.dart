@@ -312,7 +312,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: EdgeInsets.symmetric(vertical: 10),
                   ),
                   //Active Class Text
-                  if (value.dataClass.data != null)
+                  if (value.dataClass.data!.isNotEmpty)
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -344,7 +344,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       ),
                     ),
-                  if (value.dataClass.data != null)
+                  if (value.dataClass.data!.isNotEmpty)
                     SliverToBoxAdapter(
                       child: SizedBox(
                           height: 150.0,
@@ -372,12 +372,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               .toString() ??
                                           'null');
                                   if (mounted) {
-                                    var data = Provider.of<ActiveClassProvider>(
-                                            context,
-                                            listen: false)
-                                        .materialClass
-                                        .data?[0];
                                     try {
+                                      var data =
+                                          Provider.of<ActiveClassProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .materialClass
+                                              .data?[0];
                                       if (data != null) {
                                         Navigator.push(context,
                                             MaterialPageRoute(
@@ -422,8 +423,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           backgroundColor: Colors.transparent,
                                           content: AwesomeSnackbarContent(
                                             title: 'Oops!',
-                                            message: 'Something wrong...\n$e',
-                                            contentType: ContentType.failure,
+                                            message: 'Class Materi is Empty :(',
+                                            contentType: ContentType.warning,
                                           ));
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
@@ -448,14 +449,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             itemCount: value.dataClass.data?.length ?? 0,
                           )),
                     ),
-                  if (value.dataClass.data == null)
+                  if (value.dataClass.data!.isEmpty)
                     SliverToBoxAdapter(
                       child: LottieBuilder.asset(
                         "assets/emptyScreen.json",
                         fit: BoxFit.fill,
                       ),
                     ),
-                  if (value.dataClass.data == null)
+                  if (value.dataClass.data!.isEmpty)
                     const SliverToBoxAdapter(
                         child: Center(
                       child: Text(

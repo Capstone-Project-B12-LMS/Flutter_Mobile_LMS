@@ -90,7 +90,7 @@ Widget listFeedBack(String name, String role, String feedback) {
   );
 }
 
-Widget listHistory(String title, String action, List date) {
+Widget listHistory(String title, String action) {
   return Card(
     elevation: 2,
     shadowColor: HexColor('#9EC9E2'),
@@ -102,7 +102,7 @@ Widget listHistory(String title, String action, List date) {
             title,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          subtitle: Text("Date: ${date[2]}/${date[1]}/${date[0]}"),
+          // subtitle: Text("Date: ${date[2]}/${date[1]}/${date[0]}"),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

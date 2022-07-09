@@ -53,9 +53,7 @@ class Data {
 
 class User {
   String? id;
-  List<int>? createdAt;
   String? createdBy;
-  List<int>? updatedAt;
   String? updatedBy;
   bool? isDeleted;
   String? fullName;
@@ -72,9 +70,7 @@ class User {
 
   User(
       {this.id,
-      this.createdAt,
       this.createdBy,
-      this.updatedAt,
       this.updatedBy,
       this.isDeleted,
       this.fullName,
@@ -91,9 +87,7 @@ class User {
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    createdAt = json['createdAt'].cast<int>();
     createdBy = json['createdBy'];
-    updatedAt = json['updatedAt'].cast<int>();
     updatedBy = json['updatedBy'];
     isDeleted = json['isDeleted'];
     fullName = json['fullName'];
@@ -122,9 +116,7 @@ class User {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['createdAt'] = createdAt;
     data['createdBy'] = createdBy;
-    data['updatedAt'] = updatedAt;
     data['updatedBy'] = updatedBy;
     data['isDeleted'] = isDeleted;
     data['fullName'] = fullName;

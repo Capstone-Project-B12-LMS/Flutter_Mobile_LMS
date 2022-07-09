@@ -19,19 +19,21 @@ class HistoryScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Consumer<ActivityHistoryProvider>(
-        builder: (context, value, child) {
+        builder: (context, value, _) {
           switch (value.dataStatusHistory) {
             case DataStatusHistory.none:
               return Column(
                 children: [
-                  if (value.activityHistoryProvider.data!.isEmpty)
+                  if (value.activityHistoryProvider.data!.isEmpty &&
+                      value.activityHistoryProvider.data == null)
                     SizedBox(
                       child: LottieBuilder.asset(
                         "assets/emptyScreen.json",
                         fit: BoxFit.fill,
                       ),
                     ),
-                  if (value.activityHistoryProvider.data!.isEmpty)
+                  if (value.activityHistoryProvider.data!.isEmpty &&
+                      value.activityHistoryProvider.data == null)
                     const SizedBox(
                         child: Center(
                       child: Text(
@@ -40,7 +42,8 @@ class HistoryScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     )),
-                  if (value.activityHistoryProvider.data!.isNotEmpty)
+                  if (value.activityHistoryProvider.data!.isNotEmpty &&
+                      value.activityHistoryProvider.data != null)
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -52,10 +55,7 @@ class HistoryScreen extends StatelessWidget {
                                     '..',
                                 value.activityHistoryProvider.data?[index]
                                         .content ??
-                                    '..',
-                                value.activityHistoryProvider.data?[index].user
-                                        ?.createdAt ??
-                                    []);
+                                    '..');
                           },
                           itemCount:
                               value.activityHistoryProvider.data?.length ?? 0,

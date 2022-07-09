@@ -181,6 +181,7 @@ class API {
           await _dio.get("$activity/$userId", options: Options(headers: auth));
       return ActivityHistoryResponse.fromJson(response.data);
     } catch (e) {
+      print(e);
       return ActivityHistoryResponse.fromJson({});
     }
   }
