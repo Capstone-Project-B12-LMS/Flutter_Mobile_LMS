@@ -23,7 +23,7 @@ final TextEditingController _textEditingController = TextEditingController();
 Color secColor = HexColor('#415A80');
 
 class _MyCourseScreenState extends State<MyCourseScreen> {
-  Future<void> showInformationDialog(BuildContext context) async {
+  Future<void> joinClassDialog(BuildContext context) async {
     return await showDialog(
         context: context,
         builder: (context) {
@@ -250,7 +250,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       onPressed: () async {
-                        await showInformationDialog(context);
+                        await joinClassDialog(context);
                       },
                     ),
                   ),
@@ -261,7 +261,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                       child: ListView.builder(
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () async {
+                            onTap: ()async {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                 content: AlertDialog(

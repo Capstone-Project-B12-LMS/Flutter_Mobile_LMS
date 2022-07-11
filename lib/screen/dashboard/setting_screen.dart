@@ -1,4 +1,4 @@
-import 'package:capstone_project_lms/widgets/dialog_popup_widget.dart';
+import 'package:capstone_project_lms/widgets/validation_dialog_wdget.dart';
 import 'package:flutter/material.dart';
 
 class SettingScreen extends StatelessWidget {

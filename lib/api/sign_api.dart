@@ -5,7 +5,7 @@ import 'package:capstone_project_lms/models/feedback_response.dart';
 import 'package:capstone_project_lms/models/getclass_response.dart';
 import 'package:capstone_project_lms/models/getuser_response_model.dart';
 import 'package:capstone_project_lms/models/joinclass_response.dart';
-import 'package:capstone_project_lms/screen/login/login_response_model.dart';
+import 'package:capstone_project_lms/models/login_response_model.dart';
 import 'package:capstone_project_lms/models/register_response_model.dart';
 import 'package:capstone_project_lms/models/updateuser_response.dart';
 import 'package:dio/dio.dart';
@@ -181,7 +181,6 @@ class API {
           await _dio.get("$activity/$userId", options: Options(headers: auth));
       return ActivityHistoryResponse.fromJson(response.data);
     } catch (e) {
-      print(e);
       return ActivityHistoryResponse.fromJson({});
     }
   }

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/positions.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -7,7 +6,6 @@ import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/counselling_provider.dart';
 import 'package:capstone_project_lms/provider/feedback_provider.dart';
 import 'package:capstone_project_lms/widgets/loading_inscreen_widget.dart';
-// import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -16,13 +14,10 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-// import '../../provider/material_provider.dart';
 import '../../provider/activityhistory_provider.dart';
 import '../../widgets/hexcolor_widget.dart';
 import '../../widgets/list_class_widget.dart';
 import '../../widgets/popupdialog_widget.dart';
-// import '../dashboard/main_provider.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({Key? key, this.classId = ''}) : super(key: key);

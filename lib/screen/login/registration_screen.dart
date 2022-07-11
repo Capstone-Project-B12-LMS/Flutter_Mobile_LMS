@@ -4,7 +4,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fzregex/fzregex.dart';
 import 'package:fzregex/utils/pattern.dart';
-
 import '../../widgets/hexcolor_widget.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -185,7 +184,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 if (txtpassword.text.length > 15) {
                                   return 'Password must <= 15 character';
                                 } else {
-                                  return 'Password must be 8-20 characters,\nno spaces and must contain at least 3\nof these characters: 1 uppercase,\n1 number, 1 symbols.';
+                                  return 'Password must be 8-15 characters,\nno spaces and must contain at least 3\nof these characters: 1 uppercase,\n1 number, 1 symbols.';
                                 }
                               } else if (txtpassword.text.length > 15) {
                                 return 'Password must <= 15 character';

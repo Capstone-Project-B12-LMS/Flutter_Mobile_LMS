@@ -1,5 +1,5 @@
 import 'package:capstone_project_lms/api/sign_api.dart';
-import 'package:capstone_project_lms/screen/login/login_response_model.dart';
+import 'package:capstone_project_lms/models/login_response_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
