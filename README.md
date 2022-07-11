@@ -14,7 +14,9 @@ Video Player using [Youtube_player_Flutter](https://pub.dev/packages/youtube_pla
 
 HTTP Client for Dart using [Dio](https://pub.dev/packages/dio)
 
-Render HTML as Widgets for PPT [Flutter_Widget_From_HTML](https://pub.dev/packages/flutter_widget_from_html)
+Render HTML as Widgets for Description [Flutter_Widget_From_HTML](https://pub.dev/packages/flutter_widget_from_html)
+
+WebView for Google Slide [WebView](https://pub.dev/packages/webview_flutter)
 
 ## MVVM
 - Models => Models
