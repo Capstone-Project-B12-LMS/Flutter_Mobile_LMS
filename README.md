@@ -1,4 +1,4 @@
-# capstone_project_lms
+# Study Space App
 
 Study Space is an Learning Management System Application (for user/student only) where integrated with web Study Space (user/student and admin/Teacher).
 
