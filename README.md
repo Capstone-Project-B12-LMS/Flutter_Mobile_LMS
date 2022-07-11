@@ -1,16 +1,23 @@
 # capstone_project_lms
 
-A new Flutter project.
+Study Space is an Learning Management System Application (for user/student only) where integrated with web Study Space (user/student and admin/Teacher).
 
-## Getting Started
+## Download Study Space APP
 
-This project is a starting point for a Flutter application.
+You can download updated app here: [Study Space APK]("https://drive.google.com/file/d/1INxTejFT9VGTfJLTqInM34livJpIPcXa/view?usp=sharing")
 
-A few resources to get you started if this is your first Flutter project:
+## Tools
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+State Management using [Provider]("https://pub.dev/packages/provider")
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Video Player using [Youtube_player_Flutter]("https://pub.dev/packages/youtube_player_flutter")
+
+HTTP Client for Dart using [Dio]("https://pub.dev/packages/dio")
+
+Render HTML as Widgets for PPT [Flutter_Widget_From_HTML]("https://pub.dev/packages/flutter_widget_from_html")
+
+## MVVM
+- Models => Models
+- View => Screen
+- ViewModels => State management (Provider)
+
