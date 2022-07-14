@@ -9,7 +9,7 @@ Widget listClass(String title, String progress, String role) {
       shadowColor: HexColor('#A5CECD'),
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.only(left: 5, top: 5),
+        padding: const EdgeInsets.all(5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -102,7 +102,7 @@ Widget listHistory(String title, String action) {
             title,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          // subtitle: Text("Date: ${date[2]}/${date[1]}/${date[0]}"),
+          // subtitle: Text("${date[2]}/${date[1]}/${date[0]}"),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
