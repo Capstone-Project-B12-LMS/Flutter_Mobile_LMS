@@ -9,7 +9,6 @@ import 'package:capstone_project_lms/widgets/loading_inscreen_widget.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -20,8 +19,10 @@ import '../../widgets/list_class_widget.dart';
 import '../../widgets/popupdialog_widget.dart';
 
 class DetailScreen extends StatefulWidget {
-  const DetailScreen({Key? key, this.classId = ''}) : super(key: key);
+  const DetailScreen({Key? key, this.classId = '', this.indexClass})
+      : super(key: key);
   final String? classId;
+  final int? indexClass;
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
@@ -43,6 +44,7 @@ class _DetailScreenState extends State<DetailScreen> {
   late TextEditingController _seekToController;
   // ignore: unused_field
   late YoutubeMetaData _videoMetaData;
+  String? descriptionData;
 
   void listener() {
     if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
@@ -415,15 +417,46 @@ class _DetailScreenState extends State<DetailScreen> {
                 builder: (context, player) => Scaffold(
                       appBar: AppBar(
                         backgroundColor: Colors.white,
-                        title: Text(
-                          materialClass
-                                  .materialClass.data?[0].classEntity?.name ??
-                              '...',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                        title: GestureDetector(
+                          onTap: () => showModalBottomSheet(
+                              context: context,
+                              builder: (context) => SingleChildScrollView(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Column(children: [
+                                      const Text(
+                                        'Title Class',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        context
+                                                .watch<ActiveClassProvider>()
+                                                .materialClass
+                                                .data?[0]
+                                                .classEntity
+                                                ?.name ??
+                                            '...',
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ]),
+                                  ))),
+                          child: SizedBox(
+                            child: Text(
+                              materialClass.materialClass.data?[0].classEntity
+                                      ?.name ??
+                                  '...',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
 
-                          // child:
+                              // child:
+                            ),
+                          ),
                         ),
                         centerTitle: true,
                         leading: IconButton(
@@ -644,112 +677,43 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
-                                              height: 50,
-                                              child: HtmlWidget(
-                                                  materialClass
-                                                          .materialClass
-                                                          .data?[_selectedIndex]
-                                                          .content ??
-                                                      '..',
-                                                  onErrorBuilder: (context,
-                                                          element, error) =>
-                                                      Text(
-                                                          '$element error: $error'),
-                                                  onLoadingBuilder: (context,
-                                                          element,
-                                                          loadingProgress) =>
-                                                      const CircularProgressIndicator(),
-                                                  textStyle: const TextStyle(
-                                                      fontSize: 12)),
-                                            ),
-                                            TextButton(
-                                                onPressed: () {
-                                                  showBarModalBottomSheet(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        SingleChildScrollView(
-                                                      controller:
-                                                          ModalScrollController
-                                                              .of(context),
-                                                      child: SafeArea(
-                                                        child: Container(
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height /
-                                                              2,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(10),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              const Padding(
-                                                                padding: EdgeInsets
-                                                                    .symmetric(
-                                                                        vertical:
-                                                                            10),
-                                                                child: Text(
-                                                                  'Description',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          16),
-                                                                ),
-                                                              ),
-                                                              HtmlWidget(
-                                                                materialClass
-                                                                        .materialClass
-                                                                        .data?[
-                                                                            _selectedIndex]
-                                                                        .content ??
-                                                                    '..',
-                                                                onErrorBuilder: (context,
-                                                                        element,
-                                                                        error) =>
-                                                                    Text(
-                                                                        '$element error: $error'),
-                                                                onLoadingBuilder: (context,
-                                                                        element,
-                                                                        loadingProgress) =>
-                                                                    const CircularProgressIndicator(),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Text(
-                                                  'See more',
-                                                  style: TextStyle(
-                                                      color: secColor),
-                                                ))
+                                            HtmlWidget(
+                                                materialClass
+                                                        .materialClass
+                                                        .data?[_selectedIndex]
+                                                        .content ??
+                                                    '..',
+                                                onErrorBuilder: (context,
+                                                        element, error) =>
+                                                    Text(
+                                                        '$element error: $error'),
+                                                onLoadingBuilder: (context,
+                                                        element,
+                                                        loadingProgress) =>
+                                                    const CircularProgressIndicator(),
+                                                textStyle: const TextStyle(
+                                                    fontSize: 12)),
                                           ],
                                         ),
                                       )),
                                   SliverPadding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 20),
+                                        vertical: 20, horizontal: 20),
                                     sliver: SliverToBoxAdapter(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          const Text(
-                                            'Any Questions?',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold),
+                                          const Padding(
+                                            padding:
+                                                EdgeInsets.only(bottom: 10),
+                                            child: Text(
+                                              'Any Questions?',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                           SizedBox(
                                             width: MediaQuery.of(context)
@@ -902,7 +866,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                         context,
                                                         listen: false)
                                                     .dataClass
-                                                    .data?[0]
+                                                    .data?[widget.indexClass!]
                                                     .reportUrl;
                                                 try {
                                                   if (dataUrl != null) {
@@ -966,8 +930,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                     slivers: [
                                       SliverPadding(
                                         padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                        ),
+                                            horizontal: 20, vertical: 5),
                                         sliver: SliverList(
                                           delegate: SliverChildBuilderDelegate(
                                             (BuildContext context, int index) {

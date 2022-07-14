@@ -387,7 +387,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               classId: value
                                                       .dataClass.data?[index].id
                                                       .toString() ??
-                                                  'null',
+                                                  'null',indexClass: index,
                                             );
                                           },
                                         ));
@@ -399,7 +399,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               classId: value
                                                       .dataClass.data?[index].id
                                                       .toString() ??
-                                                  'null',
+                                                  'null',indexClass: index,
                                             );
                                           },
                                         ));

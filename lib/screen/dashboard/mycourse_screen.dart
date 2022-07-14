@@ -261,7 +261,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                       child: ListView.builder(
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: ()async {
+                            onTap: () async {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                 content: AlertDialog(
@@ -293,6 +293,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                           classId: data
                                               .dataClass.data?[index].id
                                               .toString(),
+                                          indexClass: index,
                                         );
                                       },
                                     ));
@@ -303,6 +304,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                           classId: data
                                               .dataClass.data?[index].id
                                               .toString(),
+                                          indexClass: index,
                                         );
                                       },
                                     ));
