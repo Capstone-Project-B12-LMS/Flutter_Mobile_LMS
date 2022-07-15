@@ -200,23 +200,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .updateData(userId, token, newEmail!,
                                           newName!, newTelepon!)
                                       .then((value) {
-                                    var snackBar = SnackBar(
-                                        elevation: 0,
-                                        behavior: SnackBarBehavior.floating,
-                                        backgroundColor: Colors.transparent,
-                                        content: AwesomeSnackbarContent(
-                                          title: 'Success',
-                                          message: 'Data saved successfully',
-                                          contentType: ContentType.success,
-                                        ));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                    context
-                                        .read<GetUserProvider>()
-                                        .getUserData();
-                                    txtemail.clear();
-                                    txtfullname.clear();
-                                    txttelepon.clear();
+                                    if (value.data != null) {
+                                      var snackBar = SnackBar(
+                                          elevation: 0,
+                                          behavior: SnackBarBehavior.floating,
+                                          backgroundColor: Colors.transparent,
+                                          content: AwesomeSnackbarContent(
+                                            title: 'Success',
+                                            message: 'Data saved successfully',
+                                            contentType: ContentType.success,
+                                          ));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                      context
+                                          .read<GetUserProvider>()
+                                          .getUserData();
+                                      txtemail.clear();
+                                      txtfullname.clear();
+                                      txttelepon.clear();
+                                    } else {
+                                      var snackBar = SnackBar(
+                                          elevation: 0,
+                                          behavior: SnackBarBehavior.floating,
+                                          backgroundColor: Colors.transparent,
+                                          content: AwesomeSnackbarContent(
+                                            title: 'Oops!',
+                                            message: 'Email already taken!',
+                                            contentType: ContentType.warning,
+                                          ));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                      context
+                                          .read<GetUserProvider>()
+                                          .getUserData();
+                                      txtemail.clear();
+                                      txtfullname.clear();
+                                      txttelepon.clear();
+                                    }
                                   });
                                 }
                               });
