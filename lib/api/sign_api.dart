@@ -1,5 +1,6 @@
 import 'package:capstone_project_lms/models/activeclass_response.dart';
 import 'package:capstone_project_lms/models/activityhistory_response.dart';
+import 'package:capstone_project_lms/models/class_pagination_response.dart';
 import 'package:capstone_project_lms/models/counselling_response.dart';
 import 'package:capstone_project_lms/models/feedback_response.dart';
 import 'package:capstone_project_lms/models/getclass_response.dart';
@@ -25,6 +26,7 @@ class API {
   String materialUrl = "$baseUrl/material";
   String feedback = "$baseUrl/feedbacks/class";
   String activity = "$baseUrl/activityhistory/user";
+  String paginationClass = "$baseUrl/class";
 
   Future<ResponseLogin> login(String email, String password) async {
     Map<String, String> data = {"email": email, "password": password};
@@ -182,6 +184,18 @@ class API {
       return ActivityHistoryResponse.fromJson(response.data);
     } catch (e) {
       return ActivityHistoryResponse.fromJson({});
+    }
+  }
+
+  Future<List<ListClassPaginationResponse>> listClassPagination(
+      int page, int size) async {
+    Map<String, String> auth = {'Authorization': 'Bearer '};
+    try {
+      Response response = await _dio.get("$paginationClass/$page/$size",
+          options: Options(headers: auth));
+      return [ListClassPaginationResponse.fromJson(response.data)];
+    } catch (e) {
+      return [ListClassPaginationResponse.fromJson({})];
     }
   }
 }

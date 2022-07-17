@@ -1,6 +1,6 @@
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/screen/dashboard/dashboard_screen.dart';
-import 'package:capstone_project_lms/screen/dashboard/history_screen.dart';
+import 'package:capstone_project_lms/screen/dashboard/activity_screen.dart';
 import 'package:capstone_project_lms/screen/dashboard/mycourse_screen.dart';
 import 'package:capstone_project_lms/screen/dashboard/setting_screen.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   List pages = [
     const DashboardScreen(),
     const MyCourseScreen(),
-    const HistoryScreen(),
+    const ActivityScreen(),
     const SettingScreen()
   ];
   void _onItemTapped(int index) {
@@ -38,7 +38,6 @@ class _MainScreenState extends State<MainScreen> {
       context.read<NavbarProvider>().getIndexNavbar(index);
     });
   }
-  
 
   DateTime preBackpress = DateTime.now();
   @override
@@ -80,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
                 label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.book), label: 'My Class'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.history), label: 'History'),
+                icon: Icon(Icons.history), label: 'Activity'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.settings), label: 'Settings'),
           ],

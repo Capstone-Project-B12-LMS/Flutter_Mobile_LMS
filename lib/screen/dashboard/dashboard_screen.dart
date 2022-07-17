@@ -2,6 +2,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
+import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
@@ -364,7 +365,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     backgroundColor: Colors.transparent,
                                     elevation: 0,
                                   ));
-                                  await Provider.of<ActiveClassProvider>(
+                                  await Provider.of<GetMaterialClassProvider>(
                                           context,
                                           listen: false)
                                       .getListClass(value
@@ -374,11 +375,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   if (mounted) {
                                     try {
                                       var data =
-                                          Provider.of<ActiveClassProvider>(
+                                          Provider.of<GetMaterialClassProvider>(
                                                   context,
                                                   listen: false)
-                                              .materialClass
-                                              .data?[0];
+                                              .listClass
+                                              .data;
                                       if (data != null) {
                                         Navigator.push(context,
                                             MaterialPageRoute(

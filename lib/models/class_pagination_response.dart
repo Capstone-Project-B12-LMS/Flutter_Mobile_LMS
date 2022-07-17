@@ -1,107 +1,7 @@
-class MaterialByClassResponse {
-  String? errors;
-  bool? status;
-  List<Data>? data;
-
-  MaterialByClassResponse({this.errors, this.status, this.data});
-
-  MaterialByClassResponse.fromJson(Map<String, dynamic> json) {
-    errors = json['errors'];
-    status = json['status'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['errors'] = errors;
-    data['status'] = status;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Data {
+class ListClassPaginationResponse {
   String? id;
   String? createdBy;
-  String? updatedBy;
-  bool? isDeleted;
-  ClassEntity? classEntity;
-  String? title;
-  String? content;
-  String? topic;
-  String? videoUrl;
-  String? fileUrl;
-  String? deadline;
-  int? point;
-  Roles? category;
-
-  Data(
-      {this.id,
-      this.createdBy,
-      this.updatedBy,
-      this.isDeleted,
-      this.classEntity,
-      this.title,
-      this.content,
-      this.topic,
-      this.videoUrl,
-      this.fileUrl,
-      this.deadline,
-      this.point,
-      this.category});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    createdBy = json['createdBy'];
-    updatedBy = json['updatedBy'];
-    isDeleted = json['isDeleted'];
-    classEntity = json['classEntity'] != null
-        ? ClassEntity.fromJson(json['classEntity'])
-        : null;
-    title = json['title'];
-    content = json['content'];
-    topic = json['topic'];
-    videoUrl = json['videoUrl'];
-    fileUrl = json['fileUrl'];
-    deadline = json['deadline'];
-    point = json['point'];
-    category =
-        json['category'] != null ? Roles.fromJson(json['category']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['createdBy'] = createdBy;
-    data['updatedBy'] = updatedBy;
-    data['isDeleted'] = isDeleted;
-    if (classEntity != null) {
-      data['classEntity'] = classEntity!.toJson();
-    }
-    data['title'] = title;
-    data['content'] = content;
-    data['topic'] = topic;
-    data['videoUrl'] = videoUrl;
-    data['fileUrl'] = fileUrl;
-    data['deadline'] = deadline;
-    data['point'] = point;
-    if (category != null) {
-      data['category'] = category!.toJson();
-    }
-    return data;
-  }
-}
-
-class ClassEntity {
-  String? id;
-  String? createdBy;
+  String? updatedAt;
   String? updatedBy;
   bool? isDeleted;
   String? name;
@@ -111,9 +11,10 @@ class ClassEntity {
   String? status;
   List<Users>? users;
 
-  ClassEntity(
+  ListClassPaginationResponse(
       {this.id,
       this.createdBy,
+      this.updatedAt,
       this.updatedBy,
       this.isDeleted,
       this.name,
@@ -123,9 +24,10 @@ class ClassEntity {
       this.status,
       this.users});
 
-  ClassEntity.fromJson(Map<String, dynamic> json) {
+  ListClassPaginationResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     createdBy = json['createdBy'];
+    updatedAt = json['updatedAt'];
     updatedBy = json['updatedBy'];
     isDeleted = json['isDeleted'];
     name = json['name'];
@@ -145,6 +47,7 @@ class ClassEntity {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['createdBy'] = createdBy;
+    data['updatedAt'] = updatedAt;
     data['updatedBy'] = updatedBy;
     data['isDeleted'] = isDeleted;
     data['name'] = name;
@@ -162,6 +65,7 @@ class ClassEntity {
 class Users {
   String? id;
   String? createdBy;
+  String? updatedAt;
   String? updatedBy;
   bool? isDeleted;
   String? fullName;
@@ -179,6 +83,7 @@ class Users {
   Users(
       {this.id,
       this.createdBy,
+      this.updatedAt,
       this.updatedBy,
       this.isDeleted,
       this.fullName,
@@ -196,6 +101,7 @@ class Users {
   Users.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     createdBy = json['createdBy'];
+    updatedAt = json['updatedAt'];
     updatedBy = json['updatedBy'];
     isDeleted = json['isDeleted'];
     fullName = json['fullName'];
@@ -225,6 +131,7 @@ class Users {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['createdBy'] = createdBy;
+    data['updatedAt'] = updatedAt;
     data['updatedBy'] = updatedBy;
     data['isDeleted'] = isDeleted;
     data['fullName'] = fullName;

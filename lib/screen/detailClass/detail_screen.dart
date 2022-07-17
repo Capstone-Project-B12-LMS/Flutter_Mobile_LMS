@@ -5,6 +5,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/counselling_provider.dart';
 import 'package:capstone_project_lms/provider/feedback_provider.dart';
+import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/widgets/loading_inscreen_widget.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
@@ -58,12 +59,14 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     Provider.of<FeedbackProvider>(context, listen: false)
         .getFeedback(widget.classId!);
+
     _controller = YoutubePlayerController(
-      initialVideoId: Provider.of<ActiveClassProvider>(context, listen: false)
-              .materialClass
-              .data?[0]
-              .videoUrl ??
-          '',
+      initialVideoId:
+          Provider.of<GetMaterialClassProvider>(context, listen: false)
+                  .listClass
+                  .data?[0]
+                  .videoUrl ??
+              '',
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: false,
@@ -77,6 +80,7 @@ class _DetailScreenState extends State<DetailScreen> {
     _idController = TextEditingController();
     _seekToController = TextEditingController();
     _videoMetaData = const YoutubeMetaData();
+
     super.initState();
   }
 
@@ -367,10 +371,10 @@ class _DetailScreenState extends State<DetailScreen> {
     }
 
     String ppt = '';
-    return Consumer<ActiveClassProvider>(
+    return Consumer<GetMaterialClassProvider>(
       builder: (context, materialClass, child) {
-        switch (materialClass.dataStatus) {
-          case DataStatus.none:
+        switch (materialClass.materialStatus) {
+          case MaterialStatus.none:
             return YoutubePlayerBuilder(
                 player: YoutubePlayer(
                   controller: _controller,
@@ -403,13 +407,13 @@ class _DetailScreenState extends State<DetailScreen> {
                         _controller.value.copyWith(isReady: true),
                       );
                     } else {
-                      var vidId = formatLink(Provider.of<ActiveClassProvider>(
-                                  context,
-                                  listen: false)
-                              .materialClass
-                              .data?[_selectedIndex]
-                              .videoUrl ??
-                          '');
+                      var vidId = formatLink(
+                          Provider.of<GetMaterialClassProvider>(context,
+                                      listen: false)
+                                  .listClass
+                                  .data?[_selectedIndex]
+                                  .videoUrl ??
+                              '');
                       _controller.load(vidId);
                     }
                   },
@@ -432,8 +436,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                       ),
                                       Text(
                                         context
-                                                .watch<ActiveClassProvider>()
-                                                .materialClass
+                                                .watch<
+                                                    GetMaterialClassProvider>()
+                                                .listClass
                                                 .data?[0]
                                                 .classEntity
                                                 ?.name ??
@@ -444,8 +449,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                   ))),
                           child: SizedBox(
                             child: Text(
-                              materialClass.materialClass.data?[0].classEntity
-                                      ?.name ??
+                              materialClass
+                                      .listClass.data?[0].classEntity?.name ??
                                   '...',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -471,18 +476,18 @@ class _DetailScreenState extends State<DetailScreen> {
                         height: MediaQuery.of(context).size.height,
                         child: Column(
                           children: [
-                            if (materialClass.materialClass
-                                        .data?[_selectedIndex].videoUrl !=
+                            if (materialClass.listClass.data?[_selectedIndex]
+                                        .videoUrl !=
                                     null &&
-                                materialClass.materialClass
-                                        .data?[_selectedIndex].videoUrl !=
+                                materialClass.listClass.data?[_selectedIndex]
+                                        .videoUrl !=
                                     "")
                               player,
-                            if (materialClass.materialClass
-                                        .data?[_selectedIndex].fileUrl !=
+                            if (materialClass.listClass.data?[_selectedIndex]
+                                        .fileUrl !=
                                     null &&
-                                materialClass.materialClass
-                                        .data?[_selectedIndex].fileUrl !=
+                                materialClass.listClass.data?[_selectedIndex]
+                                        .fileUrl !=
                                     "")
                               LayoutBuilder(
                                 builder: (context, constraints) {
@@ -493,7 +498,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                           webViewController) {
                                         controller.complete(webViewController);
                                       },
-                                      initialUrl: materialClass.materialClass
+                                      initialUrl: materialClass.listClass
                                               .data?[_selectedIndex].fileUrl ??
                                           '..',
                                       javascriptMode:
@@ -511,7 +516,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   padding:
                                       const EdgeInsets.only(left: 20, top: 10),
                                   child: Text(
-                                    materialClass.materialClass
+                                    materialClass.listClass
                                             .data?[_selectedIndex].title ??
                                         '..',
                                     style: const TextStyle(
@@ -545,7 +550,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         padding:
                                             const EdgeInsets.only(left: 10),
                                         child: Text(
-                                          "${materialClass.materialClass.data?[0].classEntity?.users?.length} Members",
+                                          "${materialClass.listClass.data?[0].classEntity?.users?.length} Members",
                                           style: const TextStyle(fontSize: 12),
                                         ),
                                       )
@@ -648,7 +653,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                     children: [
                                                       Text(
                                                         materialClass
-                                                                .materialClass
+                                                                .listClass
                                                                 .data?[
                                                                     _selectedIndex]
                                                                 .createdBy ??
@@ -662,7 +667,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       ),
                                                       Text(
                                                         materialClass
-                                                                .materialClass
+                                                                .listClass
                                                                 .data?[
                                                                     _selectedIndex]
                                                                 .createdBy ??
@@ -679,7 +684,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                             ),
                                             HtmlWidget(
                                                 materialClass
-                                                        .materialClass
+                                                        .listClass
                                                         .data?[_selectedIndex]
                                                         .content ??
                                                     '..',
@@ -794,13 +799,13 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       .fileUrl !=
                                                   null) {
                                                 ppt = materialClass
-                                                        .materialClass
+                                                        .listClass
                                                         .data?[_selectedIndex]
                                                         .fileUrl ??
                                                     '';
                                                 setState(() {
                                                   materialClass
-                                                      .materialClass
+                                                      .listClass
                                                       .data?[_selectedIndex]
                                                       .fileUrl = null;
                                                 });
@@ -811,7 +816,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                     () {});
                                                 setState(() {
                                                   materialClass
-                                                      .materialClass
+                                                      .listClass
                                                       .data?[_selectedIndex]
                                                       .fileUrl = ppt;
                                                 });
@@ -823,16 +828,16 @@ class _DetailScreenState extends State<DetailScreen> {
                                                   : Colors.white,
                                               elevation: 5,
                                               child: listClassVertical(
-                                                  materialClass.materialClass
+                                                  materialClass.listClass
                                                           .data?[index].title ??
                                                       '..',
                                                   materialClass
-                                                          .materialClass
+                                                          .listClass
                                                           .data?[index]
                                                           .createdBy ??
                                                       '..',
                                                   materialClass
-                                                          .materialClass
+                                                          .listClass
                                                           .data?[index]
                                                           .classEntity
                                                           ?.users
@@ -843,7 +848,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                           );
                                         },
                                         childCount: materialClass
-                                                .materialClass.data?.length ??
+                                                .listClass.data?.length ??
                                             0, // 1000 list items
                                       ),
                                     ),
@@ -971,13 +976,13 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ));
 
-          case DataStatus.loading:
+          case MaterialStatus.loading:
             return AlertDialog(
               content: loadingInScreen(),
               elevation: 0,
               backgroundColor: Colors.transparent,
             );
-          case DataStatus.error:
+          case MaterialStatus.error:
             return PopUpDialogWidget(
               text: 'Something Wrong...',
               type: ContentType.failure,

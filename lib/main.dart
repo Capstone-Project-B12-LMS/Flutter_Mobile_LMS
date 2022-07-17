@@ -3,7 +3,7 @@ import 'package:capstone_project_lms/provider/activityhistory_provider.dart';
 import 'package:capstone_project_lms/provider/feedback_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
-import 'package:capstone_project_lms/provider/listclass_provider.dart';
+import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/provider/login_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/provider/splash_provider.dart';
@@ -33,7 +33,7 @@ void main() {
         create: (_) => GetUserProvider(),
       ),
       ChangeNotifierProvider(
-        create: (_) => GetListClassProvider(),
+        create: (_) => GetMaterialClassProvider(),
       ),
       ChangeNotifierProvider(
         create: (_) => JoinProvider(),

@@ -90,7 +90,7 @@ Widget listFeedBack(String name, String role, String feedback) {
   );
 }
 
-Widget listHistory(String title, String action) {
+Widget listActivity(String title, String action) {
   return Card(
     elevation: 2,
     shadowColor: HexColor('#9EC9E2'),
