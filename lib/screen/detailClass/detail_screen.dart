@@ -59,7 +59,6 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     Provider.of<FeedbackProvider>(context, listen: false)
         .getFeedback(widget.classId!);
-
     _controller = YoutubePlayerController(
       initialVideoId:
           Provider.of<GetMaterialClassProvider>(context, listen: false)

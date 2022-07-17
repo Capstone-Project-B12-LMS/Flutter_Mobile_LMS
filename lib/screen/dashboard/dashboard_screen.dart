@@ -380,7 +380,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   listen: false)
                                               .listClass
                                               .data;
-                                      if (data != null) {
+                                      if (data != null && data.isNotEmpty) {
                                         Navigator.push(context,
                                             MaterialPageRoute(
                                           builder: (context) {
@@ -388,22 +388,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               classId: value
                                                       .dataClass.data?[index].id
                                                       .toString() ??
-                                                  'null',indexClass: index,
+                                                  'null',
+                                              indexClass: index,
                                             );
                                           },
                                         ));
                                       } else {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                          builder: (context) {
-                                            return DetailScreen(
-                                              classId: value
-                                                      .dataClass.data?[index].id
-                                                      .toString() ??
-                                                  'null',indexClass: index,
-                                            );
-                                          },
-                                        ));
                                         var snackBar = SnackBar(
                                             elevation: 0,
                                             behavior: SnackBarBehavior.floating,

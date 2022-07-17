@@ -327,8 +327,9 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                               listen: false)
                                           .listClass
                                           .data;
-                                          
-                                  if (dataClass != null) {
+
+                                  if (dataClass != null &&
+                                      dataClass.isNotEmpty) {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
                                         return DetailScreen(
@@ -340,16 +341,6 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                       },
                                     ));
                                   } else {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return DetailScreen(
-                                          classId: data
-                                              .dataClass.data?[index].id
-                                              .toString(),
-                                          indexClass: index,
-                                        );
-                                      },
-                                    ));
                                     var snackBar = SnackBar(
                                         elevation: 0,
                                         behavior: SnackBarBehavior.floating,
