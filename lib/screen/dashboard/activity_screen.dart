@@ -8,14 +8,14 @@ import 'package:provider/provider.dart';
 
 import '../../widgets/popupdialog_widget.dart';
 
-class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({Key? key}) : super(key: key);
+class ActivityScreen extends StatelessWidget {
+  const ActivityScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("History"),
+        title: const Text("Activity"),
         centerTitle: true,
       ),
       body: Consumer<ActivityHistoryProvider>(
@@ -49,7 +49,7 @@ class HistoryScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: ListView.builder(
                           itemBuilder: (context, index) {
-                            return listHistory(
+                            return listActivity(
                                 value.activityHistoryProvider.data?[index].user
                                         ?.email ??
                                     '..',

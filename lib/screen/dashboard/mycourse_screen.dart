@@ -1,15 +1,19 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:capstone_project_lms/api/sign_api.dart';
+import 'package:capstone_project_lms/models/class_pagination_response.dart';
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
-import 'package:capstone_project_lms/screen/detailClass/detail_screen.dart';
+import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
-import 'package:capstone_project_lms/widgets/loading_inscreen_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../provider/activityhistory_provider.dart';
 import '../../widgets/hexcolor_widget.dart';
+import '../../widgets/loading_inscreen_widget.dart';
+import '../detailClass/detail_screen.dart';
 
 class MyCourseScreen extends StatefulWidget {
   const MyCourseScreen({Key? key}) : super(key: key);
@@ -23,6 +27,41 @@ final TextEditingController _textEditingController = TextEditingController();
 Color secColor = HexColor('#415A80');
 
 class _MyCourseScreenState extends State<MyCourseScreen> {
+  static const _pageSize = 20;
+
+  final PagingController<int, ListClassPaginationResponse> _pagingController =
+      PagingController(firstPageKey: 0);
+
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      // final newItems = await RemoteApi.getCharacterList(pageKey, _pageSize);
+      final newItems = await API().listClassPagination(pageKey, _pageSize);
+      final isLastPage = newItems.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + newItems.length;
+        _pagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
   Future<void> joinClassDialog(BuildContext context) async {
     return await showDialog(
         context: context,
@@ -273,7 +312,8 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                 backgroundColor: Colors.transparent,
                                 elevation: 0,
                               ));
-                              await Provider.of<ActiveClassProvider>(context,
+                              await Provider.of<GetMaterialClassProvider>(
+                                      context,
                                       listen: false)
                                   .getListClass(data.dataClass.data?[index].id
                                           .toString() ??
@@ -282,11 +322,14 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                               if (mounted) {
                                 try {
                                   var dataClass =
-                                      Provider.of<ActiveClassProvider>(context,
+                                      Provider.of<GetMaterialClassProvider>(
+                                              context,
                                               listen: false)
-                                          .materialClass
-                                          .data?[0];
-                                  if (dataClass != null) {
+                                          .listClass
+                                          .data;
+
+                                  if (dataClass != null &&
+                                      dataClass.isNotEmpty) {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
                                         return DetailScreen(
@@ -298,16 +341,6 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                       },
                                     ));
                                   } else {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return DetailScreen(
-                                          classId: data
-                                              .dataClass.data?[index].id
-                                              .toString(),
-                                          indexClass: index,
-                                        );
-                                      },
-                                    ));
                                     var snackBar = SnackBar(
                                         elevation: 0,
                                         behavior: SnackBarBehavior.floating,
@@ -347,6 +380,25 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                       ),
                     ),
                   ),
+                // if (data.dataClass.data!.isNotEmpty)
+                //   RefreshIndicator(
+                //     onRefresh: () =>
+                //         Future.sync(() => _pagingController.refresh()),
+                //     child: PagedListView<int,
+                //             ListClassPaginationResponse>.separated(
+                //         pagingController: _pagingController,
+                //         builderDelegate: PagedChildBuilderDelegate<
+                //             ListClassPaginationResponse>(
+                //           itemBuilder: (context, item, index) =>
+                //               listClassVertical(
+                //                   data.dataClass.data?[index].name ?? '...',
+                //                   data.dataClass.data?[index].room ?? '...',
+                //                   data.dataClass.data?[index].users?.length
+                //                           .toString() ??
+                //                       '...'),
+                //         ),
+                //         separatorBuilder: (context, index) => const Divider()),
+                //   )
               ],
             );
           },
