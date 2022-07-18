@@ -15,7 +15,7 @@ import '../models/materialbyclass_response.dart';
 
 class API {
   static String baseUrl =
-      'http://ec2-34-219-136-154.us-west-2.compute.amazonaws.com/restapi/v1';
+      'http://ec2-52-37-92-72.us-west-2.compute.amazonaws.com/restapi/v1';
   final Dio _dio = Dio();
 
   String loginApi = "$baseUrl/login";
@@ -39,8 +39,7 @@ class API {
     }
   }
 
-  Future<ResponseRegister> regis(
-      String fullName, String email, String password) async {
+  Future<ResponseRegister> regis(String fullName, String email, String password) async {
     Map<String, String> data = {
       "fullName": fullName,
       "email": email,
@@ -66,8 +65,7 @@ class API {
     }
   }
 
-  Future<ResponseUpdateUser> updateData(String id, String token, String email,
-      String fullName, String telepon) async {
+  Future<ResponseUpdateUser> updateData(String id, String token, String email,String fullName, String telepon) async {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     Map<String, String> data = {
       'email': email,
@@ -86,7 +84,7 @@ class API {
   }
 
   Future<ResponseGetListClass> getListClass(String token) async {
-    Map<String, String> auth = {'Authorization': 'Bearer $token'};
+Map<String, String> auth = {'Authorization': 'Bearer $token'};
     try {
       Response response =
           await _dio.get(classUrl, options: Options(headers: auth));
@@ -96,8 +94,7 @@ class API {
     }
   }
 
-  Future<ResponseJoinClass> joinClass(
-      String classCode, String token, String userId) async {
+  Future<ResponseJoinClass> joinClass(String classCode, String token, String userId) async {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     Map<String, String> data = {"classCode": classCode, "userId": userId};
     try {
@@ -111,8 +108,7 @@ class API {
     }
   }
 
-  Future<ResponseJoinClass> classPage(
-      String page, String token, String userId) async {
+  Future<ResponseJoinClass> classPage(String page, String token, String userId) async {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     try {
       Response response =
@@ -123,8 +119,7 @@ class API {
     }
   }
 
-  Future<MaterialByClassResponse> materialClass(
-      String classId, String token) async {
+  Future<MaterialByClassResponse> materialClass(String classId, String token) async {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     try {
       Response response = await _dio.get("$materialUrl/class/$classId",
@@ -146,8 +141,7 @@ class API {
     }
   }
 
-  Future<CounsellingResponse> counsellingRequest(String topic, String userId,
-      String classId, String content, String token) async {
+  Future<CounsellingResponse> counsellingRequest(String topic, String userId,String classId, String content, String token) async {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     Map<String, String> data = {
       "topic": topic,
@@ -164,8 +158,7 @@ class API {
     }
   }
 
-  Future<FeedbackResponse> feedbackClass(String classId, String token) async {
-    Map<String, String> auth = {'Authorization': 'Bearer $token'};
+  Future<FeedbackResponse> feedbackClass(String classId, String token) async {Map<String, String> auth = {'Authorization': 'Bearer $token'};
     try {
       Response response =
           await _dio.get("$feedback/$classId", options: Options(headers: auth));
@@ -175,8 +168,7 @@ class API {
     }
   }
 
-  Future<ActivityHistoryResponse> activityHistory(
-      String userId, String token) async {
+  Future<ActivityHistoryResponse> activityHistory(String userId, String token) async {
     Map<String, String> auth = {'Authorization': 'Bearer $token'};
     try {
       Response response =
@@ -187,8 +179,7 @@ class API {
     }
   }
 
-  Future<List<ListClassPaginationResponse>> listClassPagination(
-      int page, int size) async {
+  Future<List<ListClassPaginationResponse>> listClassPagination(int page, int size) async {
     Map<String, String> auth = {'Authorization': 'Bearer '};
     try {
       Response response = await _dio.get("$paginationClass/$page/$size",

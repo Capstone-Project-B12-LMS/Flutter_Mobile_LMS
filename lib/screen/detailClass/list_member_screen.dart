@@ -1,4 +1,4 @@
-import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
+import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +18,7 @@ class ListMemberScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Consumer<ActiveClassProvider>(
+      body: Consumer<GetMaterialClassProvider>(
         builder: (context, value, _) {
           return ListView.builder(
             itemBuilder: (context, index) {
@@ -27,7 +27,7 @@ class ListMemberScreen extends StatelessWidget {
                   backgroundColor: Colors.amber,
                 ),
                 title: Text(
-                  value.materialClass.data?[0].classEntity?.users?[index]
+                  value.listClass.data?[0].classEntity?.users?[index]
                           .fullName ??
                       '..',
                   style: const TextStyle(
@@ -36,15 +36,14 @@ class ListMemberScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                  value.materialClass.data?[0].classEntity?.users?[index]
-                          .roles?[0].name ??
+                  value.listClass.data?[0].classEntity?.users?[index].roles?[0]
+                          .name ??
                       '..',
                   style: const TextStyle(color: Colors.grey),
                 ),
               );
             },
-            itemCount:
-                value.materialClass.data?[0].classEntity?.users?.length ?? 1,
+            itemCount: value.listClass.data?[0].classEntity?.users?.length ?? 1,
           );
         },
         // child:
