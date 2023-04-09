@@ -15,7 +15,7 @@ import '../models/materialbyclass_response.dart';
 
 class API {
   static String baseUrl =
-      'http://ec2-52-37-92-72.us-west-2.compute.amazonaws.com/restapi/v1';
+      'http://ec2-34-223-3-198.us-west-2.compute.amazonaws.com/restapi/v1';
   final Dio _dio = Dio();
 
   String loginApi = "$baseUrl/login";
