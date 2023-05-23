@@ -3,15 +3,15 @@ import 'package:capstone_project_lms/provider/activityhistory_provider.dart';
 import 'package:capstone_project_lms/provider/feedback_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
-import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/provider/login_provider.dart';
+import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/provider/splash_provider.dart';
+import 'package:capstone_project_lms/screen/dashboard/main_screen.dart';
+import 'package:capstone_project_lms/screen/detailClass/detail_screen.dart';
 import 'package:capstone_project_lms/screen/detailClass/list_member_screen.dart';
 import 'package:capstone_project_lms/screen/login/login_screen.dart';
-import 'package:capstone_project_lms/screen/dashboard/main_screen.dart';
 import 'package:capstone_project_lms/screen/login/registration_screen.dart';
-import 'package:capstone_project_lms/screen/detailClass/detail_screen.dart';
 import 'package:capstone_project_lms/screen/splash/splash_screen.dart';
 import 'package:capstone_project_lms/screen/splash/splash_screen2.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +67,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Study Space',
       theme: ThemeData(
-          backgroundColor: Colors.white,
-          primarySwatch: Colors.blue,
           fontFamily: 'Poppins',
           appBarTheme: const AppBarTheme(
             color: Colors.white,
@@ -76,7 +74,9 @@ class MyApp extends StatelessWidget {
             elevation: 0,
             titleTextStyle: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
-          )),
+          ),
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
+              .copyWith(background: Colors.white)),
       initialRoute: '/splash2',
       routes: {
         '/login': (context) => const LoginScreen(),
