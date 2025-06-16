@@ -20,15 +20,15 @@ class PopUpDialogWidget extends StatelessWidget {
     } else {
       title = 'Hmm..';
     }
-    var snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: title,
-          message: m,
-          contentType: type,
-        ));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    // var snackBar = SnackBar(
+    //     elevation: 0,
+    //     behavior: SnackBarBehavior.floating,
+    //     backgroundColor: Colors.transparent,
+    //     content: AwesomeSnackbarContent(
+    //       title: title,
+    //       message: m,
+    //       contentType: type,
+    //     ));
+    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

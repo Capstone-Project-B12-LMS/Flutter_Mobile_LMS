@@ -4,9 +4,9 @@ import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
 import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/provider/navbar_provider.dart';
-import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
+import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -103,13 +103,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                       side: BorderSide(color: secColor))),
                               backgroundColor:
-                                  MaterialStateProperty.all(secColor)),
+                                  WidgetStateProperty.all(secColor)),
                           onPressed: () async {
                             try {
                               ScaffoldMessenger.of(context)
@@ -128,18 +128,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   .joinClass(
                                       Provider.of<GetUserProvider>(context,
                                               listen: false)
-                                          .userToken,
-                                      Provider.of<GetUserProvider>(context,
-                                              listen: false)
                                           .userId,
                                       _textEditingController.text);
                               if (mounted) {
                                 if (context
                                         .read<JoinProvider>()
                                         .joinResClass
-                                        .status ==
+                                        ?.status ==
                                     true) {
-                                  var snackBar = SnackBar(
+                                  var snackBar = const SnackBar(
                                       elevation: 0,
                                       behavior: SnackBarBehavior.floating,
                                       backgroundColor: Colors.transparent,
@@ -158,7 +155,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   context,
                                                   listen: false)
                                               .joinResClass
-                                              .data
+                                              ?.data
                                               ?.id ??
                                           'null');
                                   Provider.of<ActiveClassProvider>(context,
@@ -169,7 +166,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       .history();
                                   _textEditingController.clear();
                                 } else {
-                                  var snackBar = SnackBar(
+                                  var snackBar = const SnackBar(
                                       elevation: 0,
                                       behavior: SnackBarBehavior.floating,
                                       backgroundColor: Colors.transparent,
@@ -196,14 +193,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                       side: const BorderSide(
                                           color: Colors.grey))),
                               backgroundColor:
-                                  MaterialStateProperty.all(Colors.grey)),
+                                  WidgetStateProperty.all(Colors.grey)),
                           onPressed: () {
                             _textEditingController.clear();
                             Navigator.of(context).pop();
@@ -261,7 +258,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
-                                      'Hi ${context.watch<GetUserProvider>().userDataProvider.data?.fullName ?? 'Alexa'} !',
+                                      'Hi ${context.watch<GetUserProvider>().userDataProvider?.data?.fullName ?? 'Alexa'} !',
                                       style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 14,
@@ -293,11 +290,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: ElevatedButton.icon(
                       style: ButtonStyle(
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                       side: BorderSide(color: secColor))),
-                          backgroundColor: MaterialStateProperty.all(secColor)),
+                          backgroundColor: WidgetStateProperty.all(secColor)),
                       icon: const Icon(Icons.door_front_door),
                       label: const Text(
                         'JOIN CLASS',
@@ -313,7 +310,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: EdgeInsets.symmetric(vertical: 10),
                   ),
                   //Active Class Text
-                  if (value.dataClass.data!.isNotEmpty)
+                  if (value.dataClass?.data?.isNotEmpty ?? false)
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -345,7 +342,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       ),
                     ),
-                  if (value.dataClass.data!.isNotEmpty)
+                  if (value.dataClass?.data?.isNotEmpty ?? false)
                     SliverToBoxAdapter(
                       child: SizedBox(
                           height: 150.0,
@@ -369,7 +366,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           context,
                                           listen: false)
                                       .getListClass(value
-                                              .dataClass.data?[index].id
+                                              .dataClass?.data?[index].id
                                               .toString() ??
                                           'null');
                                   if (mounted) {
@@ -379,14 +376,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   context,
                                                   listen: false)
                                               .listClass
-                                              .data;
+                                              ?.data;
                                       if (data != null && data.isNotEmpty) {
                                         Navigator.push(context,
                                             MaterialPageRoute(
                                           builder: (context) {
                                             return DetailScreen(
-                                              classId: value
-                                                      .dataClass.data?[index].id
+                                              classId: value.dataClass
+                                                      ?.data?[index].id
                                                       .toString() ??
                                                   'null',
                                               indexClass: index,
@@ -394,7 +391,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           },
                                         ));
                                       } else {
-                                        var snackBar = SnackBar(
+                                        var snackBar = const SnackBar(
                                             elevation: 0,
                                             behavior: SnackBarBehavior.floating,
                                             backgroundColor: Colors.transparent,
@@ -408,7 +405,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             .showSnackBar(snackBar);
                                       }
                                     } catch (e) {
-                                      var snackBar = SnackBar(
+                                      var snackBar = const SnackBar(
                                           elevation: 0,
                                           behavior: SnackBarBehavior.floating,
                                           backgroundColor: Colors.transparent,
@@ -423,31 +420,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   }
                                 },
                                 child: listClass(
-                                  value.dataClass.data?[index].name ?? '...',
-                                  value.dataClass.data?[index].createdBy ??
+                                  value.dataClass?.data?[index].name ?? '...',
+                                  value.dataClass?.data?[index].createdBy ??
                                       '...',
-                                  value.dataClass.data?[index].createdBy ==
+                                  value.dataClass?.data?[index].createdBy ==
                                           Provider.of<GetUserProvider>(context,
                                                   listen: false)
                                               .userDataProvider
-                                              .data!
+                                              ?.data!
                                               .email
                                       ? 'Admin'
                                       : 'User',
                                 ),
                               );
                             },
-                            itemCount: value.dataClass.data?.length ?? 0,
+                            itemCount: value.dataClass?.data?.length ?? 0,
                           )),
                     ),
-                  if (value.dataClass.data!.isEmpty)
+                  if (value.dataClass?.data?.isEmpty ?? true)
                     SliverToBoxAdapter(
                       child: LottieBuilder.asset(
                         "assets/emptyScreen.json",
                         fit: BoxFit.fill,
                       ),
                     ),
-                  if (value.dataClass.data!.isEmpty)
+                  if (value.dataClass?.data?.isEmpty ?? true)
                     const SliverToBoxAdapter(
                         child: Center(
                       child: Text(
@@ -461,7 +458,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             case DataStatus.loading:
               return const LoadingWidget();
             case DataStatus.error:
-              return PopUpDialogWidget(
+              return const PopUpDialogWidget(
                 text: 'Something Wrong...',
                 type: ContentType.failure,
               );

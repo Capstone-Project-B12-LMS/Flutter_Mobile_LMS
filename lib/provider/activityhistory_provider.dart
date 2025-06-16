@@ -6,12 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum DataStatusHistory { none, loading, error }
 
 class ActivityHistoryProvider with ChangeNotifier {
-  ActivityHistoryResponse _activityHistoryProvider = ActivityHistoryResponse();
-  ActivityHistoryResponse get activityHistoryProvider =>
+  ActivityHistoryResponse? _activityHistoryProvider = ActivityHistoryResponse();
+  ActivityHistoryResponse? get activityHistoryProvider =>
       _activityHistoryProvider;
 
-  DataStatusHistory _dataStatusHistory = DataStatusHistory.none;
-  DataStatusHistory get dataStatusHistory => _dataStatusHistory;
+  DataStatusHistory? _dataStatusHistory = DataStatusHistory.none;
+  DataStatusHistory? get dataStatusHistory => _dataStatusHistory;
 
   changeStatus(DataStatusHistory status) {
     _dataStatusHistory = status;
@@ -23,9 +23,8 @@ class ActivityHistoryProvider with ChangeNotifier {
     try {
       late SharedPreferences logindata;
       logindata = await SharedPreferences.getInstance();
-      String token = logindata.getString('token')!;
       String userId = logindata.getString('userId')!;
-      _activityHistoryProvider = await API().activityHistory(userId, token);
+      _activityHistoryProvider = await API().activityHistory(userId);
       changeStatus(DataStatusHistory.none);
       notifyListeners();
     } catch (e) {

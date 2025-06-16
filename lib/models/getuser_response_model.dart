@@ -33,9 +33,9 @@ class Data {
   String? email;
   String? password;
   String? telepon;
-  List<Roles>? roles;
+  String? roles;
   bool? enabled;
-  List<Authorities>? authorities;
+  String? authorities;
   String? username;
   bool? accountNonExpired;
   bool? credentialsNonExpired;
@@ -63,56 +63,62 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     // createdAt = json['createdAt'].cast<int>();
-    createdBy = json['createdBy'];
+    createdBy = json['createdby'];
     // updatedAt = json['updatedAt'].cast<int>();
-    updatedBy = json['updatedBy'];
-    isDeleted = json['isDeleted'];
-    fullName = json['fullName'];
+    updatedBy = json['updatedby'];
+    isDeleted = json['isdeleted'];
+    fullName = json['fullname'];
     email = json['email'];
     password = json['password'];
     telepon = json['telepon'];
-    if (json['roles'] != null) {
-      roles = <Roles>[];
-      json['roles'].forEach((v) {
-        roles!.add(Roles.fromJson(v));
-      });
-    }
+    roles = json['roles'];
+    // if (json['roles'] != null) {
+    //   // roles = <Roles>[];
+    //   List<Roles> roles = jsonDecode(json['roles']);
+    //   json['roles'].forEach((v) {
+    //     roles.add(Roles.fromJson(v));
+    //   });
+    // }
     enabled = json['enabled'];
-    if (json['authorities'] != null) {
-      authorities = <Authorities>[];
-      json['authorities'].forEach((v) {
-        authorities!.add(Authorities.fromJson(v));
-      });
-    }
+    authorities = json['authorities'];
+    // if (json['authorities'] != null) {
+    //   // authorities = <Authorities>[];
+    //   List<Authorities> authorities = jsonDecode(json['authorities']);
+    //   json['authorities'].forEach((v) {
+    //     authorities.add(Authorities.fromJson(v));
+    //   });
+    // }
     username = json['username'];
-    accountNonExpired = json['accountNonExpired'];
-    credentialsNonExpired = json['credentialsNonExpired'];
-    accountNonLocked = json['accountNonLocked'];
+    accountNonExpired = json['accountnonexpired'];
+    credentialsNonExpired = json['credentialsnonexpired'];
+    accountNonLocked = json['accountnonlocked'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     // data['createdAt'] = createdAt;
-    data['createdBy'] = createdBy;
+    data['createdby'] = createdBy;
     // data['updatedAt'] = updatedAt;
-    data['updatedBy'] = updatedBy;
-    data['isDeleted'] = isDeleted;
-    data['fullName'] = fullName;
+    data['updatebBy'] = updatedBy;
+    data['isdeleted'] = isDeleted;
+    data['fullname'] = fullName;
     data['email'] = email;
     data['password'] = password;
     data['telepon'] = telepon;
-    if (roles != null) {
-      data['roles'] = roles!.map((v) => v.toJson()).toList();
-    }
+    data['roles'] = roles;
+    // if (roles != null) {
+    //   data['roles'] = roles!.map((v) => v.toJson()).toList();
+    // }
     data['enabled'] = enabled;
-    if (authorities != null) {
-      data['authorities'] = authorities!.map((v) => v.toJson()).toList();
-    }
+    // if (authorities != null) {
+    //   data['authorities'] = authorities!.map((v) => v.toJson()).toList();
+    // }
+    data['authorities'] = authorities;
     data['username'] = username;
-    data['accountNonExpired'] = accountNonExpired;
-    data['credentialsNonExpired'] = credentialsNonExpired;
-    data['accountNonLocked'] = accountNonLocked;
+    data['accountnonexpired'] = accountNonExpired;
+    data['credentialsnonexpired'] = credentialsNonExpired;
+    data['accountnonlocked'] = accountNonLocked;
     return data;
   }
 }

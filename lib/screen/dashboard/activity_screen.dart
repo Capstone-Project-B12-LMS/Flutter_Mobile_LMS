@@ -24,16 +24,14 @@ class ActivityScreen extends StatelessWidget {
             case DataStatusHistory.none:
               return Column(
                 children: [
-                  if (value.activityHistoryProvider.data!.isEmpty &&
-                      value.activityHistoryProvider.data == null)
+                  if (value.activityHistoryProvider?.data == null)
                     SizedBox(
                       child: LottieBuilder.asset(
                         "assets/emptyScreen.json",
                         fit: BoxFit.fill,
                       ),
                     ),
-                  if (value.activityHistoryProvider.data!.isEmpty &&
-                      value.activityHistoryProvider.data == null)
+                  if (value.activityHistoryProvider?.data == null)
                     const SizedBox(
                         child: Center(
                       child: Text(
@@ -42,23 +40,24 @@ class ActivityScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     )),
-                  if (value.activityHistoryProvider.data!.isNotEmpty &&
-                      value.activityHistoryProvider.data != null)
+                  if ((value.activityHistoryProvider?.data?.isNotEmpty ??
+                          false) &&
+                      value.activityHistoryProvider?.data != null)
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: ListView.builder(
                           itemBuilder: (context, index) {
                             return listActivity(
-                                value.activityHistoryProvider.data?[index].user
+                                value.activityHistoryProvider?.data?[index].user
                                         ?.email ??
                                     '..',
-                                value.activityHistoryProvider.data?[index]
+                                value.activityHistoryProvider?.data?[index]
                                         .content ??
                                     '..');
                           },
                           itemCount:
-                              value.activityHistoryProvider.data?.length ?? 0,
+                              value.activityHistoryProvider?.data?.length ?? 0,
                         ),
                       ),
                     ),
@@ -75,6 +74,9 @@ class ActivityScreen extends StatelessWidget {
                 text: 'Something Wrong...',
                 type: ContentType.failure,
               );
+            case null:
+              // TODO: Handle this case.
+              throw UnimplementedError();
           }
         },
         // child:

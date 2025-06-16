@@ -24,7 +24,7 @@ class ResponseRegister {
 
 class Data {
   String? id;
-  List<int>? createdAt;
+  String? createdAt;
   String? createdBy;
   String? updatedAt;
   String? updatedBy;
@@ -33,9 +33,9 @@ class Data {
   String? email;
   String? password;
   String? telepon;
-  List<Roles>? roles;
+  String? roles;
   bool? enabled;
-  List<Authorities>? authorities;
+  String? authorities;
   String? username;
   bool? accountNonExpired;
   bool? credentialsNonExpired;
@@ -62,7 +62,7 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    createdAt = json['createdAt'].cast<int>();
+    createdAt = json['createdAt'];
     createdBy = json['createdBy'];
     updatedAt = json['updatedAt'];
     updatedBy = json['updatedBy'];
@@ -71,19 +71,21 @@ class Data {
     email = json['email'];
     password = json['password'];
     telepon = json['telepon'];
-    if (json['roles'] != null) {
-      roles = <Roles>[];
-      json['roles'].forEach((v) {
-        roles!.add(Roles.fromJson(v));
-      });
-    }
+    // if (json['roles'] != null) {
+    //   roles = <Roles>[];
+    //   json['roles'].forEach((v) {
+    //     roles!.add(Roles.fromJson(v));
+    //   });
+    // }
+    roles = json['roles'];
     enabled = json['enabled'];
-    if (json['authorities'] != null) {
-      authorities = <Authorities>[];
-      json['authorities'].forEach((v) {
-        authorities!.add(Authorities.fromJson(v));
-      });
-    }
+    // if (json['authorities'] != null) {
+    //   authorities = <Authorities>[];
+    //   json['authorities'].forEach((v) {
+    //     authorities!.add(Authorities.fromJson(v));
+    //   });
+    // }
+    authorities = json['authorities'];
     username = json['username'];
     accountNonExpired = json['accountNonExpired'];
     credentialsNonExpired = json['credentialsNonExpired'];
@@ -102,13 +104,15 @@ class Data {
     data['email'] = email;
     data['password'] = password;
     data['telepon'] = telepon;
-    if (roles != null) {
-      data['roles'] = roles!.map((v) => v.toJson()).toList();
-    }
+    // if (roles != null) {
+    //   data['roles'] = roles!.map((v) => v.toJson()).toList();
+    // }
+    data['roles'] = roles;
     data['enabled'] = enabled;
-    if (authorities != null) {
-      data['authorities'] = authorities!.map((v) => v.toJson()).toList();
-    }
+    // if (authorities != null) {
+    //   data['authorities'] = authorities!.map((v) => v.toJson()).toList();
+    // }
+    data['authorities'] = authorities;
     data['username'] = username;
     data['accountNonExpired'] = accountNonExpired;
     data['credentialsNonExpired'] = credentialsNonExpired;
@@ -117,63 +121,63 @@ class Data {
   }
 }
 
-class Roles {
-  String? id;
-  List<int>? createdAt;
-  String? createdBy;
-  String? updatedAt;
-  String? updatedBy;
-  bool? isDeleted;
-  String? name;
-  String? description;
+// class Roles {
+//   String? id;
+//   List<int>? createdAt;
+//   String? createdBy;
+//   String? updatedAt;
+//   String? updatedBy;
+//   bool? isDeleted;
+//   String? name;
+//   String? description;
 
-  Roles(
-      {this.id,
-      this.createdAt,
-      this.createdBy,
-      this.updatedAt,
-      this.updatedBy,
-      this.isDeleted,
-      this.name,
-      this.description});
+//   Roles(
+//       {this.id,
+//       this.createdAt,
+//       this.createdBy,
+//       this.updatedAt,
+//       this.updatedBy,
+//       this.isDeleted,
+//       this.name,
+//       this.description});
 
-  Roles.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    createdAt = json['createdAt'].cast<int>();
-    createdBy = json['createdBy'];
-    updatedAt = json['updatedAt'];
-    updatedBy = json['updatedBy'];
-    isDeleted = json['isDeleted'];
-    name = json['name'];
-    description = json['description'];
-  }
+//   Roles.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     createdAt = json['createdAt'].cast<int>();
+//     createdBy = json['createdBy'];
+//     updatedAt = json['updatedAt'];
+//     updatedBy = json['updatedBy'];
+//     isDeleted = json['isDeleted'];
+//     name = json['name'];
+//     description = json['description'];
+//   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['createdAt'] = createdAt;
-    data['createdBy'] = createdBy;
-    data['updatedAt'] = updatedAt;
-    data['updatedBy'] = updatedBy;
-    data['isDeleted'] = isDeleted;
-    data['name'] = name;
-    data['description'] = description;
-    return data;
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['id'] = id;
+//     data['createdAt'] = createdAt;
+//     data['createdBy'] = createdBy;
+//     data['updatedAt'] = updatedAt;
+//     data['updatedBy'] = updatedBy;
+//     data['isDeleted'] = isDeleted;
+//     data['name'] = name;
+//     data['description'] = description;
+//     return data;
+//   }
+// }
 
-class Authorities {
-  String? authority;
+// class Authorities {
+//   String? authority;
 
-  Authorities({this.authority});
+//   Authorities({this.authority});
 
-  Authorities.fromJson(Map<String, dynamic> json) {
-    authority = json['authority'];
-  }
+//   Authorities.fromJson(Map<String, dynamic> json) {
+//     authority = json['authority'];
+//   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['authority'] = authority;
-    return data;
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['authority'] = authority;
+//     return data;
+//   }
+// }

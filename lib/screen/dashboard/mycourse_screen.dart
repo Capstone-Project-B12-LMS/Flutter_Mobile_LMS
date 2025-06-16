@@ -1,15 +1,15 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/api/sign_api.dart';
-import 'package:capstone_project_lms/models/class_pagination_response.dart';
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/join_provider.dart';
 import 'package:capstone_project_lms/provider/material_provider.dart';
 import 'package:capstone_project_lms/widgets/list_class_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+// import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+
 import '../../provider/activityhistory_provider.dart';
 import '../../widgets/hexcolor_widget.dart';
 import '../../widgets/loading_inscreen_widget.dart';
@@ -27,40 +27,42 @@ final TextEditingController _textEditingController = TextEditingController();
 Color secColor = HexColor('#415A80');
 
 class _MyCourseScreenState extends State<MyCourseScreen> {
-  static const _pageSize = 20;
+  final api = API();
+  // static const _pageSize = 20;
 
-  final PagingController<int, ListClassPaginationResponse> _pagingController =
-      PagingController(firstPageKey: 0);
+  // final PagingController<int, ListClassPaginationResponse> _pagingController =
+  //     PagingController(firstPageKey: 0);
 
   @override
   void initState() {
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    // _pagingController.addPageRequestListener((pageKey) {
+    //   _fetchPage(pageKey);
+    // });
     super.initState();
   }
 
   @override
   void dispose() {
-    _pagingController.dispose();
+    // _pagingController.dispose();
     super.dispose();
   }
 
-  Future<void> _fetchPage(int pageKey) async {
-    try {
-      // final newItems = await RemoteApi.getCharacterList(pageKey, _pageSize);
-      final newItems = await API().listClassPagination(pageKey, _pageSize);
-      final isLastPage = newItems.length < _pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        final nextPageKey = pageKey + newItems.length;
-        _pagingController.appendPage(newItems, nextPageKey);
-      }
-    } catch (error) {
-      _pagingController.error = error;
-    }
-  }
+  // Future<void> _fetchPage(int pageKey) async {
+  //   try {
+  //     // final newItems = await RemoteApi.getCharacterList(pageKey, _pageSize);
+  //     final newItems = await api.listClassPagination(pageKey, _pageSize);
+  //     if (newItems == null) return;
+  //     final isLastPage = newItems.length < _pageSize;
+  //     if (isLastPage) {
+  //       // _pagingController.appendLastPage(newItems);
+  //     } else {
+  //       final nextPageKey = pageKey + newItems.length;
+  //       // _pagingController.appendPage(newItems, nextPageKey);
+  //     }
+  //   } catch (error) {
+  //     // _pagingController.error = error;
+  //   }
+  // }
 
   Future<void> joinClassDialog(BuildContext context) async {
     return await showDialog(
@@ -137,21 +139,18 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                       side: BorderSide(color: secColor))),
                               backgroundColor:
-                                  MaterialStateProperty.all(secColor)),
+                                  WidgetStateProperty.all(secColor)),
                           onPressed: () async {
                             try {
                               await Provider.of<JoinProvider>(context,
                                       listen: false)
                                   .joinClass(
-                                      Provider.of<GetUserProvider>(context,
-                                              listen: false)
-                                          .userToken,
                                       Provider.of<GetUserProvider>(context,
                                               listen: false)
                                           .userId,
@@ -160,9 +159,9 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                 if (context
                                         .read<JoinProvider>()
                                         .joinResClass
-                                        .status ==
+                                        ?.status ==
                                     true) {
-                                  var snackBar = SnackBar(
+                                  var snackBar = const SnackBar(
                                       elevation: 0,
                                       behavior: SnackBarBehavior.floating,
                                       backgroundColor: Colors.transparent,
@@ -181,7 +180,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                                   context,
                                                   listen: false)
                                               .joinResClass
-                                              .data
+                                              ?.data
                                               ?.id ??
                                           'null');
                                   Provider.of<ActiveClassProvider>(context,
@@ -192,7 +191,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                       .history();
                                   _textEditingController.clear();
                                 } else {
-                                  var snackBar = SnackBar(
+                                  var snackBar = const SnackBar(
                                       elevation: 0,
                                       behavior: SnackBarBehavior.floating,
                                       backgroundColor: Colors.transparent,
@@ -219,14 +218,14 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                       side: const BorderSide(
                                           color: Colors.grey))),
                               backgroundColor:
-                                  MaterialStateProperty.all(Colors.grey)),
+                                  WidgetStateProperty.all(Colors.grey)),
                           onPressed: () {
                             _textEditingController.clear();
                             Navigator.of(context).pop();
@@ -256,14 +255,14 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
           builder: (context, data, _) {
             return Column(
               children: [
-                if (data.dataClass.data!.isEmpty)
+                if (data.dataClass?.data?.isEmpty ?? false)
                   SizedBox(
                     child: LottieBuilder.asset(
                       "assets/emptyScreen.json",
                       fit: BoxFit.fill,
                     ),
                   ),
-                if (data.dataClass.data!.isEmpty)
+                if (data.dataClass?.data?.isEmpty ?? false)
                   const SizedBox(
                       child: Center(
                     child: Text(
@@ -272,16 +271,16 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   )),
-                if (data.dataClass.data!.isEmpty)
+                if (data.dataClass?.data?.isEmpty ?? false)
                   SizedBox(
                     child: ElevatedButton.icon(
                       style: ButtonStyle(
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                       side: BorderSide(color: secColor))),
-                          backgroundColor: MaterialStateProperty.all(secColor)),
+                          backgroundColor: WidgetStateProperty.all(secColor)),
                       icon: const Icon(Icons.door_front_door),
                       label: const Text(
                         'JOIN CLASS',
@@ -293,7 +292,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                       },
                     ),
                   ),
-                if (data.dataClass.data!.isNotEmpty)
+                if (data.dataClass?.data?.isNotEmpty ?? false)
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -315,7 +314,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                               await Provider.of<GetMaterialClassProvider>(
                                       context,
                                       listen: false)
-                                  .getListClass(data.dataClass.data?[index].id
+                                  .getListClass(data.dataClass?.data?[index].id
                                           .toString() ??
                                       'null');
 
@@ -326,7 +325,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                               context,
                                               listen: false)
                                           .listClass
-                                          .data;
+                                          ?.data;
 
                                   if (dataClass != null &&
                                       dataClass.isNotEmpty) {
@@ -334,14 +333,14 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                       builder: (context) {
                                         return DetailScreen(
                                           classId: data
-                                              .dataClass.data?[index].id
+                                              .dataClass?.data?[index].id
                                               .toString(),
                                           indexClass: index,
                                         );
                                       },
                                     ));
                                   } else {
-                                    var snackBar = SnackBar(
+                                    var snackBar = const SnackBar(
                                         elevation: 0,
                                         behavior: SnackBarBehavior.floating,
                                         backgroundColor: Colors.transparent,
@@ -354,7 +353,7 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                                         .showSnackBar(snackBar);
                                   }
                                 } catch (e) {
-                                  var snackBar = SnackBar(
+                                  var snackBar = const SnackBar(
                                       elevation: 0,
                                       behavior: SnackBarBehavior.floating,
                                       backgroundColor: Colors.transparent,
@@ -369,14 +368,14 @@ class _MyCourseScreenState extends State<MyCourseScreen> {
                               }
                             },
                             child: listClassVertical(
-                                data.dataClass.data?[index].name ?? '...',
-                                data.dataClass.data?[index].room ?? '...',
-                                data.dataClass.data?[index].users?.length
+                                data.dataClass?.data?[index].name ?? '...',
+                                data.dataClass?.data?[index].room ?? '...',
+                                data.dataClass?.data?[index].users?.length
                                         .toString() ??
                                     '...'),
                           );
                         },
-                        itemCount: data.dataClass.data?.length ?? 0,
+                        itemCount: data.dataClass?.data?.length ?? 0,
                       ),
                     ),
                   ),

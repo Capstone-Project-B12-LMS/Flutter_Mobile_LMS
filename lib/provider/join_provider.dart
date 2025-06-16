@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 class JoinProvider with ChangeNotifier {
   String _token = '';
   String get token => _token;
-  String _userId = '';
-  String get userId => _userId;
-  ResponseJoinClass _joinresClass = ResponseJoinClass();
-  ResponseJoinClass get joinResClass => _joinresClass;
+  String? _userId = '';
+  String? get userId => _userId;
+  ResponseJoinClass? _joinresClass = ResponseJoinClass();
+  ResponseJoinClass? get joinResClass => _joinresClass;
 
   savetokenid(String token, String id) async {
     try {
@@ -20,9 +20,9 @@ class JoinProvider with ChangeNotifier {
     }
   }
 
-  joinClass(String token, String userId, String classCode) async {
+  joinClass(String userId, String classCode) async {
     try {
-      _joinresClass = await API().joinClass(classCode, token, userId);
+      _joinresClass = await API().joinClass(classCode, userId);
       notifyListeners();
     } catch (e) {
       notifyListeners();

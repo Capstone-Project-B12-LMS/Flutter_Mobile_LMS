@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fzregex/fzregex.dart';
 import 'package:fzregex/utils/pattern.dart';
+
 import '../../widgets/hexcolor_widget.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -17,6 +18,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   late TextEditingController txtemail;
   late TextEditingController txtpassword;
   late TextEditingController txtfullname;
+  late TextEditingController txtusername;
+  late TextEditingController txttelp;
   final formRegis = GlobalKey<FormState>();
   @override
   void initState() {
@@ -24,6 +27,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     txtemail = TextEditingController();
     txtpassword = TextEditingController();
     txtfullname = TextEditingController();
+    txtusername = TextEditingController();
+    txttelp = TextEditingController();
   }
 
   @override
@@ -31,6 +36,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     txtemail.dispose();
     txtpassword.dispose();
     txtfullname.dispose();
+    txtusername.dispose();
+    txttelp.dispose();
     super.dispose();
   }
 
@@ -52,11 +59,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'Create an Account',
                           style: TextStyle(
@@ -165,6 +172,80 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'username must be filled!';
+                              }
+                              return null;
+                            },
+                            autocorrect: true,
+                            controller: txtusername,
+                            cursorColor: secColor,
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              hintText: 'Enter Username',
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: secColor,
+                              ),
+                              hintStyle: const TextStyle(color: Colors.grey),
+                              filled: true,
+                              fillColor: Colors.white70,
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.0)),
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0)),
+                                borderSide:
+                                    BorderSide(color: secColor, width: 2),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'phone number must be filled!';
+                              }
+                              return null;
+                            },
+                            autocorrect: true,
+                            controller: txttelp,
+                            cursorColor: secColor,
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              hintText: 'Enter Phone Number',
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: secColor,
+                              ),
+                              hintStyle: const TextStyle(color: Colors.grey),
+                              filled: true,
+                              fillColor: Colors.white70,
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.0)),
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0)),
+                                borderSide:
+                                    BorderSide(color: secColor, width: 2),
+                              ),
+                            ),
+                          ),
+                        ),
                         const Text(
                           'Password',
                           style: TextStyle(
@@ -242,7 +323,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor:
-                                        MaterialStateProperty.all(secColor)),
+                                        WidgetStateProperty.all(secColor)),
                                 onPressed: () {
                                   final isValidForm =
                                       formRegis.currentState!.validate();
@@ -252,8 +333,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     if (isValid &&
                                         Fzregex.hasMatch(txtpassword.text,
                                             FzPattern.passwordHard)) {
-                                      signUp(txtemail.text, txtpassword.text,
-                                          txtfullname.text);
+                                      signUp(
+                                        email: txtemail.text,
+                                        password: txtpassword.text,
+                                        fullName: txtfullname.text,
+                                        telp: txttelp.text,
+                                        username: txtusername.text,
+                                      );
                                     } else if (isValid == false) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
@@ -285,39 +371,44 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  signUp(String email, String password, String fullName) async {
+  signUp(
+      {required String email,
+      required String password,
+      required String fullName,
+      required String telp,
+      required String username}) async {
     try {
-      await API().regis(fullName, email, password).then((value) {
-        if (value.status == true) {
-          txtemail.clear();
-          txtfullname.clear();
-          txtpassword.clear();
-          var snackBar = SnackBar(
-              elevation: 0,
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.transparent,
-              content: AwesomeSnackbarContent(
-                title: 'Success!',
-                message: 'Successfully Registered!',
-                contentType: ContentType.success,
-              ));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          Navigator.pop(context);
-        } else {
-          var snackBar = SnackBar(
-              elevation: 0,
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.transparent,
-              content: AwesomeSnackbarContent(
-                title: 'Oops!',
-                message: 'Email already taken!\nPlease use another email..',
-                contentType: ContentType.warning,
-              ));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      });
+      var response =
+          await API().regis(fullName, email, password, telp, username);
+      if (response?.status == true) {
+        txtemail.clear();
+        txtfullname.clear();
+        txtpassword.clear();
+        var snackBar = const SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: AwesomeSnackbarContent(
+              title: 'Success!',
+              message: 'Successfully Registered!',
+              contentType: ContentType.success,
+            ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Navigator.pop(context);
+      } else {
+        var snackBar = const SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: AwesomeSnackbarContent(
+              title: 'Oops!',
+              message: 'Email already taken!\nPlease use another email..',
+              contentType: ContentType.warning,
+            ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     } catch (e) {
-      var snackBar = SnackBar(
+      var snackBar = const SnackBar(
           elevation: 0,
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,

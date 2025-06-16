@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/positions.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 import '../../provider/activityhistory_provider.dart';
 import '../../widgets/hexcolor_widget.dart';
 import '../../widgets/list_class_widget.dart';
@@ -63,7 +65,7 @@ class _DetailScreenState extends State<DetailScreen> {
       initialVideoId:
           Provider.of<GetMaterialClassProvider>(context, listen: false)
                   .listClass
-                  .data?[0]
+                  ?.data?[0]
                   .videoUrl ??
               '',
       flags: const YoutubePlayerFlags(
@@ -109,8 +111,7 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final Completer<WebViewController> controller =
-        Completer<WebViewController>();
+    final webviewControllers = WebViewController();
     final TextEditingController txtTopic = TextEditingController();
     final TextEditingController txtContent = TextEditingController();
     Future<void> showInformationDialog(BuildContext context) async {
@@ -225,13 +226,13 @@ class _DetailScreenState extends State<DetailScreen> {
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                       side: BorderSide(color: secColor))),
                               backgroundColor:
-                                  MaterialStateProperty.all(secColor)),
+                                  WidgetStateProperty.all(secColor)),
                           onPressed: () async {
                             final isValidForm =
                                 formKey.currentState!.validate();
@@ -248,7 +249,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 if (Provider.of<CounsellingProvdider>(context,
                                             listen: false)
                                         .dataCounselling
-                                        .status ==
+                                        ?.status ==
                                     true) {
                                   showDialog<String>(
                                     context: context,
@@ -272,7 +273,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                               MediaQuery.of(context).size.width,
                                           child: ElevatedButton(
                                               style: ButtonStyle(
-                                                  shape: MaterialStateProperty.all<
+                                                  shape: WidgetStateProperty.all<
                                                           RoundedRectangleBorder>(
                                                       RoundedRectangleBorder(
                                                           borderRadius:
@@ -283,7 +284,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                               color:
                                                                   secColor))),
                                                   backgroundColor:
-                                                      MaterialStateProperty.all(
+                                                      WidgetStateProperty.all(
                                                           secColor)),
                                               onPressed: () {
                                                 Navigator.pop(context);
@@ -316,7 +317,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                               MediaQuery.of(context).size.width,
                                           child: ElevatedButton(
                                               style: ButtonStyle(
-                                                  shape: MaterialStateProperty.all<
+                                                  shape: WidgetStateProperty.all<
                                                           RoundedRectangleBorder>(
                                                       RoundedRectangleBorder(
                                                           borderRadius:
@@ -327,7 +328,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                               color:
                                                                   secColor))),
                                                   backgroundColor:
-                                                      MaterialStateProperty.all(
+                                                      WidgetStateProperty.all(
                                                           secColor)),
                                               onPressed: () {
                                                 Navigator.pop(context);
@@ -349,14 +350,14 @@ class _DetailScreenState extends State<DetailScreen> {
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                       side: const BorderSide(
                                           color: Colors.grey))),
                               backgroundColor:
-                                  MaterialStateProperty.all(Colors.grey)),
+                                  WidgetStateProperty.all(Colors.grey)),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -393,7 +394,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                   ],
-                  bottomActions: [
+                  bottomActions: const [
                     CurrentPosition(),
                     ProgressBar(isExpanded: true),
                     FullScreenButton(
@@ -410,7 +411,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           Provider.of<GetMaterialClassProvider>(context,
                                       listen: false)
                                   .listClass
-                                  .data?[_selectedIndex]
+                                  ?.data?[_selectedIndex]
                                   .videoUrl ??
                               '');
                       _controller.load(vidId);
@@ -438,7 +439,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 .watch<
                                                     GetMaterialClassProvider>()
                                                 .listClass
-                                                .data?[0]
+                                                ?.data?[0]
                                                 .classEntity
                                                 ?.name ??
                                             '...',
@@ -449,7 +450,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: SizedBox(
                             child: Text(
                               materialClass
-                                      .listClass.data?[0].classEntity?.name ??
+                                      .listClass?.data?[0].classEntity?.name ??
                                   '...',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -475,35 +476,37 @@ class _DetailScreenState extends State<DetailScreen> {
                         height: MediaQuery.of(context).size.height,
                         child: Column(
                           children: [
-                            if (materialClass.listClass.data?[_selectedIndex]
+                            if (materialClass.listClass?.data?[_selectedIndex]
                                         .videoUrl !=
                                     null &&
-                                materialClass.listClass.data?[_selectedIndex]
+                                materialClass.listClass?.data?[_selectedIndex]
                                         .videoUrl !=
                                     "")
                               player,
-                            if (materialClass.listClass.data?[_selectedIndex]
+                            if (materialClass.listClass?.data?[_selectedIndex]
                                         .fileUrl !=
                                     null &&
-                                materialClass.listClass.data?[_selectedIndex]
+                                materialClass.listClass?.data?[_selectedIndex]
                                         .fileUrl !=
                                     "")
                               LayoutBuilder(
                                 builder: (context, constraints) {
                                   return SizedBox(
                                     height: constraints.maxWidth * 9 / 16,
-                                    child: WebView(
-                                      onWebViewCreated: (WebViewController
-                                          webViewController) {
-                                        controller.complete(webViewController);
-                                      },
-                                      initialUrl: materialClass.listClass
-                                              .data?[_selectedIndex].fileUrl ??
-                                          '..',
-                                      javascriptMode:
-                                          JavascriptMode.unrestricted,
-                                      gestureNavigationEnabled: true,
-                                      backgroundColor: const Color(0x00000000),
+                                    child: WebViewWidget(
+                                      // onWebViewCreated: (WebViewController
+                                      //     webViewController) {
+                                      //   controller.complete(webViewController);
+                                      // },
+                                      // initialUrl: materialClass.listClass
+                                      //         ?.data?[_selectedIndex].fileUrl ??
+                                      //     '..',
+                                      // javascriptMode:
+                                      //     JavascriptMode.unrestricted,
+                                      // gestureNavigationEnabled: true,
+                                      // backgroundColor: const Color(0x00000000),
+
+                                      controller: webviewControllers,
                                     ),
                                   );
                                 },
@@ -516,7 +519,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                       const EdgeInsets.only(left: 20, top: 10),
                                   child: Text(
                                     materialClass.listClass
-                                            .data?[_selectedIndex].title ??
+                                            ?.data?[_selectedIndex].title ??
                                         '..',
                                     style: const TextStyle(
                                         color: Colors.black,
@@ -549,7 +552,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         padding:
                                             const EdgeInsets.only(left: 10),
                                         child: Text(
-                                          "${materialClass.listClass.data?[0].classEntity?.users?.length} Members",
+                                          "${materialClass.listClass?.data?[0].classEntity?.users?.length} Members",
                                           style: const TextStyle(fontSize: 12),
                                         ),
                                       )
@@ -584,7 +587,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                       borderRadius: BorderRadius.circular(12),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(.3),
+                                          color: Colors.black.withAlpha(50),
                                           blurRadius: 4.0,
                                           spreadRadius: 1.0,
                                           offset: const Offset(
@@ -642,7 +645,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 ),
                                                 Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       vertical: 10,
                                                       horizontal: 10),
                                                   child: Column(
@@ -653,7 +656,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       Text(
                                                         materialClass
                                                                 .listClass
-                                                                .data?[
+                                                                ?.data?[
                                                                     _selectedIndex]
                                                                 .createdBy ??
                                                             '..',
@@ -667,7 +670,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       Text(
                                                         materialClass
                                                                 .listClass
-                                                                .data?[
+                                                                ?.data?[
                                                                     _selectedIndex]
                                                                 .createdBy ??
                                                             '..',
@@ -684,11 +687,11 @@ class _DetailScreenState extends State<DetailScreen> {
                                             HtmlWidget(
                                                 materialClass
                                                         .listClass
-                                                        .data?[_selectedIndex]
+                                                        ?.data?[_selectedIndex]
                                                         .content ??
                                                     '..',
-                                                onErrorBuilder: (context,
-                                                        element, error) =>
+                                                onErrorBuilder: (context, element,
+                                                        error) =>
                                                     Text(
                                                         '$element error: $error'),
                                                 onLoadingBuilder: (context,
@@ -725,7 +728,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 .width,
                                             child: ElevatedButton(
                                               style: ButtonStyle(
-                                                  shape: MaterialStateProperty.all<
+                                                  shape: WidgetStateProperty.all<
                                                           RoundedRectangleBorder>(
                                                       RoundedRectangleBorder(
                                                           borderRadius:
@@ -736,7 +739,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                               color:
                                                                   secColor))),
                                                   backgroundColor:
-                                                      MaterialStateProperty.all(
+                                                      WidgetStateProperty.all(
                                                           secColor)),
                                               onPressed: () async {
                                                 // if(txtTopic)
@@ -777,7 +780,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                           context,
                                                           listen: false)
                                                       .materialClass
-                                                      .data?[index]
+                                                      ?.data?[index]
                                                       .videoUrl !=
                                                   null) {
                                                 var vidId = formatLink(
@@ -785,7 +788,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                                 context,
                                                                 listen: false)
                                                             .materialClass
-                                                            .data?[index]
+                                                            ?.data?[index]
                                                             .videoUrl ??
                                                         '');
                                                 _controller.load(vidId);
@@ -794,18 +797,18 @@ class _DetailScreenState extends State<DetailScreen> {
                                                           context,
                                                           listen: false)
                                                       .materialClass
-                                                      .data?[index]
+                                                      ?.data?[index]
                                                       .fileUrl !=
                                                   null) {
                                                 ppt = materialClass
                                                         .listClass
-                                                        .data?[_selectedIndex]
+                                                        ?.data?[_selectedIndex]
                                                         .fileUrl ??
                                                     '';
                                                 setState(() {
                                                   materialClass
                                                       .listClass
-                                                      .data?[_selectedIndex]
+                                                      ?.data?[_selectedIndex]
                                                       .fileUrl = null;
                                                 });
 
@@ -816,7 +819,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 setState(() {
                                                   materialClass
                                                       .listClass
-                                                      .data?[_selectedIndex]
+                                                      ?.data?[_selectedIndex]
                                                       .fileUrl = ppt;
                                                 });
                                               }
@@ -827,17 +830,19 @@ class _DetailScreenState extends State<DetailScreen> {
                                                   : Colors.white,
                                               elevation: 5,
                                               child: listClassVertical(
-                                                  materialClass.listClass
-                                                          .data?[index].title ??
+                                                  materialClass
+                                                          .listClass
+                                                          ?.data?[index]
+                                                          .title ??
                                                       '..',
                                                   materialClass
                                                           .listClass
-                                                          .data?[index]
+                                                          ?.data?[index]
                                                           .createdBy ??
                                                       '..',
                                                   materialClass
                                                           .listClass
-                                                          .data?[index]
+                                                          ?.data?[index]
                                                           .classEntity
                                                           ?.users
                                                           ?.length
@@ -847,7 +852,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                           );
                                         },
                                         childCount: materialClass
-                                                .listClass.data?.length ??
+                                                .listClass?.data?.length ??
                                             0, // 1000 list items
                                       ),
                                     ),
@@ -862,7 +867,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                           child: ElevatedButton(
                                               style: ButtonStyle(
                                                   backgroundColor:
-                                                      MaterialStateProperty.all(
+                                                      WidgetStateProperty.all(
                                                           secColor)),
                                               onPressed: () async {
                                                 String? dataUrl = Provider.of<
@@ -870,7 +875,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                         context,
                                                         listen: false)
                                                     .dataClass
-                                                    .data?[widget.indexClass!]
+                                                    ?.data?[widget.indexClass!]
                                                     .reportUrl;
                                                 try {
                                                   if (dataUrl != null) {
@@ -882,28 +887,30 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       await launchUrl(url);
                                                     }
                                                   } else {
-                                                    var snackBar = SnackBar(
-                                                        elevation: 0,
-                                                        behavior:
-                                                            SnackBarBehavior
-                                                                .floating,
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        content:
-                                                            AwesomeSnackbarContent(
-                                                          title: 'Oops!',
-                                                          message:
-                                                              'Report still in progress',
-                                                          contentType:
-                                                              ContentType
-                                                                  .warning,
-                                                        ));
+                                                    var snackBar =
+                                                        const SnackBar(
+                                                            elevation: 0,
+                                                            behavior:
+                                                                SnackBarBehavior
+                                                                    .floating,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            content:
+                                                                AwesomeSnackbarContent(
+                                                              title: 'Oops!',
+                                                              message:
+                                                                  'Report still in progress',
+                                                              contentType:
+                                                                  ContentType
+                                                                      .warning,
+                                                            ));
                                                     ScaffoldMessenger.of(
                                                             context)
                                                         .showSnackBar(snackBar);
                                                   }
                                                 } catch (e) {
-                                                  var snackBar = SnackBar(
+                                                  var snackBar = const SnackBar(
                                                       elevation: 0,
                                                       behavior: SnackBarBehavior
                                                           .floating,
@@ -941,26 +948,25 @@ class _DetailScreenState extends State<DetailScreen> {
                                               return listFeedBack(
                                                   value
                                                           .feedbackResponse
-                                                          .data?[index]
+                                                          ?.data?[index]
                                                           .user
                                                           ?.fullName ??
                                                       '..',
                                                   value
                                                           .feedbackResponse
-                                                          .data?[index]
+                                                          ?.data?[index]
                                                           .user
-                                                          ?.roles?[0]
-                                                          .name ??
+                                                          ?.roles?[0] ??
                                                       '..',
                                                   value
                                                           .feedbackResponse
-                                                          .data?[index]
+                                                          ?.data?[index]
                                                           .content ??
                                                       '..');
                                             },
 
                                             childCount: value.feedbackResponse
-                                                    .data?.length ??
+                                                    ?.data?.length ??
                                                 0, // 1000 list items
                                           ),
                                         ),
@@ -982,7 +988,7 @@ class _DetailScreenState extends State<DetailScreen> {
               backgroundColor: Colors.transparent,
             );
           case MaterialStatus.error:
-            return PopUpDialogWidget(
+            return const PopUpDialogWidget(
               text: 'Something Wrong...',
               type: ContentType.failure,
             );

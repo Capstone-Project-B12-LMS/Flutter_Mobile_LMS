@@ -77,9 +77,9 @@ class User {
   String? email;
   String? password;
   String? telepon;
-  List<Roles>? roles;
+  String? roles;
   bool? enabled;
-  List<Authorities>? authorities;
+  String? authorities;
   String? username;
   bool? accountNonExpired;
   bool? accountNonLocked;
@@ -111,19 +111,21 @@ class User {
     email = json['email'];
     password = json['password'];
     telepon = json['telepon'];
-    if (json['roles'] != null) {
-      roles = <Roles>[];
-      json['roles'].forEach((v) {
-        roles!.add(Roles.fromJson(v));
-      });
-    }
+    // if (json['roles'] != null) {
+    //   roles = <Roles>[];
+    //   json['roles'].forEach((v) {
+    //     roles!.add(Roles.fromJson(v));
+    //   });
+    // }
+    roles = json['roles'];
     enabled = json['enabled'];
-    if (json['authorities'] != null) {
-      authorities = <Authorities>[];
-      json['authorities'].forEach((v) {
-        authorities!.add(Authorities.fromJson(v));
-      });
-    }
+    // if (json['authorities'] != null) {
+    //   authorities = <Authorities>[];
+    //   json['authorities'].forEach((v) {
+    //     authorities!.add(Authorities.fromJson(v));
+    //   });
+    // }
+    authorities = json['authorities'];
     username = json['username'];
     accountNonExpired = json['accountNonExpired'];
     accountNonLocked = json['accountNonLocked'];
@@ -140,13 +142,15 @@ class User {
     data['email'] = email;
     data['password'] = password;
     data['telepon'] = telepon;
-    if (roles != null) {
-      data['roles'] = roles!.map((v) => v.toJson()).toList();
-    }
+    // if (roles != null) {
+    //   data['roles'] = roles!.map((v) => v.toJson()).toList();
+    // }
+    data['roles'] = roles;
     data['enabled'] = enabled;
-    if (authorities != null) {
-      data['authorities'] = authorities!.map((v) => v.toJson()).toList();
-    }
+    // if (authorities != null) {
+    //   data['authorities'] = authorities!.map((v) => v.toJson()).toList();
+    // }
+    data['authorities'] = authorities;
     data['username'] = username;
     data['accountNonExpired'] = accountNonExpired;
     data['accountNonLocked'] = accountNonLocked;
@@ -235,7 +239,6 @@ class ClassEntity {
       this.room,
       this.code,
       this.status});
-
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

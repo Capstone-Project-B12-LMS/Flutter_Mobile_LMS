@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
           ),
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
-              .copyWith(background: Colors.white)),
+              .copyWith(surface: Colors.white)),
       initialRoute: '/splash2',
       routes: {
         '/login': (context) => const LoginScreen(),

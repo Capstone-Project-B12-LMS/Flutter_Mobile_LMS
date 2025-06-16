@@ -2,12 +2,13 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:capstone_project_lms/provider/acitiveclass_provider.dart';
 import 'package:capstone_project_lms/provider/getuser_provider.dart';
 import 'package:capstone_project_lms/provider/login_provider.dart';
-import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:capstone_project_lms/widgets/hexcolor_widget.dart';
 import 'package:capstone_project_lms/widgets/loading_widget.dart';
+import 'package:capstone_project_lms/widgets/popupdialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../provider/activityhistory_provider.dart';
 import '../../provider/navbar_provider.dart';
 
@@ -59,9 +60,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 'Welcome Back!',
                                 style: TextStyle(
@@ -179,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: ElevatedButton(
                                       style: ButtonStyle(
                                           backgroundColor:
-                                              MaterialStateProperty.all(
+                                              WidgetStateProperty.all(
                                                   secColor)),
                                       onPressed: () {
                                         final isValidForm =
@@ -188,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           authLogin(
                                               txtemail.text, txtpassword.text);
                                         } else {
-                                          var snackBar = SnackBar(
+                                          var snackBar = const SnackBar(
                                               elevation: 0,
                                               behavior:
                                                   SnackBarBehavior.floating,
@@ -235,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
             case LoginState.loading:
               return const LoadingWidget();
             case LoginState.error:
-              return PopUpDialogWidget(
+              return const PopUpDialogWidget(
                 text: 'Something Wrong..',
                 type: ContentType.failure,
               );
@@ -252,17 +253,18 @@ class _LoginScreenState extends State<LoginScreen> {
     if (mounted) {
       final data =
           Provider.of<LoginProvider>(context, listen: false).userResponse;
-      if (data.status == true) {
+      if (data?.status == true) {
         if (mounted) {
+          Provider.of<GetUserProvider>(context, listen: false).getUserData();
           context.read<NavbarProvider>().getIndexNavbar(0);
-          await Provider.of<LoginProvider>(context, listen: false)
-              .setToken(data.token!);
+          // await Provider.of<LoginProvider>(context, listen: false)
+          //     .setToken(data.token!);
           if (mounted) {
             Provider.of<ActiveClassProvider>(context, listen: false)
                 .getActiveClass();
             Provider.of<ActivityHistoryProvider>(context, listen: false)
                 .history();
-            var snackBar = SnackBar(
+            var snackBar = const SnackBar(
                 elevation: 0,
                 behavior: SnackBarBehavior.floating,
                 backgroundColor: Colors.transparent,
@@ -282,7 +284,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         if (mounted) {
           Provider.of<LoginProvider>(context, listen: false);
-          var snackBar = SnackBar(
+          var snackBar = const SnackBar(
               elevation: 0,
               behavior: SnackBarBehavior.floating,
               backgroundColor: Colors.transparent,

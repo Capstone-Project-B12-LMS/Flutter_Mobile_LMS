@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 Future<void> validationDialog(
     BuildContext context, String title, String subtitle) async {
   Color secColor = HexColor('#415A80');
@@ -41,18 +40,18 @@ Future<void> validationDialog(
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                         style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    side: BorderSide(color: secColor))),
-                            backgroundColor:
-                                MaterialStateProperty.all(secColor)),
+                            shape:
+                                WidgetStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        side: BorderSide(color: secColor))),
+                            backgroundColor: WidgetStateProperty.all(secColor)),
                         onPressed: () async {
                           late SharedPreferences logindata;
                           context.read<GetUserProvider>().clearData();
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false);
+                          Navigator.popAndPushNamed(context, '/login',
+                              result: false);
                           logindata = await SharedPreferences.getInstance();
                           logindata.remove('token');
                           logindata.remove('userId');
@@ -64,14 +63,14 @@ Future<void> validationDialog(
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                         style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
+                            shape: WidgetStateProperty.all<
                                     RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     side:
                                         const BorderSide(color: Colors.grey))),
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.grey)),
+                                WidgetStateProperty.all(Colors.grey)),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },

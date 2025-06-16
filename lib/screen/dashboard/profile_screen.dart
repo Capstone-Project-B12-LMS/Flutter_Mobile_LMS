@@ -6,6 +6,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../api/sign_api.dart';
 import '../../widgets/hexcolor_widget.dart';
 import '../../widgets/loading_inscreen_widget.dart';
@@ -24,6 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late final TextEditingController txtuser;
   @override
   void initState() {
+    context.read<GetUserProvider>().getUserData();
     txtemail = TextEditingController();
     txttelepon = TextEditingController();
     txtfullname = TextEditingController();
@@ -80,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context
                             .watch<GetUserProvider>()
                             .userDataProvider
-                            .data
+                            ?.data
                             ?.fullName ??
                         '...',
                     TextInputType.name,
@@ -91,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context
                             .watch<GetUserProvider>()
                             .userDataProvider
-                            .data
+                            ?.data
                             ?.email ??
                         '...',
                     TextInputType.emailAddress,
@@ -102,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context
                             .watch<GetUserProvider>()
                             .userDataProvider
-                            .data
+                            ?.data
                             ?.telepon ??
                         '...',
                     TextInputType.phone,
@@ -115,35 +117,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                       side: BorderSide(color: secColor))),
-                          backgroundColor: MaterialStateProperty.all(secColor)),
+                          backgroundColor: WidgetStateProperty.all(secColor)),
                       onPressed: () async {
                         if (txtemail.text == "" &&
                             txtfullname.text == "" &&
                             txttelepon.text == "") {
-                          PopUpDialogWidget(
+                          const PopUpDialogWidget(
                               text: 'Nothing Changes..',
                               type: ContentType.warning);
                         } else {
                           logindata = await SharedPreferences.getInstance();
-                          var token = logindata.getString('token')!;
+                          // var token = logindata.getString('token')!;
                           var userId = logindata.getString('userId')!;
                           try {
                             String? newName, newEmail, newTelepon;
-                            if (userData.status == true) {
+                            if (userData?.status == true) {
                               setState(() {
                                 if (txtemail.text.isEmpty) {
-                                  newEmail = userData.data!.email;
+                                  newEmail = userData?.data!.email;
                                 } else {
                                   final bool isValid =
                                       EmailValidator.validate(txtemail.text);
                                   if (isValid) {
                                     newEmail = txtemail.text;
                                   } else {
-                                    var snackBar = SnackBar(
+                                    var snackBar = const SnackBar(
                                         elevation: 0,
                                         behavior: SnackBarBehavior.floating,
                                         backgroundColor: Colors.transparent,
@@ -157,17 +159,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   }
                                 }
                                 if (txtfullname.text.isEmpty) {
-                                  newName = userData.data!.fullName;
+                                  newName = userData?.data!.fullName;
                                 } else {
                                   newName = txtfullname.text;
                                 }
                                 if (txttelepon.text.isEmpty) {
-                                  newTelepon = userData.data!.telepon;
+                                  newTelepon = userData?.data!.telepon;
                                 } else {
                                   if (txttelepon.text.length > 10) {
                                     newTelepon = txttelepon.text;
                                   } else {
-                                    var snackBar = SnackBar(
+                                    var snackBar = const SnackBar(
                                         elevation: 0,
                                         behavior: SnackBarBehavior.floating,
                                         backgroundColor: Colors.transparent,
@@ -196,11 +198,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     elevation: 0,
                                   ));
                                   API()
-                                      .updateData(userId, token, newEmail!,
-                                          newName!, newTelepon!)
+                                      .updateData(userId, newEmail!, newName!,
+                                          newTelepon!)
                                       .then((value) {
-                                    if (value.data != null) {
-                                      var snackBar = SnackBar(
+                                    if (value?.data != null) {
+                                      var snackBar = const SnackBar(
                                           elevation: 0,
                                           behavior: SnackBarBehavior.floating,
                                           backgroundColor: Colors.transparent,
@@ -218,7 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       txtfullname.clear();
                                       txttelepon.clear();
                                     } else {
-                                      var snackBar = SnackBar(
+                                      var snackBar = const SnackBar(
                                           elevation: 0,
                                           behavior: SnackBarBehavior.floating,
                                           backgroundColor: Colors.transparent,
@@ -241,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               });
                             }
                           } catch (e) {
-                            PopUpDialogWidget(
+                            const PopUpDialogWidget(
                                 text: 'text', type: ContentType.failure);
                           }
                         }
