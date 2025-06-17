@@ -42,17 +42,18 @@ class _DetailScreenState extends State<DetailScreen> {
   bool isSelected = false;
   int _selectedIndex = 0;
 
-  late YoutubePlayerController _controller;
+  late YoutubePlayerController _youtubeController;
   late TextEditingController _idController;
   late TextEditingController _seekToController;
+  late final WebViewController _webViewController;
   // ignore: unused_field
   late YoutubeMetaData _videoMetaData;
   String? descriptionData;
 
   void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
+    if (_isPlayerReady && mounted && !_youtubeController.value.isFullScreen) {
       setState(() {
-        _videoMetaData = _controller.metadata;
+        _videoMetaData = _youtubeController.metadata;
       });
     }
   }
@@ -61,7 +62,7 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     Provider.of<FeedbackProvider>(context, listen: false)
         .getFeedback(widget.classId!);
-    _controller = YoutubePlayerController(
+    _youtubeController = YoutubePlayerController(
       initialVideoId:
           Provider.of<GetMaterialClassProvider>(context, listen: false)
                   .listClass
@@ -81,19 +82,60 @@ class _DetailScreenState extends State<DetailScreen> {
     _idController = TextEditingController();
     _seekToController = TextEditingController();
     _videoMetaData = const YoutubeMetaData();
-
+    _webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+            // You can add a progress indicator here if needed
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {
+            debugPrint('Web resource error: ${error.description}');
+          },
+          onNavigationRequest: (NavigationRequest request) {
+            // Handle specific navigation requests if necessary
+            // For example, if you want to open external links in a browser
+            // if (!request.url.startsWith('http://') &&
+            //     !request.url.startsWith('https://')) {
+            //   // Potentially block non-http/https schemes or handle them externally
+            //   return NavigationDecision.prevent;
+            // }
+            return NavigationDecision.navigate;
+          },
+        ),
+      );
     super.initState();
   }
 
   @override
+  void didUpdateWidget(covariant DetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Reload material if classId changes.
+    if (widget.classId != oldWidget.classId) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Provider.of<FeedbackProvider>(context, listen: false)
+            .getFeedback(widget.classId!);
+        // You might want to re-initialize or load new video/file based on new classId
+        // For example:
+        // _youtubeController.load(formatLink(Provider.of<GetMaterialClassProvider>(context, listen: false).listClass?.data?[0].videoUrl ?? ''));
+        // _loadWebViewContent();
+      });
+    }
+  }
+
+  @override
   void deactivate() {
-    _controller.pause();
+    _youtubeController.pause();
     super.deactivate();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _youtubeController.dispose();
     _idController.dispose();
     _seekToController.dispose();
     super.dispose();
@@ -111,7 +153,7 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final webviewControllers = WebViewController();
+    // final webviewControllers = WebViewController();
     final TextEditingController txtTopic = TextEditingController();
     final TextEditingController txtContent = TextEditingController();
     Future<void> showInformationDialog(BuildContext context) async {
@@ -377,14 +419,14 @@ class _DetailScreenState extends State<DetailScreen> {
           case MaterialStatus.none:
             return YoutubePlayerBuilder(
                 player: YoutubePlayer(
-                  controller: _controller,
+                  controller: _youtubeController,
                   showVideoProgressIndicator: true,
                   progressIndicatorColor: Colors.blueAccent,
                   topActions: <Widget>[
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
-                        _controller.metadata.title,
+                        _youtubeController.metadata.title,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,
@@ -403,8 +445,8 @@ class _DetailScreenState extends State<DetailScreen> {
                   ],
                   onReady: () {
                     if (_isPlayerReady) {
-                      _controller.updateValue(
-                        _controller.value.copyWith(isReady: true),
+                      _youtubeController.updateValue(
+                        _youtubeController.value.copyWith(isReady: true),
                       );
                     } else {
                       var vidId = formatLink(
@@ -414,7 +456,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   ?.data?[_selectedIndex]
                                   .videoUrl ??
                               '');
-                      _controller.load(vidId);
+                      _youtubeController.load(vidId);
                     }
                   },
                 ),
@@ -424,37 +466,37 @@ class _DetailScreenState extends State<DetailScreen> {
                         title: GestureDetector(
                           onTap: () => showModalBottomSheet(
                               context: context,
-                              builder: (context) => SingleChildScrollView(
+                              builder: (context) => const SingleChildScrollView(
                                       child: Padding(
-                                    padding: const EdgeInsets.all(5),
+                                    padding: EdgeInsets.all(5),
                                     child: Column(children: [
-                                      const Text(
+                                      Text(
                                         'Title Class',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        context
-                                                .watch<
-                                                    GetMaterialClassProvider>()
-                                                .listClass
-                                                ?.data?[0]
-                                                .classEntity
-                                                ?.name ??
-                                            '...',
-                                        style: const TextStyle(fontSize: 16),
+                                        // context
+                                        //         .watch<
+                                        //             GetMaterialClassProvider>()
+                                        //         .listClass
+                                        //         ?.data?[0]
+                                        //         .classEntity
+                                        //         ?.name ??
+                                        'Class Entity',
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                     ]),
                                   ))),
-                          child: SizedBox(
+                          child: const SizedBox(
                             child: Text(
-                              materialClass
-                                      .listClass?.data?[0].classEntity?.name ??
-                                  '...',
+                              // materialClass
+                              //         .listClass?.data?[0].classEntity?.name ??
+                              'Class Entity',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
                               textAlign: TextAlign.left,
@@ -494,19 +536,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   return SizedBox(
                                     height: constraints.maxWidth * 9 / 16,
                                     child: WebViewWidget(
-                                      // onWebViewCreated: (WebViewController
-                                      //     webViewController) {
-                                      //   controller.complete(webViewController);
-                                      // },
-                                      // initialUrl: materialClass.listClass
-                                      //         ?.data?[_selectedIndex].fileUrl ??
-                                      //     '..',
-                                      // javascriptMode:
-                                      //     JavascriptMode.unrestricted,
-                                      // gestureNavigationEnabled: true,
-                                      // backgroundColor: const Color(0x00000000),
-
-                                      controller: webviewControllers,
+                                      controller: _webViewController,
                                     ),
                                   );
                                 },
@@ -548,12 +578,11 @@ class _DetailScreenState extends State<DetailScreen> {
                                           ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 10),
                                         child: Text(
-                                          "${materialClass.listClass?.data?[0].classEntity?.users?.length} Members",
-                                          style: const TextStyle(fontSize: 12),
+                                          "0x Members",
+                                          style: TextStyle(fontSize: 12),
                                         ),
                                       )
                                     ],
@@ -791,7 +820,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                             ?.data?[index]
                                                             .videoUrl ??
                                                         '');
-                                                _controller.load(vidId);
+                                                _youtubeController.load(vidId);
                                               } else if (Provider.of<
                                                               ActiveClassProvider>(
                                                           context,
@@ -822,6 +851,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       ?.data?[_selectedIndex]
                                                       .fileUrl = ppt;
                                                 });
+                                                // log("ppt: $ppt");
+                                                // _webViewController.loadRequest(
+                                                //     Uri.parse(ppt));
                                               }
                                             },
                                             child: Card(
@@ -840,14 +872,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                           ?.data?[index]
                                                           .createdBy ??
                                                       '..',
-                                                  materialClass
-                                                          .listClass
-                                                          ?.data?[index]
-                                                          .classEntity
-                                                          ?.users
-                                                          ?.length
-                                                          .toString() ??
-                                                      '..'),
+                                                  '0'),
                                             ),
                                           );
                                         },

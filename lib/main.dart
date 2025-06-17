@@ -9,7 +9,6 @@ import 'package:capstone_project_lms/provider/navbar_provider.dart';
 import 'package:capstone_project_lms/provider/splash_provider.dart';
 import 'package:capstone_project_lms/screen/dashboard/main_screen.dart';
 import 'package:capstone_project_lms/screen/detailClass/detail_screen.dart';
-import 'package:capstone_project_lms/screen/detailClass/list_member_screen.dart';
 import 'package:capstone_project_lms/screen/login/login_screen.dart';
 import 'package:capstone_project_lms/screen/login/registration_screen.dart';
 import 'package:capstone_project_lms/screen/splash/splash_screen.dart';
@@ -84,7 +83,7 @@ class MyApp extends StatelessWidget {
         '/main': (context) => const MainScreen(),
         '/detail': (context) => const DetailScreen(),
         '/profile': (context) => const ProfileScreen(),
-        '/members': (context) => const ListMemberScreen(),
+        // '/members': (context) => const ListMemberScreen(),
         '/splash': (context) => const SplashScreen(),
         '/splash2': (context) => const SplashScreen2(),
       },

@@ -229,8 +229,8 @@ class DioClient {
   DioClient._internal() {
     _dio = Dio(BaseOptions(
       baseUrl: Platform.isAndroid
-          ? 'http://10.0.2.2:5678/webhook'
-          : 'http://localhost:5678/webhook-test/', // Base URL untuk emulator
+          ? 'http://10.0.2.2:5678/webhook/'
+          : 'http://localhost:5678/webhook/', // Base URL untuk emulator
       connectTimeout: const Duration(seconds: 10), // Durasi timeout
       receiveTimeout: const Duration(seconds: 10),
     ));
@@ -252,14 +252,14 @@ class API {
   final Dio _dio = DioClient().dio;
 
   // Endpoint yang lebih bersih, menggunakan base URL dari Dio
-  static const String _loginPath = "/login";
-  static const String _usersPath = "/users";
-  static const String _joinClassPath = "/classes";
-  static const String _classPath = "/class";
-  static const String _materialPath = "/material";
-  static const String _feedbackPath = "/feedbacks/class";
-  static const String _activityPath = "/activityhistory/user";
-  static const String _guidancePath = "/guidances";
+  static const String _loginPath = "login";
+  static const String _usersPath = "users";
+  static const String _joinClassPath = "classes";
+  static const String _classPath = "class";
+  static const String _materialPath = "material";
+  static const String _feedbackPath = "feedbacks/class";
+  static const String _activityPath = "activityhistory/user";
+  static const String _guidancePath = "guidances";
 
   // Helper untuk mendapatkan Options dengan token
   Options _authOptions(String token) {
@@ -316,8 +316,10 @@ class API {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
-      final response = await _dio.get(
-          "/b46774d6-a354-48e1-a7da-05296eb19be8/users/$id",
+      final response = await _dio.get("users",
+          queryParameters: {
+            "id": id,
+          },
           options: _authOptions(token ?? ''));
       return ResponseGetUser.fromJson(response.data);
     } on DioException catch (e) {
@@ -354,8 +356,8 @@ class API {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
-      final response = await Dio().get(
-          "http://localhost:5678/webhook-test/b46774d6-a354-48e1-a7da-05296eb19be8/$id/class/active",
+      final response = await _dio.get(
+          "b46774d6-a354-48e1-a7da-05296eb19be8/$id/class/active",
           options: _authOptions(token ?? ''));
       return ResponseGetListClass.fromJson(response.data);
     } on DioException catch (e) {
@@ -372,10 +374,9 @@ class API {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
-      final response = await _dio.post("$_joinClassPath/$classCode/join",
-          data: {"userId": userId},
-          options: _authOptions(token ?? '')
-            ..contentType = Headers.jsonContentType);
+      final response = await _dio.post("classes/join",
+          data: {"userId": userId, "classCode": classCode},
+          options: _authOptions(token ?? ''));
       return ResponseJoinClass.fromJson(response.data);
     } on DioException catch (e) {
       log('Join class error: ${e.response?.data ?? e.message}');
@@ -415,13 +416,17 @@ class API {
 
   // --- Get Material By Class ---
   Future<MaterialByClassResponse?> materialClass(
-    String classId,
+    String classCode,
   ) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
-      final response = await _dio.get("$_materialPath/class/$classId",
+      final response = await _dio.get("material/class",
+          queryParameters: {
+            "classCode": classCode,
+          },
           options: _authOptions(token ?? ''));
+      log("response data: ${response.data}");
       return MaterialByClassResponse.fromJson(response.data);
     } on DioException catch (e) {
       log('Get material by class error: ${e.response?.data ?? e.message}');

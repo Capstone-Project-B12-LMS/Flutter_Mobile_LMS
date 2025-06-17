@@ -366,7 +366,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           context,
                                           listen: false)
                                       .getListClass(value
-                                              .dataClass?.data?[index].id
+                                              .dataClass?.data?[index].code
                                               .toString() ??
                                           'null');
                                   if (mounted) {
